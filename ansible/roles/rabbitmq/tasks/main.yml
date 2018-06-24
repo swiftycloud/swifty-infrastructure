@@ -1,0 +1,75 @@
+# https://docs.ansible.com/ansible/latest/modules/yum_module.html
+# https://docs.ansible.com/ansible/latest/modules/rabbitmq_user_module.html
+# https://docs.ansible.com/ansible/latest/modules/rabbitmq_vhost_module.html
+# https://docs.ansible.com/ansible/latest/modules/rabbitmq_plugin_module.html
+
+- name: copy erlang repo rpm
+  copy:
+    src: erlang-solutions-1.0-1.noarch.rpm
+    dest: /root/erlang-solutions-1.0-1.noarch.rpm
+
+- name: install erlang repo from  rpm
+  yum:
+    name: /root/erlang-solutions-1.0-1.noarch.rpm
+    state: present
+
+- name: install erlang
+  yum:
+    name: erlang
+    state: present
+
+- name: copy rabbitmq rpm package
+  copy:
+    src: rabbitmq-server-3.6.9-1.el7.noarch.rpm
+    dest: /root/rabbitmq-server-3.6.9-1.el7.noarch.rpm
+
+- name: install rabbitmq
+  yum:
+    name: /root/rabbitmq-server-3.6.9-1.el7.noarch.rpm
+    state: present
+
+- name: install librabbitmq
+  yum:
+    name: librabbitmq
+    state: present
+
+- name: enable  rabbitmq-server service
+  systemd:
+    name: rabbitmq-server
+    enabled: yes
+    masked: no
+
+- name: start rabbitmq-server service
+  systemd: state=started name=rabbitmq-server
+
+- name: enable the rabbitmq_management plugin
+  rabbitmq_plugin:
+    names: rabbitmq_management
+    state: enabled
+
+- name: ensure that the vhost /s3 exists
+  rabbitmq_vhost:
+    name: /s3
+    state: present
+
+- name: ensure root user exist
+  rabbitmq_user:
+    user: root
+    password: 1OqCKIK2G9H
+    tags: administrator
+    vhost: /
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present
+
+- name: ensure s3 user exist
+  rabbitmq_user:
+    user: s3
+    password: 60baf87b7407
+    tags: administrator
+    vhost: /s3
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present
