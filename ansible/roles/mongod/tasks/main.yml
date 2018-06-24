@@ -1,0 +1,44 @@
+- name: add mongodb repo
+  copy:
+    src: mongodb.repo
+    dest: /etc/yum.repos.d/mongodb.repo
+- name: copy collections file
+  copy:
+    src: collections.js
+    dest: /root/collections.js
+- name: install mongodb
+  yum:
+    name:
+      - mongodb
+      - mongodb-server
+    state: latest
+- name: enable  mongodb service
+  systemd:
+    name: mongod
+    enabled: yes
+    masked: no
+- name: start mongodb service
+  systemd: state=started name=mongod
+- name:  add swygate user
+  mongodb_user:
+    database: swifty
+    name: swygate
+    password: dt3962zew1b
+    roles: readWrite,dbAdmin,userAdmin,dbOwner
+    state: present
+- name:  add swyadmd user
+  mongodb_user:
+    database: swifty
+    name: swyadmd
+    password: 1a84cd9148bG8
+    roles: readWrite,dbAdmin,userAdmin,dbOwner
+    state: present
+- name:  add swifty-s3 user
+  mongodb_user:
+    database: swifty-s3
+    name: swifty-s3
+    password: aebik0eichie0eXu
+    roles: readWrite,dbAdmin,userAdmin,dbOwner
+    state: present
+- name: create collections
+  shell: mongo localhost:27017/swifty /root/collections.js

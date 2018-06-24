@@ -1,0 +1,6 @@
+db . createCollection (" Function ")
+db . createCollection (" Mware ")
+db . createCollection (" Logs ")
+db . createCollection (" FnStats ")
+db . createCollection (" Balancer ")
+db . createCollection (" BalancerRS ")
