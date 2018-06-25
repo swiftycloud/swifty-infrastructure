@@ -4,13 +4,16 @@
       - mariadb-server
       - mariadb-server-utils
     state: latest
+
 - name: enable  mariadb service
   systemd:
     name: mariadb
     enabled: yes
     masked: no
+
 - name: start mariadb service
   systemd: state=started name=mariadb
+
 - name: change password for mariadb root user
   mysql_user:
     login_user: root
@@ -19,13 +22,3 @@
     password: {{ mariadb_root_password }}
     priv: *.*:ALL,GRANT
     host: {{ item }}
-- name: create user for keystone
-  mysql_user:
-    name: keystone
-    password: {{ mariadb_keystone_password }}
-    priv: '*.*:ALL'
-    state: present
-- name: create keystone database
-  mysql_db:
-    name: keystone
-    state: present
