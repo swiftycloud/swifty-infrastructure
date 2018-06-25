@@ -55,6 +55,9 @@
   copy:
     src: httpd.conf
     dest: /etc/httpd/conf.d//httpd.conf
+    
+- name: add controller name to hosts file
+  shell: echo "127.0.0.1   controller" >> /etc/hosts
 
 - name: enable  httpd service
   systemd:
