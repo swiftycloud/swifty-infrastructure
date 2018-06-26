@@ -37,21 +37,19 @@
 
 - name: Init Kubernetes cluster
   shell: |
-    kubeadm init --service-cidr {{ service_cidr }} \
-                 --kubernetes-version {{ kube_version }} \
-                 --pod-network-cidr {{ pod_network_cidr }} \
+    kubeadm init --pod-network-cidr {{ pod_network_cidr }} \
                  --token {{ token }} \
-                 --apiserver-advertise-address {{ groups['master'][0] }} \
-                 {{ kubeadm_opts }} \
-                 {{ init_opts }}
-  register: init_cluster
+                 --apiserver-advertise-address {{ swy-core }}
+  tags: master
 
 - name: Create Kubernetes config directory
   become: false
   file: path="~/.kube/" state=directory
+  tags: master
 
 - name: Change permissions of .kube/config
   file: path=/etc/kubernetes/admin.conf mode=0775
+  tags: master
 
 - name: Copy admin.conf to Home directory
   when: init_cluster and ansible_user is defined
@@ -63,9 +61,20 @@
     group: "{{ ansible_user }}"
     mode: 0755
     remote_src: True
+  tags: master
 
 - name: create flannel network
   shell: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml"
+  tags: master
+
+- name: Join to Kubernetes cluster
+  when: reset_cluster|succeeded
+  shell: |
+    kubeadm join --skip-preflight-checks \
+                 --token {{ token }} \
+                 {{ swy-core }}:6443 \
+                 --discovery-token-unsafe-skip-ca-verification
+  tags: worker
 
 - name: Enable and restart kubelet engine
   systemd:

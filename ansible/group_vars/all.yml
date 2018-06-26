@@ -1,0 +1,15 @@
+# Kubernetes
+token: bf17425ae44344f50dd8c832d
+pod_network_cidr: "10.244.0.0/16"
+
+mariadb_root_password: a5d8bfe6979a
+mariadb_keystone_password: N9tSc5kgtKqvwRwN
+keystone_swyadmin_password: PwE9eMcPAverUJZn
+keystone_swyui_password: HEMv3b6GnCGt2XTn
+keystone_admin_password: 789qt4htqg5PkbXC
+
+systemd_dir: /lib/systemd/system
+system_env_dir: /etc/sysconfig
+network_dir: /etc/kubernetes/network
+kubeadmin_config: /etc/kubernetes/admin.conf
+kube_addon_dir: /etc/kubernetes/addon
