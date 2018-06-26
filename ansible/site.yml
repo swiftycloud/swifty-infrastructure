@@ -1,32 +1,18 @@
 ---
 
-- hosts: kube-cluster
+- hosts: swy-core
   gather_facts: yes
   become: yes
   roles:
-    - { role: docker, tags: docker }
+    - { role: docker}
+    - { role: mariadb}
+    - { role: mongodb}
+    - { role: rabbitmq}
+    - { role: openstack-keystone}
 
-- hosts: master
+- hosts: swy-k8s
   gather_facts: yes
   become: yes
   roles:
-    - { role: kubernetes/master, tags: master }
-    - { role: cni, tags: cni }
-
-- hosts: node
-  gather_facts: yes
-  become: yes
-  roles:
-    - { role: kubernetes/node, tags: node }
-
-- hosts: swy-gate
-  gather_facts: yes
-  become: yes
-  roles:
-    - { role: kubernetes/node, tags: node }
-
-- hosts: swy-mw
-  gather_facts: yes
-  become: yes
-  roles:
-    - { role: kubernetes/node, tags: node }
+    - { role: docker}
+    - { role: k8s}

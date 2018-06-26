@@ -1,0 +1,75 @@
+- name: Add Kubernetes yum repository
+  yum_repository:
+    name: Kubernetes
+    description: Kubernetes Repository
+    file: kubernetes
+    baseurl: http://yum.kubernetes.io/repos/kubernetes-el7-x86_64
+    enabled: yes
+    gpgcheck: no
+- name: Install kubernetes packages (RHEL/CentOS)
+  yum:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: latest
+    update_cache: yes
+
+- name: Disable system swap
+  shell: "swapoff -a"
+
+- name: Remove current swaps from fstab
+  lineinfile:
+    dest: /etc/fstab
+    regexp: '(?i)^([^#][\S]+\s+(none|swap)\s+swap.*)'
+    line: '# \1'
+    backrefs: yes
+    state: present
+
+- name: Disable swappiness and pass bridged IPv4 traffic to iptable's chains
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+  with_items:
+    - { name: 'vm.swappiness', value: '0' }
+    - { name: 'net.bridge.bridge-nf-call-iptables', value: '1' }
+
+- name: Init Kubernetes cluster
+  shell: |
+    kubeadm init --service-cidr {{ service_cidr }} \
+                 --kubernetes-version {{ kube_version }} \
+                 --pod-network-cidr {{ pod_network_cidr }} \
+                 --token {{ token }} \
+                 --apiserver-advertise-address {{ groups['master'][0] }} \
+                 {{ kubeadm_opts }} \
+                 {{ init_opts }}
+  register: init_cluster
+
+- name: Create Kubernetes config directory
+  become: false
+  file: path="~/.kube/" state=directory
+
+- name: Change permissions of .kube/config
+  file: path=/etc/kubernetes/admin.conf mode=0775
+
+- name: Copy admin.conf to Home directory
+  when: init_cluster and ansible_user is defined
+  become: false
+  copy:
+    src: "{{ kubeadmin_config }}"
+    dest: "~/.kube/config"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+    remote_src: True
+
+- name: create flannel network
+  shell: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml"
+
+- name: Enable and restart kubelet engine
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
