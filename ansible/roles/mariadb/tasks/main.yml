@@ -1,8 +1,11 @@
 - name: install mariadb
-  yum:
+  dnf:
     name:
       - mariadb-server
       - mariadb-server-utils
+      - python3-devel
+      - mysql-devel
+      - gcc
     state: latest
 
 - name: enable  mariadb service
@@ -14,11 +17,15 @@
 - name: start mariadb service
   systemd: state=started name=mariadb
 
-- name: change password for mariadb root user
-  mysql_user:
-    login_user: root
-    login_password: ''
-    name: root
-    password: {{ mariadb_root_password }}
-    priv: *.*:ALL,GRANT
-    host: {{ item }}
+- name: Install the mysqlclient module
+  pip:
+    name: mysqlclient
+
+#- name: change password for mariadb root user
+#  mysql_user:
+#    login_user: root
+#    login_password: ''
+#    name: root
+#    host_all: yes
+#    password: "{{ mariadb_root_password }}"
+#    priv: '*.*:ALL'

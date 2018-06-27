@@ -4,12 +4,12 @@
     dest: /root/rdo-release-pike-1.noarch.rpm
 
 - name: install openstack repo from  rpm
-  yum:
+  dnf:
     name: /root/rdo-release-pike-1.noarch.rpm
     state: present
 
 - name: install openstack packages
-  yum:
+  dnf:
     name:
       - openstack-keystone
       - httpd
@@ -20,7 +20,7 @@
 - name: create user for keystone
   mysql_user:
     name: keystone
-    password: {{ mariadb_keystone_password }}
+    password: "{{ mariadb_keystone_password }}"
     priv: '*.*:ALL'
     state: present
 
@@ -55,7 +55,7 @@
   copy:
     src: httpd.conf
     dest: /etc/httpd/conf.d//httpd.conf
-    
+
 - name: add controller name to hosts file
   shell: echo "127.0.0.1   controller" >> /etc/hosts
 
@@ -111,18 +111,18 @@
     enabled: True
 
 - name: create swyadmin user
-  - os_user:
+  os_user:
     state: present
     name: swyadmin
-    password: {{ keystone_swyadmin_password }}
+    password: "{{ keystone_swyadmin_password }}"
     domain: swifty
     default_project: swyadmin
 
 - name: create swyui user
-  - os_user:
+  os_user:
     state: present
     name: swyui
-    password: {{ keystone_swyui_password }}
+    password: "{{ keystone_swyui_password }}"
     domain: swifty
     default_project: swyui
 
@@ -148,7 +148,7 @@
   os_user:
     state: present
     name: admin
-    password: {{ keystone_admin_password }}
+    password: "{{ keystone_admin_password }}"
     update_password: on_create
     domain: swifty
     default_project: admin

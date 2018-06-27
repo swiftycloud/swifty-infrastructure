@@ -7,13 +7,15 @@
     enabled: yes
     gpgcheck: no
 - name: Install kubernetes packages (RHEL/CentOS)
-  yum:
+  dnf:
     name:
       - kubelet
       - kubeadm
       - kubectl
     state: latest
-    update_cache: yes
+
+- name: Disable selinux
+  shell: "setenforce 0"
 
 - name: Disable system swap
   shell: "swapoff -a"
@@ -26,20 +28,33 @@
     backrefs: yes
     state: present
 
-- name: Disable swappiness and pass bridged IPv4 traffic to iptable's chains
+- name: Disable swappiness
   sysctl:
     name: "{{ item.name }}"
     value: "{{ item.value }}"
     state: present
   with_items:
     - { name: 'vm.swappiness', value: '0' }
-    - { name: 'net.bridge.bridge-nf-call-iptables', value: '1' }
+
+- name: Enable and restart kubelet engine
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    state: started
+    enabled: yes
+
+- name: ensure net.bridge.bridge-nf-call-iptables is set to 1
+  shell: |
+    cat <<EOF >  /etc/sysctl.d/k8s.conf
+    net.bridge.bridge-nf-call-ip6tables = 1
+    net.bridge.bridge-nf-call-iptables = 1
+    EOF
+    sysctl --system
 
 - name: Init Kubernetes cluster
   shell: |
     kubeadm init --pod-network-cidr {{ pod_network_cidr }} \
-                 --token {{ token }} \
-                 --apiserver-advertise-address {{ swy-core }}
+                 --token {{ token }}
   tags: master
 
 - name: Create Kubernetes config directory
@@ -52,7 +67,6 @@
   tags: master
 
 - name: Copy admin.conf to Home directory
-  when: init_cluster and ansible_user is defined
   become: false
   copy:
     src: "{{ kubeadmin_config }}"
@@ -67,18 +81,17 @@
   shell: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml"
   tags: master
 
-- name: Join to Kubernetes cluster
-  when: reset_cluster|succeeded
+- name: Join to Kubernetes clusters
+  tags: worker
   shell: |
     kubeadm join --skip-preflight-checks \
                  --token {{ token }} \
-                 {{ swy-core }}:6443 \
+                 {{ groups['cluster'][0] }}:6443 \
                  --discovery-token-unsafe-skip-ca-verification
-  tags: worker
 
 - name: Enable and restart kubelet engine
   systemd:
     name: kubelet
     daemon_reload: yes
-    state: restarted
+    state: started
     enabled: yes

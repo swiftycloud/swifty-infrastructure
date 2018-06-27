@@ -1,5 +1,5 @@
 # Kubernetes
-token: bf17425ae44344f50dd8c832d
+token: c9f7b8.8d17974y63l7g85s
 pod_network_cidr: "10.244.0.0/16"
 
 mariadb_root_password: a5d8bfe6979a

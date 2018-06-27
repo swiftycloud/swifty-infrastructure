@@ -1,4 +1,11 @@
 [swy-core]
-192.0.0.1
+18.222.113.145
 [swy-k8s]
-192.0.0.2
+18.191.223.130
+
+[cluster]
+18.222.113.145
+18.191.223.130
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3

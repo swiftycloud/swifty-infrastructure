@@ -1,5 +1,5 @@
 - name: install docker engine
-  yum:
+  dnf:
     name: docker
     state: latest
 - name: enable  docker service

@@ -1,19 +1,19 @@
 ---
+#- hosts: cluster
+#  gather_facts: yes
+#  roles:
+#    - docker
 
 - hosts: swy-core
   gather_facts: yes
-  become: yes
   roles:
-    - { role: docker}
-    - { role: k8s, tags: master}
-    - { role: mariadb}
-    - { role: mongodb}
-    - { role: rabbitmq}
-    - { role: openstack-keystone}
+#    - { role: k8s, tags: master}
+#    - mariadb
+#    - mongod
+#    - rabbitmq
+    - openstack-keystone
 
 - hosts: swy-k8s
   gather_facts: yes
-  become: yes
   roles:
-    - { role: docker}
     - { role: k8s, tags: worker}
