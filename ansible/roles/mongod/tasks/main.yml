@@ -26,34 +26,34 @@
   mongodb_user:
     database: admin
     name: admin
-    password: ew8VKv8Kq79C
+    password: "{{ mongodb_admin_password }}"
     roles: readWrite,userAdminAnyDatabase,dbAdminAnyDatabase,dbAdminAnyDatabase
     state: present
 - name:  add swygate user
   mongodb_user:
     login_user: admin
-    login_password: ew8VKv8Kq79C
+    login_password: "{{ mongodb_admin_password }}"
     database: swifty
     name: swygate
-    password: dt3962zew1b
+    password: "{{ mongodb_swygate_password }}"
     roles: readWrite,dbAdmin,userAdmin,dbOwner
     state: present
 - name:  add swyadmd user
   mongodb_user:
     login_user: admin
-    login_password: ew8VKv8Kq79C
+    login_password: "{{ mongodb_admin_password }}"
     database: swifty
     name: swyadmd
-    password: 1a84cd9148bG8
+    password: "{{ mongodb_swyadmd_password }}"
     roles: readWrite,dbAdmin,userAdmin,dbOwner
     state: present
 - name:  add swifty-s3 user
   mongodb_user:
     login_user: admin
-    login_password: ew8VKv8Kq79C
+    login_password: "{{ mongodb_admin_password }}"
     database: swifty-s3
     name: swifty-s3
-    password: aebik0eichie0eXu
+    password: "{{ mongodb_s3_password }}"
     roles: readWrite,dbAdmin,userAdmin,dbOwner
     state: present
 - name: create collections

@@ -55,7 +55,7 @@
 - name: ensure root user exist
   rabbitmq_user:
     user: root
-    password: 1OqCKIK2G9H
+    password: "{{ rabbitmq_root_password }}"
     tags: administrator
     vhost: /
     configure_priv: .*
@@ -66,7 +66,7 @@
 - name: ensure s3 user exist
   rabbitmq_user:
     user: s3
-    password: 60baf87b7407
+    password: "{{ rabbitmq_s3_password }}"
     tags: administrator
     vhost: /s3
     configure_priv: .*

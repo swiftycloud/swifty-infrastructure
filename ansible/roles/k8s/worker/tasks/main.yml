@@ -56,7 +56,7 @@
   shell: |
     kubeadm join --skip-preflight-checks \
                  --token {{ token }} \
-                 {{ groups['cluster'][0] }}:6443 \
+                 {{ master_int }}:6443 \
                  --discovery-token-unsafe-skip-ca-verification
 
 - name: Enable and restart kubelet engine

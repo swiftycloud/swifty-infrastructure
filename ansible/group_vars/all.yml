@@ -4,12 +4,19 @@ pod_network_cidr: "10.244.0.0/16"
 
 mariadb_root_password: a5d8bfe6979a
 mariadb_keystone_password: N9tSc5kgtKqvwRwN
+mongodb_admin_password: ew8VKv8Kq79C
+mongodb_swygate_password: dt3962zew1b
+mongodb_swyadmd_password: 1a84cd9148bG8
+mongodb_s3_password: aebik0eichie0eXu
 keystone_swyadmin_password: PwE9eMcPAverUJZn
 keystone_swyui_password: HEMv3b6GnCGt2XTn
 keystone_admin_password: 789qt4htqg5PkbXC
+rabbitmq_root_password: 1OqCKIK2G9H
+rabbitmq_s3_password: 60baf87b7407
+
 remote_host_ip: '%'
-master_int: ip-172-31-1-109.us-east-2.compute.internal
-worker_int: ip-172-31-3-66.us-east-2.compute.internal
+master_int: ip-172-31-7-143.us-east-2.compute.internal
+worker_int: ip-172-31-12-140.us-east-2.compute.internal
 
 
 systemd_dir: /lib/systemd/system

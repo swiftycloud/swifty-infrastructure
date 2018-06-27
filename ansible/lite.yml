@@ -12,7 +12,7 @@
     - mongod
     - rabbitmq
     - openstack-keystone
-     - { role: nfs/master, tags: master}
+    - { role: nfs/master, tags: master}
 
 - hosts: swy-k8s
   gather_facts: yes
