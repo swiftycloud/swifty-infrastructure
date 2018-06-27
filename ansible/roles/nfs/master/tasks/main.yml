@@ -1,0 +1,25 @@
+- name: install nfs packages
+  dnf:
+    name:
+      - nfs-utils
+    state: latest
+
+- name: enable  nfs service
+  systemd:
+    name: nfs
+    enabled: yes
+    masked: no
+
+- name: start nfs service
+  systemd: state=started name=nfs
+
+- name: Creates swifty-volume dir
+  file:
+    path: /home/swifty-volume
+    state: directory
+
+- name: Configure export dir
+  shell: echo "/home/swifty-volume "{{ worker_int }}"(rw,sync,no_root_squash)" >> /etc/exports
+
+- name: Export dir
+  shell: exportfs -a

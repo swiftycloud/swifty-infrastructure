@@ -658,7 +658,7 @@
 # Deprecated group/name - [DEFAULT]/sql_connection
 # Deprecated group/name - [DATABASE]/sql_connection
 # Deprecated group/name - [sql]/connection
-connection=mysql+pymysql://keystone:'{{ mariadb_keystone_password }}'@controller/keystone
+connection=mysql+pymysql://keystone:{{ mariadb_keystone_password }}@controller/keystone
 
 # The SQLAlchemy connection string to use to connect to the slave database.
 # (string value)

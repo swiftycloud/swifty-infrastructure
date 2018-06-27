@@ -7,6 +7,10 @@ mariadb_keystone_password: N9tSc5kgtKqvwRwN
 keystone_swyadmin_password: PwE9eMcPAverUJZn
 keystone_swyui_password: HEMv3b6GnCGt2XTn
 keystone_admin_password: 789qt4htqg5PkbXC
+remote_host_ip: '%'
+master_int: ip-172-31-1-109.us-east-2.compute.internal
+worker_int: ip-172-31-3-66.us-east-2.compute.internal
+
 
 systemd_dir: /lib/systemd/system
 system_env_dir: /etc/sysconfig

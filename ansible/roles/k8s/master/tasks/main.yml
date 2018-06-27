@@ -80,18 +80,3 @@
 - name: create flannel network
   shell: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml"
   tags: master
-
-- name: Join to Kubernetes clusters
-  tags: worker
-  shell: |
-    kubeadm join --skip-preflight-checks \
-                 --token {{ token }} \
-                 {{ groups['cluster'][0] }}:6443 \
-                 --discovery-token-unsafe-skip-ca-verification
-
-- name: Enable and restart kubelet engine
-  systemd:
-    name: kubelet
-    daemon_reload: yes
-    state: started
-    enabled: yes
