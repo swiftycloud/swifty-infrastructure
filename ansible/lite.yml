@@ -32,3 +32,21 @@
    - docker
    - { role: k8s/worker, tags: worker}
    - { role: nfs/client, tags: client}
+
+- hosts: dep-worker
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  pre_tasks:
+   - include_vars: group_vars/all.yml
+  roles:
+   - { role: swifty/worker, tags: master}
+
+- hosts: dep-core
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  pre_tasks:
+   - include_vars: group_vars/all.yml
+  roles:
+   - { role: swifty/core, tags: master}

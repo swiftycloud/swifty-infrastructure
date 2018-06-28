@@ -73,3 +73,14 @@
     read_priv: .*
     write_priv: .*
     state: present
+
+- name: s3 add
+  shell: |
+    rabbitmqctl add_user root "{{ rabbitmq_root_password }}" ; \
+    rabbitmqctl set_user_tags root administrator ; \
+    rabbitmqctl set_permissions -p / root ".*" ".*" ".*" ; \
+    rabbitmq-plugins enable rabbitmq_management ; \
+    rabbitmqctl add_user s3 "{{ rabbitmq_s3_password }}" ; \
+    rabbitmqctl set_user_tags s3 administrator ; \
+    rabbitmqctl add_vhost s3 ; \
+    rabbitmqctl set_permissions -p s3 s3 ".*" ".*" ".*"

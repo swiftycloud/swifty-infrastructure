@@ -1,0 +1,6 @@
+{
+  "API_GATE_ENDPOINT": "http://{{ hostvars[groups['swy-core'][0]]['core_public_ip'] }}:8686",
+  "API_ADMD_ENDPOINT": "http://{{ hostvars[groups['swy-core'][0]]['core_public_ip'] }}:8687",
+  "API_USERNAME": "swyui",
+  "API_PASSWORD": "{{ keystone_swyui_password }}"
+}

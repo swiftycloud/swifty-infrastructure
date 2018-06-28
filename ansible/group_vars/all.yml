@@ -22,6 +22,11 @@ keystone_swyui_password: HEMv3b6GnCGt2XTn
 keystone_admin_password: 789qt4htqg5PkbXC
 rabbitmq_root_password: 1OqCKIK2G9H
 rabbitmq_s3_password: 60baf87b7407
+pgr_token: e8yftKPn_GrhFa0d9TMwCt7GG?Ggu:biw:e_bfndvfyC^i-D*=+*euNznmpxE1jq
+s3_token: NgsfqX&ruOcjk+CXr@a2yq_M-YAGv7^#-6?E=zw:Rh?FJf_fWVfivHKi1A?m2jDR
+s3_secret_key: fd7b1601ae2ff4ccb91b85ea315f2b2e
+mw_secpass: f406a11cd8598e80b6180230f116b15b
+
 remote_host_ip: '%'
 
 # aws

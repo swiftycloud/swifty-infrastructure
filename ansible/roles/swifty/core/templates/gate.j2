@@ -1,0 +1,48 @@
+---
+db: "swygate:DBPASS@127.0.0.1:27017"
+keystone:
+        address: "127.0.0.1:5000"
+        domain: "swifty"
+daemon:
+        address: "0.0.0.0:8686"
+        sources:
+                share: "/home/swifty-volume"
+                clone: "/home/swifty/local-sources"
+        loglevel: "debug"
+        prometheus: "127.0.0.1:9012"
+balancer:
+        localips:
+                - ip: "10.244.0.1"
+                  ports: "8680:8880"
+                - ip: "10.244.0.2"
+                  ports: "8780:8980"
+middleware:
+        mwseckey: "MWSECPASS"
+        maria:
+                creds: "root:-@127.0.0.1:3306"
+                quotdb: "swifty.QUOTAS"
+        rabbit:
+                creds: "root:RABBITPASS@127.0.0.1:5672"
+                admport: "15672"
+        mongo:
+                creds: "root:MONGOPASS@127.0.0.1:27017"
+        postgres:
+                creds: "-:PGRTOKEN@swft-mw:5432"
+                admport: "3872"
+        s3:
+                creds: "-:S3TOKEN@127.0.0.1:8787"
+                admport: "8789"
+                notify: "swifty:S3IFYPASS@127.0.0.1:5672/s3"
+                hidden-key-timeout: 120
+runtime:
+        timeout:
+                max: 60
+                def: 1
+        memory:
+                max: 1024
+                min: 64
+                def: 128
+        max-replicas: 32
+wdog:
+        port: 8687
+swage: "/home/swifty/swage"

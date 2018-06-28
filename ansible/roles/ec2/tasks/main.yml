@@ -24,6 +24,7 @@
      core_private_ip: "{{ item.private_ip }}"
      groups:
        - swy-core
+       - dep-core
    with_items: '{{ ec2_core.instances }}'
 
  - name: Wait for the instances to boot by checking the ssh port
@@ -51,6 +52,7 @@
      worker_private_ip: "{{ item.private_ip }}"
      groups:
        - swy-worker
+       - dep-worker
    with_items: '{{ ec2_worker.instances }}'
 
  - name: Wait for the instances to boot by checking the ssh port

@@ -196,11 +196,5 @@
     role: swifty.ui
     project: swyui
 
-#- name: add admin user to admin project
-#  os_user:
-#    state: present
-#    name: admin
-#    password: "{{ keystone_admin_password }}"
-#    update_password: on_create
-#    domain: swifty
-#    default_project: admin
+- name:
+  shell: openstack user set --project admin admin
