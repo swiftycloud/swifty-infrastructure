@@ -34,5 +34,8 @@
     --net=host \
     deliverous/certbot \
     certonly \
-    --webroot --webroot-path=/data/letsencrypt \
-    -d {{ groups['swy-core'][0] }}
+    --standalone \
+    --agree-tos \
+    --non-interactive \
+    --email {{ cert_admin_email }} \
+    -d 18.219.255.245.nip.io
