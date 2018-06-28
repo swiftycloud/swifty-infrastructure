@@ -58,7 +58,6 @@
   tags: master
 
 - name: Create Kubernetes config directory
-  become: false
   file: path="~/.kube/" state=directory
   tags: master
 
@@ -67,12 +66,11 @@
   tags: master
 
 - name: Copy admin.conf to Home directory
-  become: false
   copy:
     src: "{{ kubeadmin_config }}"
     dest: "~/.kube/config"
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    owner: root
+    group: root
     mode: 0755
     remote_src: True
   tags: master

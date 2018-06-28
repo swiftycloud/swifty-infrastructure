@@ -19,7 +19,7 @@
     state: directory
 
 - name: Configure export dir
-  shell: echo "/home/swifty-volume "{{ worker_int }}"(rw,sync,no_root_squash)" >> /etc/exports
+  shell: echo "/home/swifty-volume {{ hostvars[groups['swy-worker'][0]]['worker_private_ip'] }}(rw,sync,no_root_squash)" >> /etc/exports
 
 - name: Export dir
   shell: exportfs -a

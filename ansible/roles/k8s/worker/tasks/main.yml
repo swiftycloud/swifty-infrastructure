@@ -56,7 +56,7 @@
   shell: |
     kubeadm join --skip-preflight-checks \
                  --token {{ token }} \
-                 {{ master_int }}:6443 \
+                 {{ hostvars[groups['swy-core'][0]]['core_private_ip'] }}:6443 \
                  --discovery-token-unsafe-skip-ca-verification
 
 - name: Enable and restart kubelet engine

@@ -1,0 +1,27 @@
+---
+- hosts: local
+  connection: local
+  gather_facts: false
+    - ec2
+
+# - hosts: cluster
+#   gather_facts: yes
+#   roles:
+#     - docker
+
+#- hosts: swy-core
+#  gather_facts: yes
+#  roles:
+#    - { role: k8s/master, tags: master}
+#     - mariadb
+#     - mongod
+#     - rabbitmq
+#     - openstack-keystone
+#     - { role: nfs/master, tags: master}
+#     - letsencrypt
+
+# - hosts: swy-k8s
+#   gather_facts: yes
+#   roles:
+#     - { role: k8s/worker, tags: worker}
+#     - { role: nfs/client, tags: client}

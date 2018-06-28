@@ -1,6 +1,15 @@
+# ansible
+
+ansible_ssh_user: fedora
+ansible_ssh_private_key_file: ./ansible.pem
+ansible_python_interpreter: /usr/bin/python3
+
 # Kubernetes
+
 token: c9f7b8.8d17974y63l7g85s
 pod_network_cidr: "10.244.0.0/16"
+
+# passwords
 
 mariadb_root_password: a5d8bfe6979a
 mariadb_keystone_password: N9tSc5kgtKqvwRwN
@@ -13,7 +22,9 @@ keystone_swyui_password: HEMv3b6GnCGt2XTn
 keystone_admin_password: 789qt4htqg5PkbXC
 rabbitmq_root_password: 1OqCKIK2G9H
 rabbitmq_s3_password: 60baf87b7407
-cert_admin_email: serenityqn@gmail.com
+remote_host_ip: '%'
+
+# aws
 
 ec2_keypair: "ansible"
 ec2_security_group: "sg-e0fe9c8a"
@@ -21,14 +32,9 @@ ec2_instance_type: "t2.medium"
 ec2_image: "ami-e4a89a81"
 ec2_subnet_ids: ['subnet-a7cf72cf','subnet-a7cf72cf','subnet-a7cf72cf']
 ec2_region: "us-east-2"
-ec2_tag_Name: "swy-core"
-ec2_tag_Type: "swy-core"
-ec2_tag_Environment: "swy-core"
 ec2_volume_size: 16
 
-remote_host_ip: '%'
-master_int: ip-172-31-7-143.us-east-2.compute.internal
-worker_int: ip-172-31-12-140.us-east-2.compute.internal
+# system
 
 systemd_dir: /lib/systemd/system
 system_env_dir: /etc/sysconfig

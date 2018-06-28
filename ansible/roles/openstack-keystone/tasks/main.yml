@@ -17,6 +17,10 @@
       - python-openstackclient
     state: present
 
+- name: Install the mysqlclient module
+  pip:
+    name: mysqlclient
+
 - name: create user for keystone
   mysql_user:
     name: keystone
@@ -49,6 +53,9 @@
     group: keystone
     mode: 0640
 
+- name: Disable selinux
+  shell: "setenforce 0"
+
 - name: copy httpd.conf
   copy:
     src: httpd.conf
@@ -73,6 +80,25 @@
     group: root
     mode: 0644
 
+- name: reload .bashrc
+  shell: source /root/.bashrc
+
+- name: create .config/openstack dir
+  file:
+    path: /root/.config/openstack/
+    state: directory
+    owner: root
+    group: keystone
+    mode: 0755
+
+- name: add clouds.yml from template
+  template:
+    src: clouds.j2
+    dest: /root/.config/openstack/clouds.yaml
+    owner: root
+    group: keystone
+    mode: 0644
+
 - name: add keystone_init.sh from template
   template:
     src: keystone_init.j2
@@ -93,26 +119,31 @@
 
 - name: create swifty domain
   os_keystone_domain:
+     cloud: swifty
      state: present
      name: swifty
 
 - name: create swifty.admin role
   os_keystone_role:
+    cloud: swifty
     state: present
     name: swifty.admin
 
 - name: create swifty.owner role
   os_keystone_role:
+    cloud: swifty
     state: present
     name: swifty.owner
 
 - name: create swifty.ui role
   os_keystone_role:
+    cloud: swifty
     state: present
     name: swifty.ui
 
 - name: create swyadmin project
   os_project:
+    cloud: swifty
     state: present
     name: swyadmin
     domain_id: swifty
@@ -120,6 +151,7 @@
 
 - name: create swyui project
   os_project:
+    cloud: swifty
     state: present
     name: swyui
     domain_id: swifty
@@ -127,6 +159,7 @@
 
 - name: create swyadmin user
   os_user:
+    cloud: swifty
     state: present
     name: swyadmin
     password: "{{ keystone_swyadmin_password }}"
@@ -135,6 +168,7 @@
 
 - name: create swyui user
   os_user:
+    cloud: swifty
     state: present
     name: swyui
     password: "{{ keystone_swyui_password }}"
@@ -143,18 +177,21 @@
 
 - name: grant swifty.admin role to swyadmin user
   os_user_role:
+    cloud: swifty
     user: swyadmin
     role: swifty.admin
     project: swyadmin
 
 - name: grant swifty.owner role to swyadmin user
   os_user_role:
+    cloud: swifty
     user: swyadmin
     role: swifty.owner
     project: swyadmin
 
 - name: grant swifty.ui role to swyui user
   os_user_role:
+    cloud: swifty
     user: swyui
     role: swifty.ui
     project: swyui
