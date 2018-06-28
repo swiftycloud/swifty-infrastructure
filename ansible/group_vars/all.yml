@@ -30,9 +30,8 @@ ec2_keypair: "ansible"
 ec2_security_group: "sg-e0fe9c8a"
 ec2_instance_type: "t2.medium"
 ec2_image: "ami-e4a89a81"
-ec2_subnet_ids: ['subnet-a7cf72cf','subnet-a7cf72cf','subnet-a7cf72cf']
+ec2_subnet_id: "subnet-a7cf72cf"
 ec2_region: "us-east-2"
-ec2_volume_size: 16
 
 # system
 

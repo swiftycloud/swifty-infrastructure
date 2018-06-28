@@ -9,8 +9,8 @@
      key_name: "{{ ec2_keypair }}"
      group_id: "{{ ec2_security_group }}"
      instance_type: "{{ ec2_instance_type }}"
+     vpc_subnet_id: "{{ ec2_subnet_id }}"
      image: "{{ ec2_image }}"
-     vpc_subnet_id: "{{ ec2_subnet_ids|random }}"
      region: "{{ ec2_region }}"
      assign_public_ip: yes
      wait: true
@@ -36,8 +36,8 @@
      key_name: "{{ ec2_keypair }}"
      group_id: "{{ ec2_security_group }}"
      instance_type: "{{ ec2_instance_type }}"
+     vpc_subnet_id: "{{ ec2_subnet_id }}"
      image: "{{ ec2_image }}"
-     vpc_subnet_id: "{{ ec2_subnet_ids|random }}"
      region: "{{ ec2_region }}"
      assign_public_ip: yes
      wait: true
