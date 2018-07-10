@@ -6,6 +6,3 @@ ec2-18-191-254-204.us-east-2.compute.amazonaws.com
 [cluster]
 ec2-18-219-255-245.us-east-2.compute.amazonaws.com
 ec2-18-191-254-204.us-east-2.compute.amazonaws.com
-
-[all:vars]
-ansible_python_interpreter=/usr/bin/python3

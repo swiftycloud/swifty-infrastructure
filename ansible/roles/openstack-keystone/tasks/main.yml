@@ -197,6 +197,4 @@
     project: swyui
 
 - name:
-  shell: openstack user set --project admin admin
-  become: yes
-  become_user: root
+  shell: openstack user set --project admin admin --os-cloud swifty

@@ -11,6 +11,7 @@
   gather_facts: true
   become: yes
   become_method: sudo
+  become_user: root
   pre_tasks:
    - include_vars: group_vars/all.yml
   roles:
@@ -26,6 +27,7 @@
   gather_facts: true
   become: yes
   become_method: sudo
+  become_user: root
   pre_tasks:
    - include_vars: group_vars/all.yml
   roles:
@@ -37,6 +39,7 @@
   gather_facts: true
   become: yes
   become_method: sudo
+  become_user: root
   pre_tasks:
    - include_vars: group_vars/all.yml
   roles:
@@ -46,6 +49,7 @@
   gather_facts: true
   become: yes
   become_method: sudo
+  become_user: root
   pre_tasks:
    - include_vars: group_vars/all.yml
   roles:
