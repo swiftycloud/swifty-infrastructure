@@ -77,7 +77,7 @@
     src: .bashrc.j2
     dest: /root/.bashrc
     owner: root
-    group: root
+    group: keystone
     mode: 0644
 
 - name: reload .bashrc
@@ -198,3 +198,5 @@
 
 - name:
   shell: openstack user set --project admin admin
+  become: yes
+  become_user: root
