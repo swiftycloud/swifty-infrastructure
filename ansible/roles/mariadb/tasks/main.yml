@@ -20,6 +20,7 @@
 - name: Install the mysqlclient module
   pip:
     name: mysqlclient
+    executable: pip3
 
 #- name: change password for mariadb root user
 #  mysql_user:

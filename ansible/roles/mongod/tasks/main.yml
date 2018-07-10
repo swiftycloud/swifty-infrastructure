@@ -22,6 +22,7 @@
 - name: Install the pymongo module
   pip:
     name: pymongo
+    executable: pip3
 - name:  add admin user
   mongodb_user:
     database: admin

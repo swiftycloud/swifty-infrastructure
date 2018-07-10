@@ -20,6 +20,7 @@
 - name: Install the mysqlclient module
   pip:
     name: mysqlclient
+    executable: pip3
 
 - name: create user for keystone
   mysql_user:
@@ -116,6 +117,7 @@
 - name: Install the shade module
   pip:
     name: shade
+    executable: pip3
 
 - name: create swifty domain
   os_keystone_domain:

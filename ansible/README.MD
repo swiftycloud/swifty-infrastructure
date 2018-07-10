@@ -1,5 +1,4 @@
 ##### In swifty-infrastructure/ansible/group_vars/all.yml change pass variables and master_int and worker_int vars. Master_int and worker_int are Private DNS AWS Domains.
-##### In swifty-infrastructure/ansible/hosts specify Public DNS AWS Domains.
 ##### Make sure you have proper key-based ssh connections to AWS virtual machines. Add aws keypair file to ~/swifty-infrastructure/ansible directory.
 
 ##### Create aws credential file and add keys:

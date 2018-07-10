@@ -2,6 +2,7 @@
  - name: Install the boto module
    pip:
      name: boto
+     executable: pip3
 
  - name: Provision core instances
    local_action:
