@@ -4,7 +4,7 @@ keystone:
         address: "127.0.0.1:5000"
         domain: "swifty"
 daemon:
-        address: "0.0.0.0:8686"
+        address: "{{ hostvars[groups['swy-core'][0]]['core_private_ip'] }}:8686"
         sources:
                 share: "/home/swifty-volume"
                 clone: "/home/swifty/local-sources"

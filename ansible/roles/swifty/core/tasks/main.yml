@@ -86,10 +86,10 @@
 
 
 - name: docker run gate
-  shell: docker run -d --net=host --name=swygate -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume swiftycloudou/gate
+  shell: docker run -d --net=host --name=swygate --restart always -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume swiftycloudou/gate
 
 - name: docker run admd
-  shell: docker run -d --net=host --name=swyadmd -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume swiftycloudou/admd
+  shell: docker run -d --net=host --name=swyadmd --restart always -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume swiftycloudou/admd
 
 - name: docker run s3
-  shell: docker run -d --net=host --name=swys3 -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume swiftycloudou/s3
+  shell: docker run -d --net=host --name=swys3 --restart always -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume swiftycloudou/s3
