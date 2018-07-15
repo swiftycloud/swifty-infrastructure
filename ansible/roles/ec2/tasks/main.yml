@@ -18,6 +18,9 @@
      assign_public_ip: yes
      wait: true
      count: 1
+     volumes:
+     - device_name: /dev/sda1
+       volume_size: 20
    register: ec2_core
 
  - name: add host to inventory
@@ -48,6 +51,9 @@
      assign_public_ip: yes
      wait: true
      count: 1
+     volumes:
+     - device_name: /dev/sda1
+       volume_size: 20
    register: ec2_worker
 
  - name: add host to inventory
