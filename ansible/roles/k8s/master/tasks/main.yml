@@ -57,7 +57,7 @@
 - name: Init Kubernetes cluster
   shell: |
     kubeadm init --pod-network-cidr {{ pod_network_cidr }} \
-                 --kubernetes-version=v1.11.0
+                 --kubernetes-version=v1.11.0 \
                  --token {{ token }}
   tags: master
 
