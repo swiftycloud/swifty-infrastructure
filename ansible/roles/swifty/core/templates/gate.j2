@@ -1,21 +1,13 @@
 ---
+home: "/home/swifty"
 db: "swygate:DBPASS@127.0.0.1:27017"
 keystone:
         address: "127.0.0.1:5000"
         domain: "swifty"
 daemon:
         address: "{{ hostvars[groups['swy-core'][0]]['core_private_ip'] }}:8686"
-        sources:
-                share: "/home/swifty-volume"
-                clone: "/home/swifty/local-sources"
         loglevel: "debug"
         prometheus: "127.0.0.1:9012"
-balancer:
-        localips:
-                - ip: "10.244.0.1"
-                  ports: "8680:8880"
-                - ip: "10.244.0.2"
-                  ports: "8780:8980"
 middleware:
         mwseckey: "MWSECPASS"
         maria:
@@ -30,8 +22,8 @@ middleware:
                 creds: "-:PGRTOKEN@swft-mw:5432"
                 admport: "3872"
         s3:
-                creds: "-:S3TOKEN@127.0.0.1:8787"
-                admport: "8789"
+                creds: "-:S3TOKEN@{{ hostvars[groups['swy-core'][0]]['core_private_ip'] }}:8789"
+                admport: "{{ hostvars[groups['swy-core'][0]]['core_private_ip'] }}:8787"
                 notify: "swifty:S3IFYPASS@127.0.0.1:5672/s3"
                 hidden-key-timeout: 120
 runtime:
@@ -44,5 +36,6 @@ runtime:
                 def: 128
         max-replicas: 32
 wdog:
+        volume: "/home/swifty-volume"
         port: 8687
-swage: "/home/swifty/swage"
+logs-keep: 1
