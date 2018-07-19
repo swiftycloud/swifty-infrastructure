@@ -17,13 +17,13 @@ middleware:
                 creds: "root:RABBITPASS@127.0.0.1:5672"
                 admport: "15672"
         mongo:
-                creds: "root:MONGOPASS@127.0.0.1:27017"
+                creds: "admin:MONGOPASS@127.0.0.1:27017"
         postgres:
                 creds: "-:PGRTOKEN@swft-mw:5432"
                 admport: "3872"
         s3:
                 creds: "-:S3TOKEN@{{ hostvars[groups['swy-core'][0]]['core_private_ip'] }}:8789"
-                admport: "{{ hostvars[groups['swy-core'][0]]['core_private_ip'] }}:8787"
+                api: "{{ hostvars[groups['swy-core'][0]]['core_public_ip'] }}:8787"
                 notify: "swifty:S3IFYPASS@127.0.0.1:5672/s3"
                 hidden-key-timeout: 120
 runtime:
@@ -36,6 +36,9 @@ runtime:
                 def: 128
         max-replicas: 32
 wdog:
+        img-prefix: "swiftycloudou"
         volume: "/home/swifty-volume"
         port: 8687
-logs-keep: 1
+logs-keep: 2
+repo-sync-rate: 5
+repo-sync-period: 60
