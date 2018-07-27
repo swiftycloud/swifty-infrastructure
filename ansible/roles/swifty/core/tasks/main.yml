@@ -84,6 +84,11 @@
 - name: kubectl create swiftbuilder
   shell: kubectl create -f /root/swiftbuild-dep.yaml
 
+- name: pull python image
+  shell: docker pull swiftycloudou/python
+
+- name: pull nodejs image
+  shell: docker pull swiftycloudou/nodejs
 
 - name: docker run gate
   shell: docker run -d --net=host --name=swygate --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume swiftycloudou/gate
