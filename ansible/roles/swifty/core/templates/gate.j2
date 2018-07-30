@@ -6,7 +6,7 @@ keystone:
         domain: "swifty"
 daemon:
         address: "{{ hostvars[groups['swy-core'][0]]['core_public_dns'] }}:8686"
-        callgate: "{{ hostvars[groups['swy-core'][0]]['core_public_dns'] }}:8686"
+        callgate: "http://{{ hostvars[groups['swy-core'][0]]['core_public_dns'] }}:8686"
         loglevel: "debug"
         prometheus: "127.0.0.1:9012"
 middleware:
