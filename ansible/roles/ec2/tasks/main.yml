@@ -4,15 +4,49 @@
      name: boto
      executable: pip3
 
+ - name: Install the boto3 module
+   pip:
+     name: boto3
+     executable: pip3
+
+ - name: Create ec2_security_group
+   local_action:
+     module: ec2_group
+     name: swifty
+     description: "swifty security group"
+     region: "{{ec2_region}}"
+     vpc_id: "{{ec2_vpc_id}}"
+     aws_access_key: "{{aws_access_key}}"
+     aws_secret_key: "{{aws_secret_key}}"
+     rules:
+       - proto: all
+         cidr_ip: 0.0.0.0/0
+       - proto: all
+         group_name: swifty
+     rules_egress:
+       - proto: all
+         cidr_ip: 0.0.0.0/0
+   register: firewall
+
+ - name: Gather vpc_subnet_id by vpc_id
+   local_action:
+     module: ec2_vpc_subnet_facts
+     region: "{{ ec2_region }}"
+     aws_access_key: "{{ aws_access_key }}"
+     aws_secret_key: "{{ aws_secret_key }}"
+     filters:
+       vpc-id: "{{ec2_vpc_id}}"
+   register: subnet_facts
+
  - name: Provision core instances
    local_action:
      module: ec2
      aws_access_key: "{{ aws_access_key }}"
      aws_secret_key: "{{ aws_secret_key }}"
      key_name: "{{ ec2_keypair }}"
-     group_id: "{{ ec2_security_group }}"
+     group_id: "{{firewall.group_id}}"
      instance_type: "{{ ec2_instance_type }}"
-     vpc_subnet_id: "{{ ec2_subnet_id }}"
+     vpc_subnet_id: "{{ subnet_facts.subnets|map(attribute='id')|list|first }}"
      image: "{{ ec2_image }}"
      region: "{{ ec2_region }}"
      assign_public_ip: yes
@@ -44,9 +78,9 @@
      aws_access_key: "{{ aws_access_key }}"
      aws_secret_key: "{{ aws_secret_key }}"
      key_name: "{{ ec2_keypair }}"
-     group_id: "{{ ec2_security_group }}"
+     group_id: "{{firewall.group_id}}"
      instance_type: "{{ ec2_instance_type }}"
-     vpc_subnet_id: "{{ ec2_subnet_id }}"
+     vpc_subnet_id: "{{ subnet_facts.subnets|map(attribute='id')|list|first }}"
      image: "{{ ec2_image }}"
      region: "{{ ec2_region }}"
      assign_public_ip: yes

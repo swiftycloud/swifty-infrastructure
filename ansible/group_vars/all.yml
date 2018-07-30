@@ -33,11 +33,10 @@ remote_host_ip: '%'
 aws_access_key: "AKIAJSCGC2E2ATWMNNUQ"
 aws_secret_key: "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"
 ec2_keypair: "vporokhov"
-ec2_security_group: "sg-135b1558"
 ec2_instance_type: "t2.medium"
 ec2_image: "ami-005ca2b3c05cf85e2"
-ec2_subnet_id: "subnet-3a682267"
 ec2_region: "us-east-1"
+ec2_vpc_id: "vpc-2766af5c"
 
 # system
 

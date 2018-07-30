@@ -64,3 +64,11 @@
    - include_vars: group_vars/all.yml
   roles:
    - { role: swifty/core, tags: master}
+
+- hosts: localhost
+  connection: local
+  tasks:
+   - name: Display post install message
+     debug:
+       msg: Please go to {{ item.public_ip }} or {{ item.public_dns_name }} to get access to swifty.dashboard. Have a nice day!
+     with_items: '{{ ec2_worker.instances }}'
