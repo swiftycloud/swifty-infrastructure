@@ -16,8 +16,6 @@
      description: "swifty security group"
      region: "{{ec2_region}}"
      vpc_id: "{{ec2_vpc_id}}"
-     aws_access_key: "{{aws_access_key}}"
-     aws_secret_key: "{{aws_secret_key}}"
      rules:
        - proto: all
          cidr_ip: 0.0.0.0/0
@@ -32,8 +30,6 @@
    local_action:
      module: ec2_vpc_subnet_facts
      region: "{{ ec2_region }}"
-     aws_access_key: "{{ aws_access_key }}"
-     aws_secret_key: "{{ aws_secret_key }}"
      filters:
        vpc-id: "{{ec2_vpc_id}}"
    register: subnet_facts
@@ -41,8 +37,6 @@
  - name: Provision core instances
    local_action:
      module: ec2
-     aws_access_key: "{{ aws_access_key }}"
-     aws_secret_key: "{{ aws_secret_key }}"
      key_name: "{{ ec2_keypair }}"
      group_id: "{{firewall.group_id}}"
      instance_type: "{{ ec2_instance_type }}"
@@ -75,8 +69,6 @@
  - name: Provision worker instances
    local_action:
      module: ec2
-     aws_access_key: "{{ aws_access_key }}"
-     aws_secret_key: "{{ aws_secret_key }}"
      key_name: "{{ ec2_keypair }}"
      group_id: "{{firewall.group_id}}"
      instance_type: "{{ ec2_instance_type }}"

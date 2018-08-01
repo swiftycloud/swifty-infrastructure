@@ -30,8 +30,6 @@ remote_host_ip: '%'
 
 # aws
 
-aws_access_key: "AKIAJSCGC2E2ATWMNNUQ"
-aws_secret_key: "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"
 ec2_keypair: "vporokhov"
 ec2_instance_type: "t2.medium"
 ec2_image: "ami-005ca2b3c05cf85e2"
