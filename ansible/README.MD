@@ -24,6 +24,10 @@ ec2_region: "us-east-1"
 ec2_vpc_id: "vpc-2766af5c"
 
 ```
+<<<<<<< HEAD
+=======
+
+>>>>>>> 458f0b0e15f20c7e06247e4ee1d5bd003123a6e3
 ##### For Ubuntu 16.04/Ubuntu 18.04 install and configure ansible like this
 
 ```
