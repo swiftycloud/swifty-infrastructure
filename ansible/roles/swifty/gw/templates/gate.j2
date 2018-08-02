@@ -5,26 +5,26 @@ keystone:
         address: "127.0.0.1:5000"
         domain: "swifty"
 daemon:
-        address: "{{ hostvars[groups['swy-core'][0]]['core_public_dns'] }}:8686"
-        callgate: "http://{{ hostvars[groups['swy-core'][0]]['core_public_dns'] }}:8686"
+        address: "{{ hostvars[groups['swy-gw'][0]]['gw_public_dns'] }}:8686"
+        callgate: "http://{{ hostvars[groups['swy-gw'][0]]['gw_public_dns'] }}:8686"
         loglevel: "debug"
         prometheus: "127.0.0.1:9012"
 middleware:
         mwseckey: "MWSECPASS"
         maria:
-                creds: "root:-@127.0.0.1:3306"
+                creds: "root:-@{{ hostvars[groups['swy-mw'][0]]['mw_public_dns'] }}:3306"
                 quotdb: "swifty.QUOTAS"
         rabbit:
                 creds: "root:RABBITPASS@127.0.0.1:5672"
                 admport: "15672"
         mongo:
-                creds: "admin:MONGOPASS@127.0.0.1:27017"
+                creds: "admin:MONGOPASS@{{ hostvars[groups['swy-mw'][0]]['mw_public_dns'] }}:27017"
         postgres:
                 creds: "-:PGRTOKEN@swft-mw:5432"
                 admport: "3872"
         s3:
-                creds: "-:S3TOKEN@{{ hostvars[groups['swy-core'][0]]['core_public_dns'] }}:8789"
-                api: "{{ hostvars[groups['swy-core'][0]]['core_public_dns'] }}:8787"
+                creds: "-:S3TOKEN@{{ hostvars[groups['swy-mw'][0]]['mw_public_dns'] }}:8789"
+                api: "{{ hostvars[groups['swy-mw'][0]]['mw_public_dns'] }}:8787"
                 notify: "swifty:S3IFYPASS@127.0.0.1:5672/s3"
                 hidden-key-timeout: 120
 runtime:

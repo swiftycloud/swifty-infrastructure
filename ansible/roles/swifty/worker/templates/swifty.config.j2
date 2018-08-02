@@ -1,7 +1,0 @@
-{
-  "API_GATE_ENDPOINT": "http://{{ hostvars[groups['swy-core'][0]]['core_public_dns'] }}:8686/v1",
-  "API_ADMD_ENDPOINT": "http://{{ hostvars[groups['swy-core'][0]]['core_public_dns'] }}:8687/v1",
-  "API_USERNAME": "swyui",
-  "API_PASSWORD": "{{ keystone_swyui_password }}",
-  "API_S3_SSL_ENABLED": false
-}

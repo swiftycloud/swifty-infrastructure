@@ -19,7 +19,7 @@
     state: directory
 
 - name: Configure mount point
-  shell: echo "{{ hostvars[groups['swy-core'][0]]['core_private_ip'] }}:/home/swifty-volume /home/swifty-volume nfs rw,sync,hard,intr,addr={{ hostvars[groups['swy-worker'][0]]['worker_private_ip'] }} 0 0" >>  /etc/fstab
+  shell: echo "{{ hostvars[groups['swy-gw'][0]]['gw_private_ip'] }}:/home/swifty-volume /home/swifty-volume nfs rw,sync,hard,intr,addr={{ physical_ip }} 0 0" >>  /etc/fstab
 
 - name: Mount swifty-volume
   shell: mount /home/swifty-volume

@@ -12,7 +12,6 @@ aws_access_key_id=your_key
 aws_secret_access_key=your_key
 
 ```
-
 ##### Edit group_vars/all.yml
 
 ```
@@ -25,8 +24,7 @@ ec2_region: "us-east-1"
 ec2_vpc_id: "vpc-2766af5c"
 
 ```
-
-##### For Ubuntu 16.04 install and configure ansible like this
+##### For Ubuntu 16.04/Ubuntu 18.04 install and configure ansible like this
 
 ```
 sudo apt-get update && sudo apt-get -y install python3-pip openssl libssl-dev ansible

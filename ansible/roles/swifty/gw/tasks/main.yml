@@ -1,0 +1,97 @@
+- name: create /etc/swifty/conf/ dir
+  file:
+    path: /etc/swifty/conf/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: create /root/.swysecrets/ dir
+  file:
+    path: /root/.swysecrets/
+    state: directory
+    owner: root
+    group: root
+    mode:  0700
+
+- name: copy admd_secret.yaml
+  template:
+    src: admd_secret.j2
+    dest: /root/.swysecrets/admd
+    owner: root
+    group: root
+    mode: 0600
+
+- name: copy gate_secret.yaml
+  template:
+    src: gate_secret.j2
+    dest: /root/.swysecrets/gate
+    owner: root
+    group: root
+    mode: 0600
+
+- name: copy s3_secret.yaml
+  template:
+    src: s3_secret.j2
+    dest: /root/.swysecrets/s3
+    owner: root
+    group: root
+    mode: 0600
+
+- name: copy kubeconfig
+  copy:
+    src: "{{ kubeadmin_config }}"
+    dest: "/etc/swifty/conf/kubeconfig"
+    remote_src: True
+
+- name: copy gate config
+  template:
+    src: gate.j2
+    dest: /etc/swifty/conf/gate.yaml
+    owner: root
+    group: root
+    mode: 0640
+
+- name: copy admd config
+  template:
+    src: admd.j2
+    dest: /etc/swifty/conf/admd.yaml
+    owner: root
+    group: root
+    mode: 0640
+
+- name: copy s3 config
+  template:
+    src: s3.j2
+    dest: /etc/swifty/conf/s3.yaml
+    owner: root
+    group: root
+    mode: 0640
+
+- name: copy go deployment
+  copy:
+    src: gobuild-dep.yaml
+    dest: /root/gobuild-dep.yaml
+
+- name: copy swift deployment
+  copy:
+    src: swiftbuild-dep.yaml
+    dest: /root/swiftbuild-dep.yaml
+
+- name: kubectl create gobuilder
+  shell: kubectl create -f /root/gobuild-dep.yaml
+
+- name: kubectl create swiftbuilder
+  shell: kubectl create -f /root/swiftbuild-dep.yaml
+
+- name: pull python image
+  shell: docker pull swiftycloudou/python
+
+- name: pull nodejs image
+  shell: docker pull swiftycloudou/nodejs
+
+- name: docker run gate
+  shell: docker run -d --net=host --name=swygate --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume swiftycloudou/gate
+
+- name: docker run admd
+  shell: docker run -d --net=host --name=swyadmd --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume swiftycloudou/admd

@@ -1,7 +1,7 @@
 # ansible
 
 ansible_ssh_user: fedora
-ansible_ssh_private_key_file: ./vporokhov.pem
+ansible_ssh_private_key_file: ./ansible.pem
 
 # Kubernetes
 
@@ -30,11 +30,19 @@ remote_host_ip: '%'
 
 # aws
 
-ec2_keypair: "vporokhov"
+ec2_keypair: "ansible"
 ec2_instance_type: "t2.medium"
 ec2_image: "ami-005ca2b3c05cf85e2"
 ec2_region: "us-east-1"
 ec2_vpc_id: "vpc-2766af5c"
+
+# tinc vpn
+
+netname: nyc3
+vpn_interface: tun0
+physical_ip: "{{ ansible_eth0.ipv4.address }}"
+vpn_netmask: 255.255.255.0
+vpn_subnet_cidr_netmask: 32
 
 # system
 
