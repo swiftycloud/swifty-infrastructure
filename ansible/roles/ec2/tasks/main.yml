@@ -51,16 +51,18 @@
        volume_size: 20
    register: ec2_gw
 
- - name: add host to inventory
+ - name: add gw to inventory
    add_host:
      hostname: "{{ item.public_dns_name }}"
      gw_public_ip: "{{ item.public_ip }}"
      gw_private_ip: "{{ item.private_ip }}"
      gw_public_dns: "{{ item.public_dns_name }}"
      vpn_ip: 192.0.0.1
+     tinc_hostname: swygw
      groups:
        - swy-gw
        - dep-gw
+       - tinc_vpn
    with_items: '{{ ec2_gw.instances }}'
 
  - name: Wait for the instances to boot by checking the ssh port
@@ -85,16 +87,18 @@
        volume_size: 20
    register: ec2_mw
 
- - name: add host to inventory
+ - name: add mw to inventory
    add_host:
      hostname: "{{ item.public_dns_name }}"
      mw_public_ip: "{{ item.public_ip }}"
      mw_private_ip: "{{ item.private_ip }}"
      mw_public_dns: "{{ item.public_dns_name }}"
      vpn_ip: 192.0.0.2
+     tinc_hostname: swymw
      groups:
        - swy-mw
        - dep-mw
+       - tinc_vpn
    with_items: '{{ ec2_mw.instances }}'
 
  - name: Wait for the instances to boot by checking the ssh port
@@ -119,15 +123,17 @@
        volume_size: 20
    register: ec2_ui
 
- - name: add host to inventory
+ - name: add ui to inventory
    add_host:
      hostname: "{{ item.public_dns_name }}"
      ui_public_ip: "{{ item.public_ip }}"
      ui_private_ip: "{{ item.private_ip }}"
      ui_public_dns: "{{ item.public_dns_name }}"
      vpn_ip: 192.0.0.3
+     tinc_hostname: swyui
      groups:
        - swy-ui
+       - tinc_vpn
    with_items: '{{ ec2_ui.instances }}'
 
  - name: Wait for the instances to boot by checking the ssh port
@@ -135,7 +141,7 @@
    with_items: '{{ ec2_ui.instances }}'
 
 
- - name: Provision worker instances
+ - name: Provision worker0 instance
    local_action:
      module: ec2
      key_name: "{{ ec2_keypair }}"
@@ -146,22 +152,59 @@
      region: "{{ ec2_region }}"
      assign_public_ip: yes
      wait: true
-     count: 2
+     count: 1
      volumes:
      - device_name: /dev/sda1
        volume_size: 20
-   register: ec2_worker
+   register: ec2_worker0
 
- - name: add host to inventory
+ - name: Provision worker instance
+   local_action:
+     module: ec2
+     key_name: "{{ ec2_keypair }}"
+     group_id: "{{firewall.group_id}}"
+     instance_type: "{{ ec2_instance_type }}"
+     vpc_subnet_id: "{{ subnet_facts.subnets|map(attribute='id')|list|first }}"
+     image: "{{ ec2_image }}"
+     region: "{{ ec2_region }}"
+     assign_public_ip: yes
+     wait: true
+     count: 1
+     volumes:
+     - device_name: /dev/sda1
+       volume_size: 20
+   register: ec2_worker1
+
+ - name: add worker0 to inventory
    add_host:
      hostname: "{{ item.public_dns_name }}"
      worker_public_ip: "{{ item.public_ip }}"
      worker_private_ip: "{{ item.private_ip }}"
      worker_public_dns: "{{ item.public_dns_name }}"
+     vpn_ip: 192.0.0.4
+     tinc_hostname: swyworker0
      groups:
        - swy-worker
-   with_items: '{{ ec2_worker.instances }}'
+       - tinc_vpn
+   with_items: "{{ ec2_worker0.instances }}"
+
+ - name: add worker1 to inventory
+   add_host:
+     hostname: "{{ item.public_dns_name }}"
+     worker_public_ip: "{{ item.public_ip }}"
+     worker_private_ip: "{{ item.private_ip }}"
+     worker_public_dns: "{{ item.public_dns_name }}"
+     vpn_ip: 192.0.0.5
+     tinc_hostname: swyworker1
+     groups:
+       - swy-worker
+       - tinc_vpn
+   with_items: "{{ ec2_worker1.instances }}"
 
  - name: Wait for the instances to boot by checking the ssh port
    wait_for: host="{{item.public_ip}}" port=22 delay=20 timeout=320 state=started
-   with_items: '{{ ec2_worker.instances }}'
+   with_items: '{{ ec2_worker0.instances }}'
+
+ - name: Wait for the instances to boot by checking the ssh port
+   wait_for: host="{{item.public_ip}}" port=22 delay=20 timeout=320 state=started
+   with_items: '{{ ec2_worker1.instances }}'

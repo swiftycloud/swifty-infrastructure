@@ -53,7 +53,7 @@
 
 - name: ensure tinc hosts file binds to physical ip address
   lineinfile: >
-    dest=/etc/tinc/{{ netname }}/hosts/{{ inventory_hostname }}
+    dest=/etc/tinc/{{ netname }}/hosts/{{ tinc_hostname }}
     line="Address = {{ physical_ip }}"
     create=yes
   notify:
@@ -61,14 +61,14 @@
 
 - name: ensure subnet ip address is properly set in tinc host file
   lineinfile: >
-    dest=/etc/tinc/{{ netname }}/hosts/{{ inventory_hostname }}
+    dest=/etc/tinc/{{ netname }}/hosts/{{ tinc_hostname }}
     line="Subnet = {{ vpn_ip }}/{{ vpn_subnet_cidr_netmask }}"
     create=yes
   notify:
     - restart tinc
 
-- name: check whether /etc/tinc/netname/hosts/inventory_hostname contains "-----END RSA PUBLIC KEY-----"
-  command: awk '/^-----END RSA PUBLIC KEY-----$/'  /etc/tinc/{{ netname }}/hosts/{{ inventory_hostname }}
+- name: check whether /etc/tinc/netname/hosts/tinc_hostname contains "-----END RSA PUBLIC KEY-----"
+  command: awk '/^-----END RSA PUBLIC KEY-----$/'  /etc/tinc/{{ netname }}/hosts/{{ tinc_hostname }}
   changed_when: "public_key.stdout != '-----END RSA PUBLIC KEY-----'"
   register: public_key
 
@@ -88,8 +88,8 @@
 
 - name: fetch tinc hosts file after key creation
   fetch: >
-    src=/etc/tinc/{{ netname }}/hosts/{{ inventory_hostname }}
-    dest=fetch/{{ inventory_hostname }}
+    src=/etc/tinc/{{ netname }}/hosts/{{ tinc_hostname }}
+    dest=fetch/{{ tinc_hostname }}
     flat=yes
   notify:
     - reload tinc
@@ -112,6 +112,6 @@
     pattern=tincd -n {{ netname }}
 
 - name: add nodes to /etc/hosts (ansible_inventory resolves to vpn_ip)
-  lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].vpn_ip }} {{item}}" state=present
+  lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].vpn_ip }} {{ hostvars[item].tinc_hostname }}" state=present
   when: hostvars[item].vpn_ip is defined
   with_items: "{{ play_hosts }}"

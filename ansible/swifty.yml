@@ -9,6 +9,17 @@
   roles:
    - ec2
 
+- hosts: tinc_vpn
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+   - include_vars: group_vars/all.yml
+  roles:
+   - tinc
 - hosts: swy-gw
   gather_facts: true
   become: yes
@@ -20,7 +31,6 @@
    - include_vars: group_vars/all.yml
   roles:
    - docker
-   - tinc
    - { role: k8s/master, tags: master}
    - mariadb
    - mongod
@@ -39,42 +49,22 @@
    - include_vars: group_vars/all.yml
   roles:
    - docker
-   - tinc
    - mariadb
    - mongod
 
-- hosts: "{{ hostvars[groups['swy-worker'][0] }}"
+- hosts: swy-worker
   gather_facts: true
   become: yes
   become_method: sudo
   become_user: root
   vars:
     ansible_python_interpreter: /usr/bin/python3
-    vpn_ipip: 192.0.0.4
   pre_tasks:
    - include_vars: group_vars/all.yml
   roles:
    - docker
-   - tinc
-   - { role: nfs/client, tags: client}
    - { role: k8s/worker, tags: worker}
-
-
-- hosts: "{{ hostvars[groups['swy-worker'][1] }}"
-  gather_facts: true
-  become: yes
-  become_method: sudo
-  become_user: root
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
-    vpn_ipip: 192.0.0.5
-  pre_tasks:
-   - include_vars: group_vars/all.yml
-  roles:
-   - docker
-   - tinc
    - { role: nfs/client, tags: client}
-   - { role: k8s/worker, tags: worker}
 
 - hosts: dep-gw
   gather_facts: true
@@ -111,7 +101,6 @@
    - include_vars: group_vars/all.yml
   roles:
    - docker
-   - tinc
    - swifty/ui
 
 - hosts: localhost

@@ -29,3 +29,5 @@
 # Ansible specific
 
 ansible/*.retry
+ansible/fetch
+ansible/*.pem
