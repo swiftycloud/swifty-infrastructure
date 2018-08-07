@@ -17,6 +17,15 @@
     name: mongod
     enabled: yes
     masked: no
+
+- name: copy mongod.conf
+  template:
+    src: mongod.j2
+    dest: /etc/mongod.conf
+    owner: root
+    group: root
+    mode: 0644
+
 - name: start mongodb service
   systemd: state=started name=mongod
 - name: Install the pymongo module

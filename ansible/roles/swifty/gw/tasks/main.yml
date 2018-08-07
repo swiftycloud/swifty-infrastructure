@@ -90,8 +90,27 @@
 - name: pull nodejs image
   shell: docker pull swiftycloudou/nodejs
 
+- name: create home dir
+  file:
+    path: /home/swifty/clone/.shared
+    state: directory
+    owner: root
+    group: root
+    mode:  0700
+
+- name: install git 
+  dnf:
+    name: git
+    state: latest
+
+- name: clone demo apps repo
+  git:
+    repo: 'https://github.com/swiftycloud/swifty.demo'
+    dest: /home/swifty/clone/.shared
+    version: master
+    
 - name: docker run gate
-  shell: docker run -d --net=host --name=swygate --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume swiftycloudou/gate
+  shell: docker run -d --net=host --name=swygate --restart always -v /home/swifty:/home/swifty -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets  swiftycloudou/gate
 
 - name: docker run admd
-  shell: docker run -d --net=host --name=swyadmd --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume swiftycloudou/admd
+  shell: docker run -d --net=host --name=swyadmd --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets swiftycloudou/admd

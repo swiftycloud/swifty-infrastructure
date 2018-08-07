@@ -7,5 +7,5 @@ daemon:
         loglevel: "debug"
         prometheus: "swy0:9013"
 notify:
-        rabbitmq: "s3:RMQS3PASS@127.0.0.1:5672/s3"
+        rabbitmq: "s3:RMQS3PASS@{{ hostvars[groups['swy-mw'][0]]['gw_private_ip'] }}:5672/s3"
 secretskey: "S3SECRETSKEY"

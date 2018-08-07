@@ -1,3 +1,6 @@
+- name: Disable selinux
+  shell: "setenforce 0"
+  
 - name: install docker engine
   dnf:
     name: docker
