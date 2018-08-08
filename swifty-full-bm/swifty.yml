@@ -1,0 +1,112 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    ansible_python_interpreter: python3
+  pre_tasks:
+   - include_vars: group_vars/all.yml
+  roles:
+   - ec2
+
+- hosts: tinc_vpn
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+   - include_vars: group_vars/all.yml
+  roles:
+   - tinc
+- hosts: swy-gw
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+   - include_vars: group_vars/all.yml
+  roles:
+   - docker
+   - { role: k8s/master, tags: master}
+   - mariadb
+   - mongod
+   - rabbitmq
+   - openstack-keystone
+   - { role: nfs/master, tags: master}
+
+- hosts: swy-mw
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+   - include_vars: group_vars/all.yml
+  roles:
+   - docker
+   - mariadb
+   - mongod
+
+- hosts: swy-worker
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+   - include_vars: group_vars/all.yml
+  roles:
+   - docker
+   - { role: k8s/worker, tags: worker}
+   - { role: nfs/client, tags: client}
+
+- hosts: dep-gw
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+   - include_vars: group_vars/all.yml
+  roles:
+   - { role: swifty/gw, tags: master}
+
+- hosts: dep-mw
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+   - include_vars: group_vars/all.yml
+  roles:
+   - { role: swifty/mw, tags: master}
+
+- hosts: swy-ui
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+   - include_vars: group_vars/all.yml
+  roles:
+   - docker
+   - swifty/ui
+
+- hosts: localhost
+  connection: local
+  tasks:
+   - name: Display post install message
+     debug:
+       msg: Please go to {{ item.public_ip }} or {{ item.public_dns_name }} to get access to swifty.dashboard. Have a nice day!
+     with_items: '{{ ec2_ui.instances }}'

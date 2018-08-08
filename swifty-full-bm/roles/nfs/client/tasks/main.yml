@@ -1,0 +1,25 @@
+- name: install nfs packages
+  dnf:
+    name:
+      - nfs-utils
+    state: latest
+
+- name: enable  nfs service
+  systemd:
+    name: nfs
+    enabled: yes
+    masked: no
+
+- name: start nfs service
+  systemd: state=started name=nfs
+
+- name: Creates swifty-volume dir
+  file:
+    path: /home/swifty-volume
+    state: directory
+
+- name: Configure mount point
+  shell: echo "{{ hostvars[groups['swy-gw'][0]]['gw_private_ip'] }}:/home/swifty-volume /home/swifty-volume nfs rw,sync,hard,intr,addr={{ physical_ip }} 0 0" >>  /etc/fstab
+
+- name: Mount swifty-volume
+  shell: mount /home/swifty-volume

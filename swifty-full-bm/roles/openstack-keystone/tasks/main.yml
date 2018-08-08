@@ -1,0 +1,202 @@
+- name: copy openstack repo rpm
+  copy:
+    src: rdo-release-pike-1.noarch.rpm
+    dest: /root/rdo-release-pike-1.noarch.rpm
+
+- name: install openstack repo from  rpm
+  dnf:
+    name: /root/rdo-release-pike-1.noarch.rpm
+    state: present
+
+- name: install openstack packages
+  dnf:
+    name:
+      - openstack-keystone
+      - httpd
+      - mod_wsgi
+      - python-openstackclient
+    state: present
+
+- name: Install the mysqlclient module
+  pip:
+    name: mysqlclient
+    executable: pip3
+
+- name: create user for keystone
+  mysql_user:
+    name: keystone
+    password: "{{ mariadb_keystone_password }}"
+    priv: '*.*:ALL'
+    state: present
+
+- name: create user for keystone
+  mysql_user:
+    login_user: root
+    login_password: ''
+    name: keystone
+    host_all: yes
+    state: present
+    host: "{{ remote_host_ip }}"
+
+- name: create keystone database
+  mysql_db:
+    name: keystone
+    state: present
+
+- name: add controller name to hosts file
+  shell: echo "127.0.0.1   controller" >> /etc/hosts
+
+- name: add keystone.conf from template
+  template:
+    src: keystone.j2
+    dest: /etc/keystone/keystone.conf
+    owner: root
+    group: keystone
+    mode: 0640
+
+- name: Disable selinux
+  shell: "setenforce 0"
+
+- name: copy httpd.conf
+  copy:
+    src: httpd.conf
+    dest: /etc/httpd/conf//httpd.conf
+- name: create link for wsgi conf
+  shell: "ln -s /usr/share/keystone/wsgi-keystone.conf /etc/httpd/conf.d/"
+
+- name: enable  httpd service
+  systemd:
+    name: httpd
+    enabled: yes
+    masked: no
+
+- name: restart httpd service
+  systemd: state=restarted name=httpd
+
+- name: add .bashrc from template
+  template:
+    src: .bashrc.j2
+    dest: /root/.bashrc
+    owner: root
+    group: keystone
+    mode: 0644
+
+- name: reload .bashrc
+  shell: source /root/.bashrc
+
+- name: create .config/openstack dir
+  file:
+    path: /root/.config/openstack/
+    state: directory
+    owner: root
+    group: keystone
+    mode: 0755
+
+- name: add clouds.yml from template
+  template:
+    src: clouds.j2
+    dest: /root/.config/openstack/clouds.yaml
+    owner: root
+    group: keystone
+    mode: 0644
+
+- name: add keystone_init.sh from template
+  template:
+    src: keystone_init.j2
+    dest: /root/keystone_init.sh
+    owner: root
+    group: keystone
+    mode: 0640
+
+- name: make keystone_init.sh executable
+  file: dest=/root/keystone_init.sh mode=a+x
+
+- name: init keystone
+  shell: /root/keystone_init.sh
+
+- name: Install the shade module
+  pip:
+    name: shade
+    executable: pip3
+
+- name: create swifty domain
+  os_keystone_domain:
+     cloud: swifty
+     state: present
+     name: swifty
+
+- name: create swifty.admin role
+  os_keystone_role:
+    cloud: swifty
+    state: present
+    name: swifty.admin
+
+- name: create swifty.owner role
+  os_keystone_role:
+    cloud: swifty
+    state: present
+    name: swifty.owner
+
+- name: create swifty.ui role
+  os_keystone_role:
+    cloud: swifty
+    state: present
+    name: swifty.ui
+
+- name: create swyadmin project
+  os_project:
+    cloud: swifty
+    state: present
+    name: swyadmin
+    domain_id: swifty
+    enabled: True
+
+- name: create swyui project
+  os_project:
+    cloud: swifty
+    state: present
+    name: swyui
+    domain_id: swifty
+    enabled: True
+
+- name: create swyadmin user
+  os_user:
+    cloud: swifty
+    state: present
+    name: swyadmin
+    password: "{{ keystone_swyadmin_password }}"
+    domain: swifty
+    default_project: swyadmin
+
+- name: create swyui user
+  os_user:
+    cloud: swifty
+    state: present
+    name: swyui
+    password: "{{ keystone_swyui_password }}"
+    domain: swifty
+    default_project: swyui
+
+- name: grant swifty.admin role to swyadmin user
+  os_user_role:
+    cloud: swifty
+    user: swyadmin
+    role: swifty.admin
+    project: swyadmin
+
+- name: grant swifty.owner role to swyadmin user
+  os_user_role:
+    cloud: swifty
+    user: swyadmin
+    role: swifty.owner
+    project: swyadmin
+
+- name: grant swifty.ui role to swyui user
+  os_user_role:
+    cloud: swifty
+    user: swyui
+    role: swifty.ui
+    project: swyui
+
+- name:
+  shell: openstack user set --project admin admin --os-cloud swifty

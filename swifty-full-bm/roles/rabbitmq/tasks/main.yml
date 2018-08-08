@@ -1,0 +1,86 @@
+# https://docs.ansible.com/ansible/latest/modules/yum_module.html
+# https://docs.ansible.com/ansible/latest/modules/rabbitmq_user_module.html
+# https://docs.ansible.com/ansible/latest/modules/rabbitmq_vhost_module.html
+# https://docs.ansible.com/ansible/latest/modules/rabbitmq_plugin_module.html
+
+- name: copy erlang repo rpm
+  copy:
+    src: erlang-solutions-1.0-1.noarch.rpm
+    dest: /root/erlang-solutions-1.0-1.noarch.rpm
+
+- name: install erlang repo from  rpm
+  dnf:
+    name: /root/erlang-solutions-1.0-1.noarch.rpm
+    state: present
+
+- name: install erlang
+  dnf:
+    name: erlang
+    state: present
+
+- name: copy rabbitmq rpm package
+  copy:
+    src: rabbitmq-server-3.6.9-1.el7.noarch.rpm
+    dest: /root/rabbitmq-server-3.6.9-1.el7.noarch.rpm
+
+- name: install rabbitmq
+  dnf:
+    name: /root/rabbitmq-server-3.6.9-1.el7.noarch.rpm
+    state: present
+
+- name: install librabbitmq
+  dnf:
+    name: librabbitmq
+    state: present
+
+- name: enable  rabbitmq-server service
+  systemd:
+    name: rabbitmq-server
+    enabled: yes
+    masked: no
+
+- name: start rabbitmq-server service
+  systemd: state=started name=rabbitmq-server
+
+- name: enable the rabbitmq_management plugin
+  rabbitmq_plugin:
+    names: rabbitmq_management
+    state: enabled
+
+- name: ensure that the vhost /s3 exists
+  rabbitmq_vhost:
+    name: /s3
+    state: present
+
+- name: ensure root user exist
+  rabbitmq_user:
+    user: root
+    password: "{{ rabbitmq_root_password }}"
+    tags: administrator
+    vhost: /
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present
+
+- name: ensure s3 user exist
+  rabbitmq_user:
+    user: s3
+    password: "{{ rabbitmq_s3_password }}"
+    tags: administrator
+    vhost: /s3
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present
+
+- name: s3 add
+  shell: |
+    rabbitmqctl add_user root "{{ rabbitmq_root_password }}" ; \
+    rabbitmqctl set_user_tags root administrator ; \
+    rabbitmqctl set_permissions -p / root ".*" ".*" ".*" ; \
+    rabbitmq-plugins enable rabbitmq_management ; \
+    rabbitmqctl add_user s3 "{{ rabbitmq_s3_password }}" ; \
+    rabbitmqctl set_user_tags s3 administrator ; \
+    rabbitmqctl add_vhost s3 ; \
+    rabbitmqctl set_permissions -p s3 s3 ".*" ".*" ".*"

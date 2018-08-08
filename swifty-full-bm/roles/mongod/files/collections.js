@@ -1,0 +1,8 @@
+db . createCollection (" Function ")
+db . createCollection (" Mware ")
+db . createCollection (" Logs ")
+db . createCollection (" FnStats ")
+db . createCollection (" Balancer ")
+db . createCollection (" BalancerRS ")
+db . createCollection (" Repos ")
+db.Repos.insert({ "tennant" : "*", "project" : "*", "name" : "https://github.com/swiftycloud/swifty.demo", "type" : "github", "state" : 4, "path" : ".shared/swifty.demo" })
