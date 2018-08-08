@@ -92,7 +92,7 @@
 
 - name: create home dir
   file:
-    path: /home/swifty/clone/.shared
+    path: /home/swifty/clone/.shared/swifty.demo
     state: directory
     owner: root
     group: root
@@ -106,11 +106,11 @@
 - name: clone demo apps repo
   git:
     repo: 'https://github.com/swiftycloud/swifty.demo'
-    dest: /home/swifty/clone/.shared
+    dest: /home/swifty/clone/.shared/swifty.demo
     version: master
     
 - name: docker run gate
-  shell: docker run -d --net=host --name=swygate --restart always -v /home/swifty:/home/swifty -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets  swiftycloudou/gate
+  shell: docker run -d --net=host --name=swygate --restart always -v /home/swifty/clone:/home/swifty/clone -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets  swiftycloudou/gate
 
 - name: docker run admd
   shell: docker run -d --net=host --name=swyadmd --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets swiftycloudou/admd
