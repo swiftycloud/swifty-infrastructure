@@ -20,6 +20,7 @@
    - include_vars: group_vars/all.yml
   roles:
    - tinc
+   
 - hosts: swy-gw
   gather_facts: true
   become: yes
@@ -76,6 +77,7 @@
   pre_tasks:
    - include_vars: group_vars/all.yml
   roles:
+   - nginx-reverse-proxy/gw
    - { role: swifty/gw, tags: master}
 
 - hosts: dep-mw
@@ -88,6 +90,7 @@
   pre_tasks:
    - include_vars: group_vars/all.yml
   roles:
+   - nginx-reverse-proxy/mw
    - { role: swifty/mw, tags: master}
 
 - hosts: swy-ui

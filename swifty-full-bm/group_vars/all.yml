@@ -44,6 +44,11 @@ physical_ip: "{{ ansible_eth0.ipv4.address }}"
 vpn_netmask: 255.255.255.0
 vpn_subnet_cidr_netmask: 32
 
+# let's encrypt
+
+cert_admin_email: serenityqn@gmail.com  
+dashboard_domain_name: dashboardv2.swifty.cloud
+
 # system
 
 systemd_dir: /lib/systemd/system

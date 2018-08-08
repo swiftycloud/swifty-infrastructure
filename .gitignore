@@ -28,6 +28,6 @@
 
 # Ansible specific
 
-ansible/*.retry
-ansible/fetch
-ansible/*.pem
+swifty-*/*.retry
+swifty-*/fetch
+swifty-*/*.pem

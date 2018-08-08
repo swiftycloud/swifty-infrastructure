@@ -5,6 +5,56 @@
     owner: root
     group: root
     mode: 0644
-    
+
+- name: check if certs volume exists
+  command: docker volume inspect certs
+  register: certs_volume_exists
+  failed_when: false
+
+- name: create certs volume
+  command: docker volume create --name certs
+  when: certs_volume_exists|failed
+
+- name: check if certs-data exists
+  command: docker volume inspect certs-data
+  register: certs_data_exists
+  failed_when: false
+
+- name: create certs-data
+  command: docker volume create --name certs-data
+  when: certs_data_exists|failed
+
+#- name: certbot container
+#  docker:
+#    name: certbot
+#    image: deliverous/certbot
+#    state: started
+#    net: host
+#    volumes:
+#    - certs:/etc/letsencrypt
+#    - certs-data:/data/letsencrypt
+
+- name: create certbot
+  shell: |
+    docker run -t --rm \
+    -v certs:/etc/letsencrypt \
+    -v certs-data:/data/letsencrypt \
+    --net=host \
+    deliverous/certbot \
+    certonly \
+    --standalone \
+    --agree-tos \
+    --non-interactive \
+    --email {{ cert_admin_email }} \
+    -d {{ dashboard_domain_name }}
+
+- name: copy nginx.conf
+  template:
+    src: nginx.j2
+    dest: /root/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+
 - name: start ui
-  shell: docker run -d -p 80:80 --name ui --restart always -v /root/swifty.config.json:/html/swifty.config.json:ro swiftycloudou/ui
+  shell: docker run -d -p 80:80 -p 443:443 --name ui --restart always -v /root/nginx.conf:/etc/nginx/conf.d/default.conf -v certs:/etc/letsencrypt  -v certs-data:/data/letsencrypt -v /root/swifty.config.json:/html/swifty.config.json:ro swiftycloudou/ui
