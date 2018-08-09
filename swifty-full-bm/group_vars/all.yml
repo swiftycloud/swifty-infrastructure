@@ -1,8 +1,8 @@
 # ansible
 
-ansible_ssh_user: fedora
-ansible_ssh_private_key_file: ./ansible.pem
-
+ansible_ssh_user: root
+ansible_ssh_private_key_file:
+ansible_python_interpreter: /usr/bin/python3
 # Kubernetes
 
 token: c9f7b8.8d17974y63l7g85s
@@ -41,6 +41,7 @@ ec2_vpc_id: "vpc-2766af5c"
 netname: nyc3
 vpn_interface: tun0
 physical_ip: "{{ ansible_eth0.ipv4.address }}"
+tinc_vpn_ip: "{{ ansible_tun0.ipv4.address }}"
 vpn_netmask: 255.255.255.0
 vpn_subnet_cidr_netmask: 32
 

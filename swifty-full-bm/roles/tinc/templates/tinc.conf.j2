@@ -1,7 +1,7 @@
 Name = {{ tinc_hostname }}
 AddressFamily = ipv4
 Interface = {{ vpn_interface }}
-{% for host in groups['tinc_vpn'] %}
+{% for host in groups['all'] %}
 {% if tinc_hostname != hostvars[host]['tinc_hostname'] %}
 ConnectTo = {{ hostvars[host]['tinc_hostname'] }}
 {% endif %}

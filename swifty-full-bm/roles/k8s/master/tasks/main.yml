@@ -14,9 +14,6 @@
       - kubectl
     state: latest
 
-- name: Disable selinux
-  shell: "setenforce 0"
-
 - name: Disable system swap
   shell: "swapoff -a"
 
@@ -57,6 +54,7 @@
 - name: Init Kubernetes cluster
   shell: |
     kubeadm init --pod-network-cidr {{ pod_network_cidr }} \
+                 --apiserver-advertise-address {{ hostvars[groups['gw'][0]]['vpn_ip'] }} \
                  --kubernetes-version=v1.11.0 \
                  --token {{ token }}
   tags: master

@@ -1,15 +1,6 @@
 ---
-- hosts: localhost
-  connection: local
-  gather_facts: false
-  vars:
-    ansible_python_interpreter: python3
-  pre_tasks:
-   - include_vars: group_vars/all.yml
-  roles:
-   - ec2
 
-- hosts: tinc_vpn
+- hosts: all
   gather_facts: true
   become: yes
   become_method: sudo
@@ -20,7 +11,8 @@
    - include_vars: group_vars/all.yml
   roles:
    - tinc
-- hosts: swy-gw
+
+- hosts: gw
   gather_facts: true
   become: yes
   become_method: sudo
@@ -37,8 +29,9 @@
    - rabbitmq
    - openstack-keystone
    - { role: nfs/master, tags: master}
+   - nginx-reverse-proxy/gw
 
-- hosts: swy-mw
+- hosts: mw
   gather_facts: true
   become: yes
   become_method: sudo
@@ -51,8 +44,9 @@
    - docker
    - mariadb
    - mongod
-
-- hosts: swy-worker
+   - nginx-reverse-proxy/gw
+   
+- hosts: worker
   gather_facts: true
   become: yes
   become_method: sudo
@@ -66,7 +60,7 @@
    - { role: k8s/worker, tags: worker}
    - { role: nfs/client, tags: client}
 
-- hosts: dep-gw
+- hosts: gw
   gather_facts: true
   become: yes
   become_method: sudo
@@ -78,7 +72,7 @@
   roles:
    - { role: swifty/gw, tags: master}
 
-- hosts: dep-mw
+- hosts: mw
   gather_facts: true
   become: yes
   become_method: sudo
@@ -90,7 +84,7 @@
   roles:
    - { role: swifty/mw, tags: master}
 
-- hosts: swy-ui
+- hosts: ui
   gather_facts: true
   become: yes
   become_method: sudo
@@ -108,5 +102,4 @@
   tasks:
    - name: Display post install message
      debug:
-       msg: Please go to {{ item.public_ip }} or {{ item.public_dns_name }} to get access to swifty.dashboard. Have a nice day!
-     with_items: '{{ ec2_ui.instances }}'
+       msg: Please go to {{ hostvars[ui].ansible_host }} to get access to swifty.dashboard. Have a nice day!

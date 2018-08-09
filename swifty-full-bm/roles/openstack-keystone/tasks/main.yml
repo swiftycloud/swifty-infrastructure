@@ -54,9 +54,6 @@
     group: keystone
     mode: 0640
 
-- name: Disable selinux
-  shell: "setenforce 0"
-
 - name: copy httpd.conf
   copy:
     src: httpd.conf

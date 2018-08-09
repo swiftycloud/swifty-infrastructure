@@ -1,0 +1,15 @@
+- name: copy swyadmd-proxy.conf
+  template:
+    src: swyadmd-proxy.j2
+    dest: /root/swyadmd-proxy.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: stop httpd
+  service:
+    name: httpd
+    state: stopped
+    
+- name: run nginx container
+  shell: docker run -d --net=host -v /root/swyadmd-proxy.conf:/etc/nginx/conf.d/swyadmd-proxy.conf --name nginx-proxy nginx

@@ -1,5 +1,11 @@
+- name: install libselinux
+  dnf:
+    name: libselinux-python3
+    state: latest
+
 - name: Disable selinux
-  shell: "setenforce 0"
+  selinux:
+    state: disabled
   
 - name: install docker engine
   dnf:
