@@ -1,19 +1,24 @@
 server {
-    listen 80;
+    listen 443 ssl;
     server_name {{ hostvars[groups['gw'][0]]['public_dns'] }};
 
+    ssl on;
+    ssl_certificate /etc/letsencrypt/live/{{ api_domain_name }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ api_domain_name }}/privkey.pem;
+    ssl_session_cache shared:SSL:10m;
+
     location ~* ^/call/(.*) {
-        proxy_pass http://{{ hostvars[groups['gw'][0]]['vpn_ip'] }}:8684/call/$1$is_args$args;
+        proxy_pass http://localhost:8684/call/$1$is_args$args;
         proxy_set_header Host $host;
     }
 
     location ~* ^/gate/(.*) {
-        proxy_pass http://{{ hostvars[groups['gw'][0]]['vpn_ip'] }}:8684/$1$is_args$args;
+        proxy_pass http://localhost:8684/$1$is_args$args;
         proxy_set_header Host $host;
     }
 
     location ~* ^/admd/(.*) {
-        proxy_pass http://{{ hostvars[groups['gw'][0]]['vpn_ip'] }}:8685/$1$is_args$args;
+        proxy_pass http://localhost:8685/$1$is_args$args;
         proxy_set_header Host $host;
     }
 

@@ -69,4 +69,4 @@
     state: absent
         
 - name: docker run s3
-  shell: docker run -d --net=host --name=swys3 --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume swiftycloudou/s3
+  shell: docker run -d --net=host --name=swys3 --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume -v certs:/etc/letsencrypt  -v certs-data:/data/letsencrypt swiftycloudou/s3-full

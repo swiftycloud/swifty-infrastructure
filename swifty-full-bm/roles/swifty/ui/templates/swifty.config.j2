@@ -1,7 +1,7 @@
 {
-  "API_GATE_ENDPOINT": "http://{{ hostvars[groups['gw'][0]]['public_dns'] }}/gate/v1",
-  "API_ADMD_ENDPOINT": "http://{{ hostvars[groups['gw'][0]]['public_dns'] }}/admd/v1",
+  "API_GATE_ENDPOINT": "https://{{ hostvars[groups['gw'][0]]['public_dns'] }}/gate/v1",
+  "API_ADMD_ENDPOINT": "https://{{ hostvars[groups['gw'][0]]['public_dns'] }}/admd/v1",
   "API_USERNAME": "swyui",
   "API_PASSWORD": "{{ keystone_swyui_password }}",
-  "API_S3_SSL_ENABLED": false
+  "API_S3_SSL_ENABLED": true
 }

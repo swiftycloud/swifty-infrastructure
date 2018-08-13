@@ -10,6 +10,39 @@
   dnf:
     name: httpd
     state: absent
+
+- name: check if certs volume exists
+  command: docker volume inspect certs
+  register: certs_volume_exists
+  failed_when: false
+
+- name: create certs volume
+  command: docker volume create --name certs
+  when: certs_volume_exists|failed
+
+- name: check if certs-data exists
+  command: docker volume inspect certs-data
+  register: certs_data_exists
+  failed_when: false
+
+- name: create certs-data
+  command: docker volume create --name certs-data
+  when: certs_data_exists|failed
+
+- name: create certbot
+  shell: |
+    docker run -t --rm \
+    -v certs:/etc/letsencrypt \
+    -v certs-data:/data/letsencrypt \
+    --net=host \
+    deliverous/certbot \
+    certonly \
+    --standalone \
+#    --staging \
+    --agree-tos \
+    --non-interactive \
+    --email {{ cert_admin_email }} \
+    -d {{ s3_domain_name }}
     
 - name: run nginx container
-  shell: docker run -d --net=host -v /root/s3.conf:/etc/nginx/conf.d/s3.conf --name nginx-proxy nginx
+  shell: docker run -d --net=host -v /root/s3.conf:/etc/nginx/conf.d/s3.conf -v certs:/etc/letsencrypt  -v certs-data:/data/letsencrypt --name nginx-proxy nginx

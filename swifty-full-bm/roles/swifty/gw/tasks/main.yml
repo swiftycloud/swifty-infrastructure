@@ -110,7 +110,7 @@
     version: master
     
 - name: docker run gate
-  shell: docker run -d --net=host --name=swygate --restart always -v /home/swifty/clone:/home/swifty/clone -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets  swiftycloudou/gate
+  shell: docker run -d --net=host --name=swygate --restart always -v /home/swifty/clone:/home/swifty/clone -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets  swiftycloudou/gate-full
 
 - name: docker run admd
-  shell: docker run -d --net=host --name=swyadmd --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets swiftycloudou/admd
+  shell: docker run -d --net=host --name=swyadmd --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets swiftycloudou/admd-full

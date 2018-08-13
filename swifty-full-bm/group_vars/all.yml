@@ -49,6 +49,8 @@ vpn_subnet_cidr_netmask: 32
 
 cert_admin_email: serenityqn@gmail.com  
 dashboard_domain_name: dashboardv2.swifty.cloud
+api_domain_name: apiv2.swifty.cloud
+s3_domain_name: s3v2.swifty.cloud
 
 # system
 
