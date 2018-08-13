@@ -48,7 +48,6 @@
     deliverous/certbot \
     certonly \
     --standalone \
-#    --staging \
     --agree-tos \
     --non-interactive \
     --email {{ cert_admin_email }} \
