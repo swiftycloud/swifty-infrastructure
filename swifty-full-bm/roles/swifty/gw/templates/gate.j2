@@ -23,7 +23,7 @@ middleware:
                 creds: "-:PGRTOKEN@swft-mw:5432"
                 admport: "3872"
         s3:
-                creds: "-:S3TOKEN@{{ hostvars[groups['mw'][0]]['vpn_ip'] }}:8789"
+                creds: "-:S3TOKEN@{{ hostvars[groups['mw'][0]]['public_dns'] }}:8789"
                 api: "{{ hostvars[groups['mw'][0]]['public_dns'] }}"
                 notify: "swifty:S3IFYPASS@127.0.0.1:5672/s3"
                 hidden-key-timeout: 120
