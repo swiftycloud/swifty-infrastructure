@@ -44,7 +44,7 @@
    - docker
    - mariadb
    - mongod
-   - nginx-reverse-proxy/gw
+   - nginx-reverse-proxy/mw
    
 - hosts: worker
   gather_facts: true
@@ -102,4 +102,4 @@
   tasks:
    - name: Display post install message
      debug:
-       msg: Please go to {{ hostvars[ui].ansible_host }} to get access to swifty.dashboard. Have a nice day!
+       msg: Please go to {{ hostvars[groups['ui'][0]]['public_dns'] }} to get access to swifty.dashboard. Have a nice day!

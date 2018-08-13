@@ -6,10 +6,10 @@
     group: root
     mode: 0644
 
-- name: stop httpd
-  service:
+- name: remove httpd
+  dnf:
     name: httpd
-    state: stopped
+    state: absent
     
 - name: run nginx container
   shell: docker run -d --net=host -v /root/s3.conf:/etc/nginx/conf.d/s3.conf --name nginx-proxy nginx

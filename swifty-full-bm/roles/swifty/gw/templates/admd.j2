@@ -1,6 +1,6 @@
 ---
 daemon:
-        address: "{{ physical_ip }}:8685"
-gate: "{{ physical_ip }}:8684"
+        address: "{{ hostvars[groups['gw'][0]]['vpn_ip'] }}:8685"
+gate: "{{ hostvars[groups['gw'][0]]['vpn_ip'] }}:8684"
 keystone: "admin:KSPASS@127.0.0.1:5000/swifty"
 db: "swyadmd:DBAPASS@127.0.0.1:27017"

@@ -14,9 +14,6 @@
       - kubectl
     state: latest
 
-- name: Disable selinux
-  shell: "setenforce 0"
-
 - name: Disable system swap
   shell: "swapoff -a"
 

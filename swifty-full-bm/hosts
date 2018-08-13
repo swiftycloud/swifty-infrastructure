@@ -1,17 +1,13 @@
-[gw]
 
+[gw]
 95.216.169.193 vpn_ip=192.0.0.1 tinc_hostname=swftgw public_dns=apiv2.swifty.cloud
 
 [mw]
-
 95.216.169.192 vpn_ip=192.0.0.2 tinc_hostname=swftmw public_dns=s3v2.swifty.cloud
 
 [ui]
-
 95.216.169.189 vpn_ip=192.0.0.5 tinc_hostname=swftui public_dns=dashboardv2.swifty.cloud
 
 [worker]
-
 95.216.169.191 vpn_ip=192.0.0.3 tinc_hostname=swftworker0
 95.216.169.190 vpn_ip=192.0.0.4 tinc_hostname=swftworker1
-

@@ -24,10 +24,10 @@
   command: docker volume create --name certs-data
   when: certs_data_exists|failed
 
-- name: stop httpd
-  service:
+- name: remove httpd
+  dnf:
     name: httpd
-    state: stopped
+    state: absent
     
 #- name: certbot container
 #  docker:
@@ -48,7 +48,7 @@
     deliverous/certbot \
     certonly \
     --standalone \
-    -- staging \
+    --staging \
     --agree-tos \
     --non-interactive \
     --email {{ cert_admin_email }} \

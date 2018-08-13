@@ -5,7 +5,7 @@ keystone:
         address: "127.0.0.1:5000"
         domain: "swifty"
 daemon:
-        address: "{{ physical_ip }}:8686"
+        address: "{{ hostvars[groups['gw'][0]]['vpn_ip'] }}:8686"
         callgate: "http://{{ hostvars[groups['gw'][0]]['public_dns'] }}:8686"
         loglevel: "debug"
         prometheus: "127.0.0.1:9012"

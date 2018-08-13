@@ -5,8 +5,8 @@ keystone:
         address: "127.0.0.1:5000"
         domain: "swifty"
 daemon:
-        address: "{{ physical_ip }}:8684"
-        callgate: "http://{{ hostvars[groups['gw'][0]]['public_dns'] }}:8684"
+        address: "{{ hostvars[groups['gw'][0]]['vpn_ip'] }}:8684"
+        callgate: "http://{{ hostvars[groups['gw'][0]]['public_dns'] }}"
         loglevel: "debug"
         prometheus: "127.0.0.1:9012"
 middleware:
@@ -23,8 +23,8 @@ middleware:
                 creds: "-:PGRTOKEN@swft-mw:5432"
                 admport: "3872"
         s3:
-                creds: "-:S3TOKEN@{{ hostvars[groups['mw'][0]]['public_dns'] }}:8789"
-                api: "{{ hostvars[groups['mw'][0]]['public_dns'] }}:8787"
+                creds: "-:S3TOKEN@{{ hostvars[groups['mw'][0]]['vpn_ip'] }}:8789"
+                api: "{{ hostvars[groups['mw'][0]]['public_dns'] }}"
                 notify: "swifty:S3IFYPASS@127.0.0.1:5672/s3"
                 hidden-key-timeout: 120
 runtime:

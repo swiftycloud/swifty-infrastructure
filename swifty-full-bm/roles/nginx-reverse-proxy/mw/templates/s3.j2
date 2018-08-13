@@ -3,7 +3,7 @@ server {
     server_name {{ hostvars[groups['mw'][0]]['public_dns'] }};
 
     location / {
-        proxy_pass http://{{ hostvars[groups['mw'][0]]['public_dns'] }}:8787;
+        proxy_pass http://{{ hostvars[groups['mw'][0]]['vpn_ip'] }}:8787;
         proxy_set_header Host $host;
     }
 }
