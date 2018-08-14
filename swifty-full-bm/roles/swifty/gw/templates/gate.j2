@@ -12,7 +12,7 @@ daemon:
 middleware:
         mwseckey: "MWSECPASS"
         maria:
-                creds: "root:-@{{ hostvars[groups['mw'][0]]['vpn_ip'] }}:3306"
+                creds: "root:MARIAPASS@{{ hostvars[groups['mw'][0]]['vpn_ip'] }}:3306"
                 quotdb: "swifty.QUOTAS"
         rabbit:
                 creds: "root:RABBITPASS@127.0.0.1:5672"
@@ -24,7 +24,7 @@ middleware:
                 admport: "3872"
         s3:
                 creds: "-:S3TOKEN@{{ hostvars[groups['mw'][0]]['public_dns'] }}:8789"
-                api: "{{ hostvars[groups['mw'][0]]['public_dns'] }}"
+                api: "{{ hostvars[groups['mw'][0]]['public_dns'] }}:8787"
                 notify: "swifty:S3IFYPASS@127.0.0.1:5672/s3"
                 hidden-key-timeout: 120
 runtime:

@@ -8,7 +8,7 @@ server {
     ssl_session_cache shared:SSL:10m;
 
     location / {
-        proxy_pass http://{{ hostvars[groups['mw'][0]]['public_dns'] }}:8787;
+        proxy_pass https://{{ hostvars[groups['mw'][0]]['public_dns'] }}:8787;
         proxy_set_header Host $host;
     }
 }

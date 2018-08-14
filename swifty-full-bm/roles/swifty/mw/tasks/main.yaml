@@ -63,6 +63,29 @@
     group: root
     mode: 0640
 
+- name: create swifty db
+  mysql_db: 
+    name: swifty
+    state: present
+
+- name: create db user for swifty.QUOTAS
+  mysql_user:
+    name: root@swftgw
+    password: "{{ mariadb_root_password }}"
+    priv: '*.*:ALL,GRANT'
+    state: present
+
+- name: Copy swifty sql
+  copy:
+    src: swifty.sql
+    dest: /tmp
+
+- name: Import swifty.sql
+  mysql_db:
+    name: swifty
+    state: import
+    target: /tmp/swifty.sql
+
 - name: remove httpd
   dnf:
     name: httpd
