@@ -68,17 +68,13 @@
     name: swifty
     state: present
 
-- name: create db user for swifty.QUOTAS
-  mysql_user:
-    name: root@swftgw
-    password: "{{ mariadb_root_password }}"
-    priv: '*.*:ALL,GRANT'
-    state: present
-
-- name: Copy swifty sql
-  copy:
-    src: swifty.sql
-    dest: /tmp
+- name: copy swifty sql
+  template:
+    src: swifty.j2
+    dest: /tmp/swifty.sql
+    owner: root
+    group: root
+    mode: 0640
 
 - name: Import swifty.sql
   mysql_db:
