@@ -9,3 +9,4 @@ daemon:
 notify:
         rabbitmq: "s3:RMQS3PASS@{{ hostvars[groups['swy-gw'][0]]['gw_private_ip'] }}:5672/s3"
 secretskey: "S3SECRETSKEY"
+mime-types: "/etc/swifty/conf/mime.types"

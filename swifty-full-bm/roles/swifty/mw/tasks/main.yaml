@@ -82,6 +82,11 @@
     state: import
     target: /tmp/swifty.sql
 
+- name: copy mime.types files
+  copy:
+    src: mime.types
+    dest: /etc/swifty/conf/mime.types
+    
 - name: remove httpd
   dnf:
     name: httpd
