@@ -40,6 +40,11 @@ wdog:
         img-prefix: "swiftycloudou"
         volume: "/home/swifty-volume"
         port: 8687
+        k8s-namespace: "default"
 logs-keep: 2
 repo-sync-rate: 5
 repo-sync-period: 60
+demo-repo:
+        url: "https://github.com/swiftycloud/swifty.demo"
+        functions:
+                user-mgmt: "functions/golang/simple-user-mgmt.go"
