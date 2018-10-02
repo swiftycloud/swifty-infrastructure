@@ -55,7 +55,7 @@
   shell: |
     kubeadm init --pod-network-cidr {{ pod_network_cidr }} \
                  --apiserver-advertise-address {{ hostvars[groups['gw'][0]]['vpn_ip'] }} \
-                 --kubernetes-version=v1.11.0 \
+                 --kubernetes-version=v1.12.0 \
                  --token {{ token }}
   tags: master
 
@@ -80,3 +80,134 @@
 - name: create flannel network
   shell: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml"
   tags: master
+
+
+# This is part for workers
+
+- name: Add Kubernetes yum repository
+  yum_repository:
+    name: Kubernetes
+    description: Kubernetes Repository
+    file: kubernetчes
+    baseurl: http://yum.kubernetes.io/repos/kubernetes-el7-x86_64
+    enabled: yes
+    gpgcheck: no
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+
+- name: Install kubernetes packages (RHEL/CentOS)
+  dnf:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: latest
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+
+- name: Disable system swap
+  shell: "swapoff -a"
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+
+- name: Remove current swaps from fstab
+  lineinfile:
+    dest: /etc/fstab
+    regexp: '(?i)^([^#][\S]+\s+(none|swap)\s+swap.*)'
+    line: '# \1'
+    backrefs: yes
+    state: present
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+
+- name: Disable swappiness
+  sysctl:
+    name: vm.swappiness
+    value: 0
+    state: present
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+
+- name: Enable and restart kubelet engine
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    state: started
+    enabled: yes
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+
+- name: ensure net.bridge.bridge-nf-call-iptables is set to 1
+  shell: |
+    cat <<EOF >  /etc/sysctl.d/k8s.conf
+    net.bridge.bridge-nf-call-ip6tables = 1
+    net.bridge.bridge-nf-call-iptables = 1
+    EOF
+    sysctl --system
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+
+- name: Join to Kubernetes clusters
+  tags: worker
+  shell: |
+    kubeadm join  --ignore-preflight-errors=all\
+                 --token {{ token }} \
+                 {{ hostvars[groups['gw'][0]]['vpn_ip'] }}:6443 \
+                 --discovery-token-unsafe-skip-ca-verification
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+
+- name: Enable and restart kubelet engine
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    state: started
+    enabled: yes
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+
+- name: pull golang image
+  shell: docker pull swiftycloudou/golang
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+
+- name: pull swift image
+  shell: docker pull swiftycloudou/swift
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+
+- name: pull python image
+  shell: docker pull swiftycloudou/python
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+
+- name: pull nodejs image
+  shell: docker pull swiftycloudou/nodejs
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
