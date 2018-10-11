@@ -1,13 +1,12 @@
-
 [gw]
-95.216.165.9 vpn_ip=192.0.0.1 tinc_hostname=swftgw public_dns=api-dev.swifty.cloud
+159.69.216.175 vpn_ip=192.0.0.1 tinc_hostname=swftgw public_dns=api-dev.swifty.cloud
 
 [mw]
-95.216.163.131 vpn_ip=192.0.0.2 tinc_hostname=swftmw public_dns=s3-dev.swifty.cloud
+159.69.216.176 vpn_ip=192.0.0.2 tinc_hostname=swftmw public_dns=s3-dev.swifty.cloud
 
 [ui]
-95.216.163.132 vpn_ip=192.0.0.5 tinc_hostname=swftui public_dns=dashboard-dev.swifty.cloud
+159.69.216.174 vpn_ip=192.0.0.3 tinc_hostname=swftui public_dns=dashboard-dev.swifty.cloud
 
 [worker]
-95.216.190.33 vpn_ip=192.0.0.2 tinc_hostname=swftworker0
-95.216.200.140 vpn_ip=192.0.0.3 tinc_hostname=swftworker1
+159.69.216.173 vpn_ip=192.0.0.4 tinc_hostname=swftworker0
+195.201.229.52 vpn_ip=192.0.0.5 tinc_hostname=swftworker1

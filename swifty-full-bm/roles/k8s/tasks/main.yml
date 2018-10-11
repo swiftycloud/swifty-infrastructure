@@ -78,7 +78,7 @@
   tags: master
 
 - name: create flannel network
-  shell: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.10.0/Documentation/kube-flannel.yml"
+  shell: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
   tags: master
 
 

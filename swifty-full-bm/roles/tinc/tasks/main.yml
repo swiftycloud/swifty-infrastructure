@@ -1,5 +1,7 @@
 ---
-
+- name: clean dnf cache
+  shell: dnf clean all
+  
 - name: install tinc
   package: >
     name=tinc
