@@ -1,3 +1,4 @@
+# run like this ansible-playbook rebuild.yml -e "githubuser=xxxx" -e "githubpassword=xxxx"
 ---
 
 - hosts: all
