@@ -1,0 +1,35 @@
+- name: create /root/src dir
+  file:
+    path: /root/src
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: install packages
+  dnf: name={{item}} state=latest
+  with_items:
+       - git
+       - golang
+       - patch
+       - librados2-devel
+       - glibc-headers
+       - glibc-static
+
+
+- name: clone swifty repo
+  git:
+    repo: "https://{{ githubuser | urlencode }}:{{ githubpassword }}@gitlab.com/swiftyteam/swifty.git"
+    dest: /root/src/swifty
+    version: master
+
+- name: copy rebuild.sh
+  copy:
+    src: rebuild.sh
+    dest: /root/src/swifty/rebuild.sh
+
+- name: Add +x for /root/src/swifty/rebuild.sh
+  file: dest=/root/src/swifty/rebuild.sh mode=a+x
+
+- name: Execute rebuild.sh
+  raw: /root/src/swifty/rebuild.sh
