@@ -11,6 +11,7 @@
    - include_vars: group_vars/all.yml
   roles:
    - tinc
+   - docker
 
 - hosts: gw
   gather_facts: true
@@ -18,18 +19,18 @@
   become_method: sudo
   become_user: root
   vars:
-    ansible_python_interpreter: /usr/bin/python3
+   ansible_python_interpreter: /usr/bin/python3
   pre_tasks:
-   - include_vars: group_vars/all.yml
+  - include_vars: group_vars/all.yml
   roles:
-   - docker
-   - { role: k8s/master, tags: master}
-   - mariadb
-   - mongod
-   - rabbitmq
-   - openstack-keystone
-   - { role: nfs/master, tags: master}
-   - nginx-reverse-proxy/gw
+  - nfs
+  - k8s
+  - mariadb
+  - mongod
+  - rabbitmq
+  - openstack-keystone
+  - nginx-reverse-proxy/gw
+  - swifty/gw
 
 - hosts: mw
   gather_facts: true
@@ -37,52 +38,14 @@
   become_method: sudo
   become_user: root
   vars:
-    ansible_python_interpreter: /usr/bin/python3
+   ansible_python_interpreter: /usr/bin/python3
   pre_tasks:
-   - include_vars: group_vars/all.yml
+  - include_vars: group_vars/all.yml
   roles:
-   - docker
-   - mariadb
-   - mongod
-   - nginx-reverse-proxy/mw
-   
-- hosts: worker
-  gather_facts: true
-  become: yes
-  become_method: sudo
-  become_user: root
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
-  pre_tasks:
-   - include_vars: group_vars/all.yml
-  roles:
-   - docker
-   - { role: k8s/worker, tags: worker}
-   - { role: nfs/client, tags: client}
-
-- hosts: gw
-  gather_facts: true
-  become: yes
-  become_method: sudo
-  become_user: root
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
-  pre_tasks:
-   - include_vars: group_vars/all.yml
-  roles:
-   - { role: swifty/gw, tags: master}
-
-- hosts: mw
-  gather_facts: true
-  become: yes
-  become_method: sudo
-  become_user: root
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
-  pre_tasks:
-   - include_vars: group_vars/all.yml
-  roles:
-   - { role: swifty/mw, tags: master}
+  - mariadb
+  - mongod
+  - nginx-reverse-proxy/mw
+  - swifty/mw
 
 - hosts: ui
   gather_facts: true
@@ -90,16 +53,15 @@
   become_method: sudo
   become_user: root
   vars:
-    ansible_python_interpreter: /usr/bin/python3
+   ansible_python_interpreter: /usr/bin/python3
   pre_tasks:
-   - include_vars: group_vars/all.yml
+  - include_vars: group_vars/all.yml
   roles:
-   - docker
-   - swifty/ui
+  - swifty/ui
 
 - hosts: localhost
   connection: local
   tasks:
-   - name: Display post install message
-     debug:
-       msg: Please go to {{ hostvars[groups['ui'][0]]['public_dns'] }} to get access to swifty.dashboard. Have a nice day!
+  - name: Display post install message
+    debug:
+      msg: Please go to {{ hostvars[groups['ui'][0]]['public_dns'] }} to get access to swifty.dashboard. Have a nice day!
