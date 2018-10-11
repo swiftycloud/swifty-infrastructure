@@ -1,5 +1,3 @@
-# run like this ansible-playbook rebuild.yml -e "githubuser=xxxx" -e "githubpassword=xxxx"
-
 - hosts: worker
   gather_facts: true
   become: yes
