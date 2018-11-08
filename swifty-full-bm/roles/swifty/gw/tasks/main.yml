@@ -14,6 +14,22 @@
     group: root
     mode:  0700
 
+- name: create functions dir
+  file:
+    path: /home/swifty-volume/functions/
+    state: directory
+    owner: root
+    group: root
+    mode:  0755
+
+- name: create packages dir
+  file:
+    path: /home/swifty-volume/packages/
+    state: directory
+    owner: root
+    group: root
+    mode:  0755
+
 - name: copy admd_secret.yaml
   template:
     src: admd_secret.j2
@@ -78,19 +94,43 @@
 
 - name: copy go deployment
   copy:
-    src: gobuild-dep.yaml
-    dest: /root/gobuild-dep.yaml
+    src: service-golang.yaml
+    dest: /root/service-golang.yaml
 
 - name: copy swift deployment
   copy:
-    src: swiftbuild-dep.yaml
-    dest: /root/swiftbuild-dep.yaml
+    src: service-swift.yaml
+    dest: /root/service-swift.yaml
+
+- name: copy python deployment
+  copy:
+    src: service-python.yaml
+    dest: /root/service-python.yaml
+
+- name: copy ruby deployment
+  copy:
+    src: service-ruby.yaml
+    dest: /root/service-ruby.yaml
+
+- name: copy nodejs deployment
+  copy:
+    src: service-nodejs.yaml
+    dest: /root/service-nodejs.yaml
 
 - name: kubectl create gobuilder
-  shell: kubectl create -f /root/gobuild-dep.yaml
+  shell: kubectl create -f /root/service-golang.yaml
 
 - name: kubectl create swiftbuilder
-  shell: kubectl create -f /root/swiftbuild-dep.yaml
+  shell: kubectl create -f /root/service-swift.yaml
+
+- name: kubectl create pythonbuilder
+  shell: kubectl create -f /root/service-python.yaml
+
+- name: kubectl create rubybuilder
+  shell: kubectl create -f /root/service-ruby.yaml
+
+- name: kubectl create nodejsbuilder
+  shell: kubectl create -f /root/service-nodejs.yaml
 
 - name: pull python image
   shell: docker pull swiftycloudou/python
