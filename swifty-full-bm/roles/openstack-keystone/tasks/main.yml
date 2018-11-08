@@ -140,6 +140,12 @@
     state: present
     name: swifty.ui
 
+- name: create swifty.monitor role
+  os_keystone_role:
+    cloud: swifty
+    state: present
+    name: swifty.monitor
+
 - name: create swyadmin project
   os_project:
     cloud: swifty
@@ -174,6 +180,15 @@
     domain: swifty
     default_project: swyui
 
+- name: create swydbscr user
+  os_user:
+    cloud: swifty
+    state: present
+    name: swydbscr
+    password: "{{ keystone_swydbscr_password }}"
+    domain: swifty
+    default_project: swyadmin
+
 - name: grant swifty.admin role to swyadmin user
   os_user_role:
     cloud: swifty
@@ -194,6 +209,13 @@
     user: swyui
     role: swifty.ui
     project: swyui
+
+- name: grant swifty.monitor role to swydbscr user
+  os_user_role:
+    cloud: swifty
+    user: swydbscr
+    role: swifty.monitor
+    project: swyadmin
 
 - name:
   shell: openstack user set --project admin admin --os-cloud swifty

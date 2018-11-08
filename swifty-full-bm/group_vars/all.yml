@@ -19,6 +19,7 @@ mongodb_s3_password: aebik0eichie0eXu
 keystone_swyadmin_password: PwE9eMcPAverUJZn
 keystone_swyui_password: HEMv3b6GnCGt2XTn
 keystone_admin_password: 789qt4htqg5PkbXC
+keystone_swydbscr_password: NWJIfQtPDdMCliU2
 rabbitmq_root_password: 1OqCKIK2G9H
 rabbitmq_s3_password: 60baf87b7407
 pgr_token: e8yftKPn_GrhFa0d9TMwCt7GG?Ggu:biw:e_bfndvfyC^i-D*=+*euNznmpxE1jq
