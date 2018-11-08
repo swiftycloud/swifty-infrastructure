@@ -68,6 +68,14 @@
     group: root
     mode: 0640
 
+- name: copy scraper config
+  template:
+    src: scraper.j2
+    dest: /etc/swifty/conf/scraper.yaml
+    owner: root
+    group: root
+    mode: 0640
+
 - name: copy go deployment
   copy:
     src: gobuild-dep.yaml
@@ -98,7 +106,7 @@
     group: root
     mode:  0700
 
-- name: install git 
+- name: install git
   dnf:
     name: git
     state: latest
@@ -108,9 +116,12 @@
     repo: 'https://github.com/swiftycloud/swifty.demo'
     dest: /home/swifty/clone/.shared/swifty.demo
     version: master
-    
+
 - name: docker run gate
   shell: docker run -d --net=host --name=swygate --restart always -v /home/swifty/clone:/home/swifty/clone -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets  swiftycloudou/gate-full
 
 - name: docker run admd
   shell: docker run -d --net=host --name=swyadmd --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets swiftycloudou/admd-full
+
+- name: docker run swydbscr
+  shell: docker run -d --net=host --name=swyadmd --restart always /etc/swifty:/etc/swifty swiftycloudou/swydbscr
