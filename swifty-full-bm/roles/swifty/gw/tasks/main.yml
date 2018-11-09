@@ -132,12 +132,6 @@
 - name: kubectl create nodejsbuilder
   shell: kubectl create -f /root/service-nodejs.yaml
 
-- name: pull python image
-  shell: docker pull swiftycloudou/python
-
-- name: pull nodejs image
-  shell: docker pull swiftycloudou/nodejs
-
 - name: create home dir
   file:
     path: /home/swifty/clone/.shared/swifty.demo
@@ -158,10 +152,10 @@
     version: master
 
 - name: docker run gate
-  shell: docker run -d --net=host --name=swygate --restart always -v /home/swifty/clone:/home/swifty/clone -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets  swiftycloudou/gate-full
+  shell: docker run -d --net=host --name=swygate --restart always -v /home/swifty/clone:/home/swifty/clone -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets http://registry.gitlab.com/swiftyteam/swifty/gate
 
 - name: docker run admd
-  shell: docker run -d --net=host --name=swyadmd --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets swiftycloudou/admd-full
+  shell: docker run -d --net=host --name=swyadmd --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets registry.gitlab.com/swiftyteam/swifty/admd
 
 - name: docker run swydbscr
-  shell: docker run -d --net=host --name=swyadmd --restart always /etc/swifty:/etc/swifty swiftycloudou/swydbscr
+  shell: docker run -d --net=host --name=swydbscr --restart always /etc/swifty:/etc/swifty registry.gitlab.com/swiftyteam/swifty/swydbscr
