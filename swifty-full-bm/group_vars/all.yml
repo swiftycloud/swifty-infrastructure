@@ -53,6 +53,12 @@ dashboard_domain_name: dashboard-dev.swifty.cloud
 api_domain_name: api-dev.swifty.cloud
 s3_domain_name: s3-dev.swifty.cloud
 
+# docker
+
+registry_host: registry.gitlab.com
+docker_username:
+docker_password:
+
 # system
 
 systemd_dir: /lib/systemd/system
