@@ -29,14 +29,6 @@ mw_secpass: f406a11cd8598e80b6180230f116b15b
 
 remote_host_ip: '%'
 
-# aws
-
-ec2_keypair: "ansible"
-ec2_instance_type: "t2.medium"
-ec2_image: "ami-005ca2b3c05cf85e2"
-ec2_region: "us-east-1"
-ec2_vpc_id: "vpc-2766af5c"
-
 # tinc vpn
 
 netname: nyc3
@@ -49,15 +41,15 @@ vpn_subnet_cidr_netmask: 32
 # let's encrypt
 
 cert_admin_email: serenityqn@gmail.com
-dashboard_domain_name: dashboard-dev.swifty.cloud
-api_domain_name: api-dev.swifty.cloud
-s3_domain_name: s3-dev.swifty.cloud
+dashboard_domain_name: dashboard-deploy-test.swifty.cloud
+api_domain_name: api-deploy-test.swifty.cloud
+s3_domain_name: s3-deploy-test.swifty.cloud
 
 # docker
 
 registry_host: registry.gitlab.com
-docker_username:
-docker_password:
+docker_username: swiftydeploy
+docker_password: :)dY?u@Tk^{7Xc>{
 
 # system
 

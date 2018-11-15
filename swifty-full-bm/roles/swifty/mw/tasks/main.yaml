@@ -64,7 +64,7 @@
     mode: 0640
 
 - name: create swifty db
-  mysql_db: 
+  mysql_db:
     name: swifty
     state: present
 
@@ -86,11 +86,11 @@
   copy:
     src: mime.types
     dest: /etc/swifty/conf/mime.types
-    
+
 - name: remove httpd
   dnf:
     name: httpd
     state: absent
-        
+
 - name: docker run s3
-  shell: docker run -d --net=host --name=swys3 --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume -v certs:/etc/letsencrypt  -v certs-data:/data/letsencrypt swiftycloudou/s3-full
+  shell: docker run -d --net=host --name=swys3 --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume -v certs:/etc/letsencrypt  -v certs-data:/data/letsencrypt registry.gitlab.com/swiftyteam/swifty/s3

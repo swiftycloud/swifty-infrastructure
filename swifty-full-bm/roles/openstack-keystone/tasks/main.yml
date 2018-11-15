@@ -219,3 +219,13 @@
 
 - name:
   shell: openstack user set --project admin admin --os-cloud swifty
+
+- name: cron job for flush tokens
+  cron:
+    name: keystone token_flush
+    weekday: 0
+    minute: 0
+    hour: 0
+    user: root
+    job: "keystone-manage token_flush"
+    cron_file: keystone_token_flush

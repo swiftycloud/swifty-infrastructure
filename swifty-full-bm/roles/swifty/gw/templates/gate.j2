@@ -6,6 +6,7 @@ keystone:
         domain: "swifty"
 daemon:
         address: "localhost:8684"
+        apigate: "https://{{ hostvars[groups['gw'][0]]['public_dns'] }}"
         callgate: "https://{{ hostvars[groups['gw'][0]]['public_dns'] }}"
         loglevel: "debug"
         prometheus: "127.0.0.1:9012"
@@ -26,26 +27,11 @@ middleware:
                 creds: "-:S3TOKEN@{{ hostvars[groups['mw'][0]]['public_dns'] }}:8789"
                 api: "{{ hostvars[groups['mw'][0]]['public_dns'] }}:8787"
                 notify: "swifty:S3IFYPASS@127.0.0.1:5672/s3"
-                hidden-key-timeout: 120
-runtime:
-        timeout:
-                max: 60
-                def: 1
-        memory:
-                max: 1024
-                min: 64
-                def: 128
-        max-replicas: 32
 wdog:
-        img-prefix: "swiftycloudou"
+        img-prefix: "registry.gitlab.com/swiftyteam/swifty"
         volume: "/home/swifty-volume"
         port: 8687
         k8s-namespace: "default"
-logs-keep: 1
-repo-sync-rate: 5
-repo-sync-period: 60
 repo-sync-delay: 1
 demo-repo:
         url: "https://github.com/swiftycloud/swifty.demo"
-        functions:
-                user-mgmt: "functions/golang/simple-user-mgmt.go"
