@@ -55,4 +55,4 @@
     cron_file: le-autorenewal
 
 - name: run nginx container
-  shell: docker run -d --net=host -v /root/s3.conf:/etc/nginx/conf.d/s3.conf -v certs:/etc/letsencrypt  -v certs-data:/data/letsencrypt --name nginx-proxy nginx
+  shell: docker run -d -p 443:443 -v /root/s3.conf:/etc/nginx/conf.d/s3.conf -v certs:/etc/letsencrypt  -v certs-data:/data/letsencrypt --name nginx-proxy nginx

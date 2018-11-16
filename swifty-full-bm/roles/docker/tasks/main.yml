@@ -21,6 +21,7 @@
     name: docker
     enabled: yes
     masked: no
+
 - name: start docker service
   systemd: state=started name=docker
 
