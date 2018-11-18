@@ -1,6 +1,6 @@
 # ansible
 
-ansible_ssh_user: root
+ansible_ssh_user: fedora
 ansible_ssh_private_key_file:
 ansible_python_interpreter: /usr/bin/python3
 # Kubernetes
@@ -56,8 +56,8 @@ s3_domain_name: s3-dev.swifty.cloud
 # docker
 
 registry_host: registry.gitlab.com
-docker_username:
-docker_password:
+docker_username: gitlab+deploy-token-27648
+docker_password: bejaxhFt9LWnSJZT59xy
 
 # system
 
