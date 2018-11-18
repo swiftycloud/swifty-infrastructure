@@ -94,8 +94,8 @@
     gpgcheck: no
   delegate_to: "{{item}}"
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
 
 - name: Install kubernetes packages (RHEL/CentOS)
   dnf:
@@ -106,15 +106,15 @@
     state: latest
   delegate_to: "{{item}}"
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
 
 - name: Disable system swap
   shell: "swapoff -a"
   delegate_to: "{{item}}"
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
 
 - name: Remove current swaps from fstab
   lineinfile:
@@ -125,8 +125,8 @@
     state: present
   delegate_to: "{{item}}"
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
 
 - name: Disable swappiness
   sysctl:
@@ -135,8 +135,8 @@
     state: present
   delegate_to: "{{item}}"
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
 
 - name: Enable and restart kubelet engine
   systemd:
@@ -146,8 +146,8 @@
     enabled: yes
   delegate_to: "{{item}}"
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
 
 - name: ensure net.bridge.bridge-nf-call-iptables is set to 1
   shell: |
@@ -158,8 +158,8 @@
     sysctl --system
   delegate_to: "{{item}}"
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
 
 - name: Join to Kubernetes clusters
   tags: worker
@@ -170,8 +170,8 @@
                  --discovery-token-unsafe-skip-ca-verification
   delegate_to: "{{item}}"
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
 
 - name: Enable and restart kubelet engine
   systemd:
@@ -181,40 +181,40 @@
     enabled: yes
   delegate_to: "{{item}}"
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
 
 - name: pull golang image
   shell: docker pull registry.gitlab.com/swiftyteam/swifty/golang
   delegate_to: "{{item}}"
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
 
 - name: pull swift image
   shell: docker pull registry.gitlab.com/swiftyteam/swifty/swift
   delegate_to: "{{item}}"
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
 
 - name: pull python image
   shell: docker pull registry.gitlab.com/swiftyteam/swifty/python
   delegate_to: "{{item}}"
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
 
 - name: pull nodejs image
   shell: docker pull registry.gitlab.com/swiftyteam/swifty/nodejs
   delegate_to: "{{item}}"
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
 
 - name: pull ruby image
   shell: docker pull registry.gitlab.com/swiftyteam/swifty/ruby
   delegate_to: "{{item}}"
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"

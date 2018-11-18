@@ -54,7 +54,7 @@
 - name: ensure tinc hosts file binds to physical ip address
   lineinfile: >
     dest=/etc/tinc/{{ netname }}/hosts/{{ tinc_hostname }}
-    line="Address = {{ physical_ip }}"
+    line="Address = {{ public_ip }}"
     create=yes
   notify:
     - restart tinc
