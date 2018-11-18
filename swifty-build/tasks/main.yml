@@ -1,8 +1,6 @@
 ---
 - hosts: all
   remote_user: fedora
-  environment:
-    GOPATH: "/home/fedora/swifty/vendor:/home/fedora/swifty"
   vars:
     registry: "registry.gitlab.com/swiftyteam/swifty"
     artifacts:
@@ -61,6 +59,8 @@
       register: gitid
 
     - name: Build binaries
+      environment:
+        GOPATH: "{{ basedir }}/vendor:{{ basedir }}"
       args:
         chdir: "{{ basedir }}"
       command: "make {{ item.artifact }}"
@@ -73,6 +73,8 @@
       with_items: "{{ artifacts }}"
 
     - name: Prepare dependencies binaries to build language Docker images
+      environment:
+        GOPATH: "{{ basedir }}/vendor:{{ basedir }}"
       args:
         chdir: "{{ basedir }}"
       command: "make {{ item }}"
@@ -138,6 +140,8 @@
       with_items: "{{ artifacts }}"
 
     - name: Final clean
+      environment:
+        GOPATH: "{{ basedir }}/vendor:{{ basedir }}"
       args:
         chdir: "{{ basedir }}"
       shell: "make mrproper"
