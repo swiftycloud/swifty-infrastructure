@@ -54,7 +54,7 @@
 - name: Init Kubernetes cluster
   shell: |
     kubeadm init --pod-network-cidr {{ pod_network_cidr }} \
-                 --apiserver-advertise-address {{ hostvars[groups['gw'][0]]['vpn_ip'] }} \
+                 --apiserver-advertise-address {{ hostvars[groups['gw'][0]]['private_ip'] }} \
                  --kubernetes-version=v1.12.0 \
                  --token {{ token }}
   tags: master
@@ -166,7 +166,7 @@
   shell: |
     kubeadm join  --ignore-preflight-errors=all\
                  --token {{ token }} \
-                 {{ hostvars[groups['gw'][0]]['vpn_ip'] }}:6443 \
+                 {{ hostvars[groups['gw'][0]]['private_ip'] }}:6443 \
                  --discovery-token-unsafe-skip-ca-verification
   delegate_to: "{{item}}"
   with_items:

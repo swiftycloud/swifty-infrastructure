@@ -36,7 +36,7 @@ net:
   port: 27017
 
   # Comma separated list of ip addresses to listen on (all local ips by default)
-  bindIp: 127.0.0.1,::1,{{ tinc_vpn_ip }}
+  bindIp: 127.0.0.1,::1,{{ private_ip }}
 
   # Enable IPv6 support (disabled by default)
   ipv6: true

@@ -13,13 +13,13 @@ daemon:
 middleware:
         mwseckey: "MWSECPASS"
         maria:
-                creds: "root:MARIAPASS@{{ hostvars[groups['mw'][0]]['vpn_ip'] }}:3306"
+                creds: "root:MARIAPASS@{{ hostvars[groups['mw'][0]]['private_ip'] }}:3306"
                 quotdb: "swifty.QUOTAS"
         rabbit:
                 creds: "root:RABBITPASS@127.0.0.1:5672"
                 admport: "15672"
         mongo:
-                creds: "admin:MONGOPASS@{{ hostvars[groups['mw'][0]]['vpn_ip'] }}:27017"
+                creds: "admin:MONGOPASS@{{ hostvars[groups['mw'][0]]['private_ip'] }}:27017"
         postgres:
                 creds: "-:PGRTOKEN@swft-mw:5432"
                 admport: "3872"

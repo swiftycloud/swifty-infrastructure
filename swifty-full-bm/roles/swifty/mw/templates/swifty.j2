@@ -1,3 +1,3 @@
-GRANT ALL PRIVILEGES on * . * TO root@{{ tinc_vpn_ip }} IDENTIFIED BY '{{ mariadb_root_password }}' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES on * . * TO root@{{ private_ip }} IDENTIFIED BY '{{ mariadb_root_password }}' WITH GRANT OPTION;
 USE swifty;
 CREATE TABLE QUOTAS (`id` varchar(64), `size` INT, `rows` INT, `locked` BOOL);

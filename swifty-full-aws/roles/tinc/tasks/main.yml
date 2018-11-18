@@ -62,7 +62,7 @@
 - name: ensure subnet ip address is properly set in tinc host file
   lineinfile: >
     dest=/etc/tinc/{{ netname }}/hosts/{{ tinc_hostname }}
-    line="Subnet = {{ vpn_ip }}/{{ vpn_subnet_cidr_netmask }}"
+    line="Subnet = {{ private_ip }}/{{ vpn_subnet_cidr_netmask }}"
     create=yes
   notify:
     - restart tinc
@@ -111,7 +111,7 @@
     state=started
     pattern=tincd -n {{ netname }}
 
-- name: add nodes to /etc/hosts (ansible_inventory resolves to vpn_ip)
-  lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].vpn_ip }} {{ hostvars[item].tinc_hostname }}" state=present
-  when: hostvars[item].vpn_ip is defined
+- name: add nodes to /etc/hosts (ansible_inventory resolves to private_ip)
+  lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].private_ip }} {{ hostvars[item].tinc_hostname }}" state=present
+  when: hostvars[item].private_ip is defined
   with_items: "{{ play_hosts }}"
