@@ -10,8 +10,7 @@
   pre_tasks:
    - include_vars: group_vars/all.yml
   roles:
-   - tinc
-   - docker
+  - {role: 'docker', tags: 'docker'}
 
 - hosts: gw
   gather_facts: true

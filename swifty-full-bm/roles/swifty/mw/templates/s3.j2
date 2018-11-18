@@ -3,6 +3,7 @@ db: "swifty-s3:MGOS3PASS@127.0.0.1:27017"
 daemon:
         address: "{{ hostvars[groups['mw'][0]]['public_dns'] }}:8787"
         admport: "8789"
+        webport: "80"
         token: "S3TOKEN"
         loglevel: "debug"
         prometheus: "swy0:9013"

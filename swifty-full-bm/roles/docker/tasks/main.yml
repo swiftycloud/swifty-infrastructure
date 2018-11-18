@@ -7,6 +7,11 @@
   selinux:
     state: disabled
 
+- name: Install the mysqlclient module
+  pip:
+    name: docker-py
+    executable: pip3
+
 - name: install docker engine
   dnf:
     name: docker
@@ -16,6 +21,7 @@
     name: docker
     enabled: yes
     masked: no
+
 - name: start docker service
   systemd: state=started name=docker
 

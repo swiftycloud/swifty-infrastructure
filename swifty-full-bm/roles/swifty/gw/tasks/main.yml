@@ -151,11 +151,19 @@
     dest: /home/swifty/clone/.shared/swifty.demo
     version: master
 
+- name: create /var/run/swifty dir
+  file:
+    path: /var/run/swifty
+    state: directory
+    owner: root
+    group: root
+    mode:  0700
+
 - name: docker run gate
-  shell: docker run -d --net=host --name=swygate --restart always -v /home/swifty/clone:/home/swifty/clone -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets http://registry.gitlab.com/swiftyteam/swifty/gate
+  shell: docker run -d --net=host --name=swygate --restart always -v /home/swifty/clone:/home/swifty/clone -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /var/run/swifty/:/var/run/swifty/ registry.gitlab.com/swiftyteam/swifty/gate
 
 - name: docker run admd
   shell: docker run -d --net=host --name=swyadmd --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets registry.gitlab.com/swiftyteam/swifty/admd
 
 - name: docker run swydbscr
-  shell: docker run -d --net=host --name=swydbscr --restart always /etc/swifty:/etc/swifty registry.gitlab.com/swiftyteam/swifty/swydbscr
+  shell: docker run -d --net=host --name=swydbscr --restart always -v /etc/swifty:/etc/swifty registry.gitlab.com/swiftyteam/swifty/swydbscr

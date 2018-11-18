@@ -3,5 +3,6 @@
   "API_ADMD_ENDPOINT": "https://{{ hostvars[groups['gw'][0]]['public_dns'] }}/admd/v1",
   "API_USERNAME": "swyui",
   "API_PASSWORD": "{{ keystone_swyui_password }}",
-  "API_S3_SSL_ENABLED": true
+  "API_S3_SSL_ENABLED": true,
+  "SWY_CONNECTOR_URL": ""
 }

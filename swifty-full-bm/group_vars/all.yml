@@ -10,39 +10,32 @@ pod_network_cidr: "10.244.0.0/16"
 
 # passwords
 
-mariadb_root_password: a5d8bfe6979a
-mariadb_keystone_password: N9tSc5kgtKqvwRwN
-mongodb_admin_password: ew8VKv8Kq79C
-mongodb_swygate_password: dt3962zew1b
-mongodb_swyadmd_password: 1a84cd9148bG8
-mongodb_s3_password: aebik0eichie0eXu
-keystone_swyadmin_password: PwE9eMcPAverUJZn
-keystone_swyui_password: HEMv3b6GnCGt2XTn
-keystone_admin_password: 789qt4htqg5PkbXC
-keystone_swydbscr_password: NWJIfQtPDdMCliU2
-rabbitmq_root_password: 1OqCKIK2G9H
-rabbitmq_s3_password: 60baf87b7407
-pgr_token: e8yftKPn_GrhFa0d9TMwCt7GG?Ggu:biw:e_bfndvfyC^i-D*=+*euNznmpxE1jq
-s3_token: NgsfqX&ruOcjk+CXr@a2yq_M-YAGv7^#-6?E=zw:Rh?FJf_fWVfivHKi1A?m2jDR
-s3_secret_key: fd7b1601ae2ff4ccb91b85ea315f2b2e
-mw_secpass: f406a11cd8598e80b6180230f116b15b
+mariadb_root_password: CkZAy42zuykED9Nb
+mariadb_keystone_password: trrc6PCOFPlKRR&R
+mongodb_admin_password: trrc6PCOFPlKRR&R
+mongodb_swygate_password: o3LqdQqfSb0lm98T
+mongodb_swyadmd_password: PM@KjvrWEtAmUBNq
+mongodb_s3_password: HfnuaVea7fz3fz0o
+keystone_swyadmin_password: EC@K6grYWaG0urMn
+keystone_swyui_password: DbeofMUkvt$pmHsL
+keystone_admin_password: V7WBwe4AE3midEXR #without special chars
+keystone_swydbscr_password: XV1he51aI35MjR
+rabbitmq_root_password: ls8RmtuuXcYJA5Mr
+rabbitmq_s3_password: MHCCOhozTrTjTRk
+pgr_token: wnUXzg3BiNIdU1g
+s3_token: em0pP8KE6X2KuRv
+s3_secret_key: 60c0b0cae645a2768405dd8ff9f9a14e
+mw_secpass: 00e18d1b513b69ac066ad0cb45cb1515
 
 remote_host_ip: '%'
-
-# aws
-
-ec2_keypair: "ansible"
-ec2_instance_type: "t2.medium"
-ec2_image: "ami-005ca2b3c05cf85e2"
-ec2_region: "us-east-1"
-ec2_vpc_id: "vpc-2766af5c"
 
 # tinc vpn
 
 netname: nyc3
 vpn_interface: tun0
-physical_ip: "{{ ansible_eth0.ipv4.address }}"
-tinc_vpn_ip: "{{ ansible_tun0.ipv4.address }}"
+physical_ip: "{{ ansible_eth0_0.ipv4.address }}"
+tinc_vpn_ip: "{{ ansible_eth1.ipv4.address }}"
+host_min: 10.133.0.0
 vpn_netmask: 255.255.255.0
 vpn_subnet_cidr_netmask: 32
 
