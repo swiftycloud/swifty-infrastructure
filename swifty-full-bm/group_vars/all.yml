@@ -49,9 +49,11 @@ vpn_subnet_cidr_netmask: 32
 # let's encrypt
 
 cert_admin_email: serenityqn@gmail.com
-dashboard_domain_name: dashboard-dev.swifty.cloud
-api_domain_name: api-dev.swifty.cloud
-s3_domain_name: s3-dev.swifty.cloud
+
+# for customization of this, use --extra-vars and omit "default_" in key, otherwise default will be applied
+default_dashboard_domain_name: dashboard-dev.swifty.cloud
+default_api_domain_name: api-dev.swifty.cloud
+default_s3_domain_name: s3-dev.swifty.cloud
 
 # docker
 

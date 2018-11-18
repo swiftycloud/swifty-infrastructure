@@ -41,7 +41,7 @@
     --agree-tos \
     --non-interactive \
     --email {{ cert_admin_email }} \
-    -d {{ s3_domain_name }}
+    -d {{ s3_domain_name | default(default_s3_domain_name) }}
 
 - name: cron job for letsencrypt autorenewal
   cron:

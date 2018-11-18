@@ -7,8 +7,8 @@ daemon:
         loglevel: "debug"
         prometheus: "swy0:9013"
         https:
-                cert: "/etc/letsencrypt/live/{{ s3_domain_name }}/fullchain.pem"
-                key: "/etc/letsencrypt/live/{{ s3_domain_name }}/privkey.pem"
+                cert: "/etc/letsencrypt/live/{{ s3_domain_name | default(default_s3_domain_name) }}/fullchain.pem"
+                key: "/etc/letsencrypt/live/{{ s3_domain_name | default(default_s3_domain_name) }}/privkey.pem"
 notify:
         rabbitmq: "s3:RMQS3PASS@{{ hostvars[groups['gw'][0]]['vpn_ip'] }}:5672/s3"
 secretskey: "S3SECRETSKEY"

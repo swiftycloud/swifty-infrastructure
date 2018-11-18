@@ -51,7 +51,7 @@
     --agree-tos \
     --non-interactive \
     --email {{ cert_admin_email }} \
-    -d {{ dashboard_domain_name }}
+    -d {{ dashboard_domain_name | default(default_dashboard_domain_name) }}
 
 - name: copy nginx.conf
   template:
