@@ -26,7 +26,4 @@
   systemd: state=started name=docker
 
 - name: Log into swifty registry
-  docker_login:
-    registry: "{{ registry_host }}"
-    username: "{{ docker_username }}"
-    password: "{{ docker_password }}"
+  shell: "docker login {{ registry_host }} -u {{ docker_username }} -p {{ docker_password }}"
