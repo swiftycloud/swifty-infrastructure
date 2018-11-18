@@ -1,5 +1,13 @@
 ## Repo for docs and IAC 
 
+### Image builder ###
+
+Usage:
+
+```
+ansible-playbook -i gitlab-runner.ci.swifty.cloud, swifty-build/tasks/main.yml --extra-vars='{"basedir": "/home/fedora/swifty"}'
+```
+
 ### full version
 
 #### Роль swft-gw:
@@ -36,3 +44,4 @@
 1. docker
 2. tinc
 ```
+

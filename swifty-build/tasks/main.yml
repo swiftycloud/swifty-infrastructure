@@ -4,8 +4,7 @@
   environment:
     GOPATH: "/home/fedora/swifty/vendor:/home/fedora/swifty"
   vars:
-    basedir: "/home/fedora/swifty"
-    registry: "registry.gitlab.com/swiftyteam/swifty-test-project"
+    registry: "registry.gitlab.com/swiftyteam/swifty"
     artifacts:
       - {
           artifact: "swy-admd",
@@ -50,6 +49,11 @@
           - "src/wdog/runner/runner.swift"
 
   tasks:
+    - name: check basedir is defined
+      fail:
+        msg: "Please, define a basedir via --extra-vars in playbook run!"
+      when: "basedir is not defined"
+
     - name: Get commit ID
       args:
         chdir: "{{ basedir }}"
