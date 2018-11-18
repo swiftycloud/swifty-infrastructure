@@ -40,7 +40,6 @@ ec2_vpc_id: "vpc-2766af5c"
 
 netname: nyc3
 vpn_interface: tun0
-physical_ip: "{{ ansible_eth0.ipv4.address }}"
 vpn_netmask: 255.255.255.0
 vpn_subnet_cidr_netmask: 32
 
