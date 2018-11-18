@@ -16,7 +16,7 @@
 - name: Configure allow master tcp wrapper
   lineinfile:
     path: /etc/hosts.allow
-    line: 'rpcbind mountd nfsd statd lockd rquotad : "{{ hostvars[groups['gw'][0]]['private_ip'] }}"/16'
+    line: "rpcbind mountd nfsd statd lockd rquotad : {{ hostvars[groups['gw'][0]]['private_ip'] }}/16"
 
 - name: Configure deny master tcp wrapper
   lineinfile:
@@ -76,7 +76,7 @@
 - name: Configure allow workers tcp wrapper
   lineinfile:
     path: /etc/hosts.allow
-    line: 'rpcbind mountd nfsd statd lockd rquotad : "{{ hostvars[groups['gw'][0]]['private_ip'] }}"/16'
+    line: "rpcbind mountd nfsd statd lockd rquotad : {{ hostvars[groups['gw'][0]]['private_ip'] }}/16"
   delegate_to: "{{item}}"
   with_items:
     - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
