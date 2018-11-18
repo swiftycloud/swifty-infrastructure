@@ -1,0 +1,140 @@
+---
+- hosts: all
+  remote_user: fedora
+  environment:
+    GOPATH: "/home/fedora/swifty/vendor:/home/fedora/swifty"
+  vars:
+    basedir: "/home/fedora/swifty"
+    registry: "registry.gitlab.com/swiftyteam/swifty-test-project"
+    artifacts:
+      - {
+          artifact: "swy-admd",
+          dst: "{{ basedir }}/kubectl/docker/admd",
+          image: "admd",
+        }
+      - {
+          artifact: "swy-gate",
+          dst: "{{ basedir }}/kubectl/docker/gate",
+          image: "gate",
+        }
+      - {
+          artifact: "swy-s3",
+          dst: "{{ basedir }}/kubectl/docker/s3",
+          image: "s3",
+        }
+      - {
+          artifact: "swydbscr",
+          dst: "{{ basedir }}/kubectl/docker/dbscr",
+          image: "dbscr",
+        }
+
+    langs:
+      - name: golang
+        dependencies:
+          - "src/wdog/runner/runner.go"
+          - "src/wdog/runner/body.go"
+          - "src/wdog/lib/lib.go"
+          - "src/common/xqueue/queue.go"
+      - name: python
+        dependencies:
+          - "src/wdog/runner/runner.py"
+          - "src/wdog/lib/lib.py"
+      - name: nodejs
+        dependencies:
+          - "src/wdog/runner/runner.js"
+      - name: ruby
+        dependencies:
+          - "src/wdog/runner/runner.rb"
+      - name: swift
+        dependencies:
+          - "src/wdog/runner/runner.swift"
+
+  tasks:
+    - name: Get commit ID
+      args:
+        chdir: "{{ basedir }}"
+      shell: "git rev-parse HEAD | cut -c -8"
+      register: gitid
+
+    - name: Build binaries
+      args:
+        chdir: "{{ basedir }}"
+      command: "make {{ item.artifact }}"
+      with_items: "{{ artifacts }}"
+
+    - name: Prepare binaries to build Docker images
+      args:
+        chdir: "{{ basedir }}"
+      command: "mv {{ item.artifact}} {{ item.dst }}"
+      with_items: "{{ artifacts }}"
+
+    - name: Prepare dependencies binaries to build language Docker images
+      args:
+        chdir: "{{ basedir }}"
+      command: "make {{ item }}"
+      with_items:
+        - "swy-wdog"
+        - "swy-runner"
+
+    - name: Copy Core artifacts to Languages Images buildspace
+      args:
+        chdir: "{{ basedir }}"
+      command: "cp -r {{ item[1] }} kubectl/docker/wdog/{{ item[0].name }}"
+      with_nested:
+        - "{{ langs }}"
+        - [ "swy-wdog", "swy-runner" ]
+
+    - name: Copy Language-specific artifacts to Languages Images buildspace
+      args:
+        chdir: "{{ basedir }}"
+      command: "cp -r {{ item.1 }} kubectl/docker/wdog/{{ item.0.name }}"
+      with_subelements:
+       - "{{ langs }}"
+       - dependencies
+
+    # For some reason original python libs are named different in source and Dockerfile
+    - name: Workaround for Python build
+      args:
+        chdir: "{{ basedir }}/kubectl/docker/wdog/python"
+      shell: "mv {{ item.src }} {{ item.dst }}"
+      with_items:
+        - { src: "lib.py", dst: "swifty.py" }
+        - { src: "runner.py", dst: "swy-runner.py" }
+
+    - name: Build Docker images (Core)
+      args:
+        chdir: "{{ item.dst }}"
+      command: "docker build --network=host -t {{ registry }}/{{ item.image }}:{{ gitid.stdout }} ."
+      with_items: "{{ artifacts }}"
+
+    - name: Build Docker images (Languages)
+      args:
+        chdir: "{{ basedir }}/kubectl/docker/wdog/{{ item.name }}"
+      command: "docker build --network=host -t {{ registry }}/{{ item.name }}:{{ gitid.stdout }} ."
+      with_items: "{{ langs }}"
+
+    - name: Push Docker images to GitLab (Core)
+      command: "docker push {{ registry }}/{{ item.image }}:{{ gitid.stdout }}"
+      with_items: "{{ artifacts }}"
+
+    - name: Push Docker images to GitLab (Languages)
+      command: "docker push {{ registry }}/{{ item.name }}:{{ gitid.stdout }}"
+      with_items: "{{ langs }}"
+
+    - name: Cleanup (Core Services)
+      file:
+        state: absent
+        path: "{{ item.dst }}/{{ item.artifact }}"
+      with_items: "{{ artifacts }}"
+
+    - name: Cleanup (All Artifacts)
+      file:
+        state: absent
+        path: "{{ basedir}}/{{ item.artifact }}"
+      with_items: "{{ artifacts }}"
+
+    - name: Final clean
+      args:
+        chdir: "{{ basedir }}"
+      shell: "make mrproper"
+
