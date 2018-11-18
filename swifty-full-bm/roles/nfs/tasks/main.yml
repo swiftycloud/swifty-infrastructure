@@ -16,7 +16,7 @@
 - name: Configure allow master tcp wrapper
   lineinfile:
     path: /etc/hosts.allow
-    line: 'rpcbind mountd nfsd statd lockd rquotad : {{ host_min }}/16'
+    line: 'rpcbind mountd nfsd statd lockd rquotad : {{ hostvars[groups['gw'][0]]['private_ip'] }}/16'
 
 - name: Configure deny master tcp wrapper
   lineinfile:
@@ -29,10 +29,10 @@
     state: directory
 
 - name: Configure export dir
-  shell: echo "/home/swifty-volume {{ hostvars[groups['worker'][0]]['vpn_ip'] }}(rw,sync,no_root_squash)" >> /etc/exports
+  shell: echo "/home/swifty-volume {{ hostvars[groups['worker'][0]]['private_ip'] }}(rw,sync,no_root_squash)" >> /etc/exports
 
 - name: Configure export dir
-  shell: echo "/home/swifty-volume {{ hostvars[groups['worker'][1]]['vpn_ip'] }}(rw,sync,no_root_squash)" >> /etc/exports
+  shell: echo "/home/swifty-volume {{ hostvars[groups['worker'][1]]['private_ip'] }}(rw,sync,no_root_squash)" >> /etc/exports
 
 - name: Export dir
   shell: exportfs -a
@@ -40,8 +40,8 @@
 - name: Wait for the instances to boot by checking the ssh port
   wait_for: host="{{item}}" port=22 delay=20 timeout=320 state=started
   with_items:
-    - "{{ hostvars[groups['worker'][0]]['vpn_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['vpn_ip'] }}"
+    - "{{ hostvars[groups['worker'][0]]['private_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['private_ip'] }}"
 
 # This is part for workers
 
@@ -76,7 +76,7 @@
 - name: Configure allow workers tcp wrapper
   lineinfile:
     path: /etc/hosts.allow
-    line: 'rpcbind mountd nfsd statd lockd rquotad : {{ host_min }}/16'
+    line: 'rpcbind mountd nfsd statd lockd rquotad : {{ hostvars[groups['gw'][0]]['private_ip'] }}/16'
   delegate_to: "{{item}}"
   with_items:
     - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"
@@ -101,7 +101,7 @@
     - "{{ hostvars[groups['worker'][1]]['physical_ip'] }}"
 
 - name: Configure mount point
-  shell: echo "{{ hostvars[groups['gw'][0]]['vpn_ip'] }}:/home/swifty-volume /home/swifty-volume nfs rw,sync,hard,intr,addr={{ tinc_vpn_ip }} 0 0" >>  /etc/fstab
+  shell: echo "{{ hostvars[groups['gw'][0]]['private_ip'] }}:/home/swifty-volume /home/swifty-volume nfs rw,sync,hard,intr,addr={{ private_ip }} 0 0" >>  /etc/fstab
   delegate_to: "{{item}}"
   with_items:
     - "{{ hostvars[groups['worker'][0]]['physical_ip'] }}"

@@ -57,7 +57,7 @@
      gw_public_ip: "{{ item.public_ip }}"
      gw_private_ip: "{{ item.private_ip }}"
      gw_public_dns: "{{ item.public_dns_name }}"
-     vpn_ip: 192.0.0.1
+     private_ip: 192.0.0.1
      tinc_hostname: swygw
      groups:
        - swy-gw
@@ -93,7 +93,7 @@
      mw_public_ip: "{{ item.public_ip }}"
      mw_private_ip: "{{ item.private_ip }}"
      mw_public_dns: "{{ item.public_dns_name }}"
-     vpn_ip: 192.0.0.2
+     private_ip: 192.0.0.2
      tinc_hostname: swymw
      groups:
        - swy-mw
@@ -129,7 +129,7 @@
      ui_public_ip: "{{ item.public_ip }}"
      ui_private_ip: "{{ item.private_ip }}"
      ui_public_dns: "{{ item.public_dns_name }}"
-     vpn_ip: 192.0.0.3
+     private_ip: 192.0.0.3
      tinc_hostname: swyui
      groups:
        - swy-ui
@@ -181,7 +181,7 @@
      worker_public_ip: "{{ item.public_ip }}"
      worker_private_ip: "{{ item.private_ip }}"
      worker_public_dns: "{{ item.public_dns_name }}"
-     vpn_ip: 192.0.0.4
+     private_ip: 192.0.0.4
      tinc_hostname: swyworker0
      groups:
        - swy-worker
@@ -194,7 +194,7 @@
      worker_public_ip: "{{ item.public_ip }}"
      worker_private_ip: "{{ item.private_ip }}"
      worker_public_dns: "{{ item.public_dns_name }}"
-     vpn_ip: 192.0.0.5
+     private_ip: 192.0.0.5
      tinc_hostname: swyworker1
      groups:
        - swy-worker

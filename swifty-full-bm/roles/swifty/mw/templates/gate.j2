@@ -5,27 +5,27 @@ keystone:
         address: "127.0.0.1:5000"
         domain: "swifty"
 daemon:
-        address: "{{ hostvars[groups['gw'][0]]['vpn_ip'] }}:8686"
+        address: "{{ hostvars[groups['gw'][0]]['private_ip'] }}:8686"
         callgate: "https://{{ hostvars[groups['gw'][0]]['public_dns'] }}"
         loglevel: "debug"
         prometheus: "127.0.0.1:9012"
 middleware:
         mwseckey: "MWSECPASS"
         maria:
-                creds: "root:-@{{ hostvars[groups['mw'][0]]['vpn_ip'] }}:3306"
+                creds: "root:-@{{ hostvars[groups['mw'][0]]['private_ip'] }}:3306"
                 quotdb: "swifty.QUOTAS"
         rabbit:
                 creds: "root:RABBITPASS@127.0.0.1:5672"
                 admport: "15672"
         mongo:
-                creds: "admin:MONGOPASS@{{ hostvars[groups['mw'][0]]['vpn_ip'] }}:27017"
+                creds: "admin:MONGOPASS@{{ hostvars[groups['mw'][0]]['private_ip'] }}:27017"
         postgres:
                 creds: "-:PGRTOKEN@swft-mw:5432"
                 admport: "3872"
         s3:
                 creds: "-:S3TOKEN@{{ hostvars[groups['mw'][0]]['public_dns'] }}:8789"
                 api: "{{ hostvars[groups['mw'][0]]['public_dns'] }}"
-                notify: "swifty:S3IFYPASS@{{ hostvars[groups['gw'][0]]['vpn_ip'] }}:5672/s3"
+                notify: "swifty:S3IFYPASS@{{ hostvars[groups['gw'][0]]['private_ip'] }}:5672/s3"
                 hidden-key-timeout: 120
 runtime:
         timeout:

@@ -34,8 +34,7 @@ remote_host_ip: '%'
 netname: nyc3
 vpn_interface: tun0
 physical_ip: "{{ ansible_eth0_0.ipv4.address }}"
-tinc_vpn_ip: "{{ ansible_eth1.ipv4.address }}"
-host_min: 10.133.0.0
+private_ip: "{{ ansible_eth1.ipv4.address }}"
 vpn_netmask: 255.255.255.0
 vpn_subnet_cidr_netmask: 32
 
