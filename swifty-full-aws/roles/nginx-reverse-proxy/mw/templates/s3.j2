@@ -1,9 +1,0 @@
-server {
-    listen 80;
-    server_name {{ hostvars[groups['swy-mw'][0]]['mw_public_dns'] }};
-
-    location / {
-        proxy_pass http://{{ hostvars[groups['swy-mw'][0]]['mw_public_dns'] }}:8787;
-        proxy_set_header Host $host;
-    }
-}

@@ -1,6 +1,0 @@
----
-daemon:
-        address: "{{ hostvars[groups['swy-gw'][0]]['gw_public_dns'] }}:8687"
-gate: "{{ hostvars[groups['swy-gw'][0]]['gw_public_dns'] }}:8686"
-keystone: "admin:KSPASS@127.0.0.1:5000/swifty"
-db: "swyadmd:DBAPASS@127.0.0.1:27017"
