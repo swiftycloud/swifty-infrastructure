@@ -32,3 +32,12 @@
 swifty-*/*.retry
 swifty-*/fetch
 swifty-*/*.pem
+
+# Terraform
+
+**/*.tfstate
+**/*.tfstate*
+**/*.pyc
+**/*.tf
+**/.terraform
+**/output.json

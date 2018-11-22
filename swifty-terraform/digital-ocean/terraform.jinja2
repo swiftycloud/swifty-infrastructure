@@ -1,0 +1,30 @@
+# Set the variable value in *.tfvars file
+# or using -var="do_token=..." CLI option
+variable "do_token" {}
+
+# Configure the DigitalOcean Provider. Dont't forget to add env var TF_VAR_do_token
+provider "digitalocean" {
+  token = "${var.do_token}"
+}
+
+{% for instance in instances %}
+
+resource "digitalocean_droplet" "{{instance.name }}" {
+  image  = "{{instance.image }}"
+  name   = "{{instance.name }}"
+  region = "{{instance.region }}"
+  size   = "{{instance.size }}"
+  private_networking = true
+  tags = ["{{instance.tags }}"]
+  ssh_keys = [23551189, 23551204]
+}
+
+{% for var in export_vars %}
+output "{{ instance.name }}::{{ var }}" {
+  value = "${digitalocean_droplet.{{ instance.name }}.{{ var }}}"
+}
+
+{% endfor %}
+
+
+{% endfor %}
