@@ -25,7 +25,7 @@
   when: certs_data_exists|failed
 
 - name: remove httpd
-  dnf:
+  package:
     name: httpd
     state: absent
 

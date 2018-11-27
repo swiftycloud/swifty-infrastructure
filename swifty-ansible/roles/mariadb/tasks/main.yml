@@ -1,5 +1,5 @@
 - name: install mariadb
-  dnf:
+  package:
     name:
       - mariadb-server
       - mariadb-server-utils

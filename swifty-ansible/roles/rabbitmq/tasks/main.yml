@@ -9,12 +9,12 @@
     dest: /root/erlang-solutions-1.0-1.noarch.rpm
 
 - name: install erlang repo from  rpm
-  dnf:
+  package:
     name: /root/erlang-solutions-1.0-1.noarch.rpm
     state: present
 
 - name: install erlang
-  dnf:
+  package:
     name: erlang
     state: present
 
@@ -24,12 +24,12 @@
     dest: /root/rabbitmq-server-3.6.9-1.el7.noarch.rpm
 
 - name: install rabbitmq
-  dnf:
+  package:
     name: /root/rabbitmq-server-3.6.9-1.el7.noarch.rpm
     state: present
 
 - name: install librabbitmq
-  dnf:
+  package:
     name: librabbitmq
     state: present
 

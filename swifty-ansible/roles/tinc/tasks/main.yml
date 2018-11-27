@@ -1,7 +1,12 @@
 ---
 - name: clean dnf cache
   shell: dnf clean all
-  
+  when: "ansible_distribution == 'Fedora'"
+
+- name: clean apt cache
+  shell: apt-cache clean
+  when: "ansible_distribution == 'Ubuntu'"
+
 - name: install tinc
   package: >
     name=tinc

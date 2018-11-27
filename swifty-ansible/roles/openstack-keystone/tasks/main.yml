@@ -3,13 +3,13 @@
     src: rdo-release-pike-1.noarch.rpm
     dest: /root/rdo-release-pike-1.noarch.rpm
 
-- name: install openstack repo from  rpm
-  dnf:
+- name: install openstack repo from rpm
+  package:
     name: /root/rdo-release-pike-1.noarch.rpm
     state: present
 
 - name: install openstack packages
-  dnf:
+  package:
     name:
       - openstack-keystone
       - httpd

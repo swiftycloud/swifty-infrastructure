@@ -1,5 +1,5 @@
 - name: install libselinux
-  dnf:
+  package:
     name: libselinux-python3
     state: latest
 
@@ -13,9 +13,10 @@
     executable: pip3
 
 - name: install docker engine
-  dnf:
+  package:
     name: docker
     state: latest
+
 - name: enable  docker service
   systemd:
     name: docker

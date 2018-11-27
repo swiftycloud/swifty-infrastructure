@@ -7,7 +7,7 @@
     mode: 0644
 
 - name: remove httpd
-  dnf:
+  package:
     name: httpd
     state: absent
 

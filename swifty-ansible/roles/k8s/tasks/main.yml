@@ -7,7 +7,7 @@
     enabled: yes
     gpgcheck: no
 - name: Install kubernetes packages (RHEL/CentOS)
-  dnf:
+  package:
     name:
       - kubelet
       - kubeadm
@@ -88,7 +88,7 @@
   yum_repository:
     name: Kubernetes
     description: Kubernetes Repository
-    file: kubernetчes
+    file: kubernetes
     baseurl: http://yum.kubernetes.io/repos/kubernetes-el7-x86_64
     enabled: yes
     gpgcheck: no
@@ -98,7 +98,7 @@
     - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
 
 - name: Install kubernetes packages (RHEL/CentOS)
-  dnf:
+  package:
     name:
       - kubelet
       - kubeadm
