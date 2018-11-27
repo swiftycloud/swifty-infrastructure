@@ -37,8 +37,8 @@ for host in swifty_hosts:
         if not inv.get(group):
             inv[group] = {'hosts': []}
 
-        if hosts_meta[host.name]['fqdn'] not in inv[group]['hosts']:
-            inv[group]['hosts'].append(hosts_meta[host.name]['fqdn'])
+        if hosts_meta[host.name]['public_dns'] not in inv[group]['hosts']:
+            inv[group]['hosts'].append(hosts_meta[host.name]['public_dns'])
 
         # Collect metadata from Terraform
         host_meta = hosts_meta[host.name]
@@ -46,7 +46,7 @@ for host in swifty_hosts:
         # Add metadata from Inventory
         host_meta.update(host.meta)
 
-        inv['_meta']['hostvars'][hosts_meta[host.name]['fqdn']] = host_meta
+        inv['_meta']['hostvars'][hosts_meta[host.name]['public_dns']] = host_meta
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
