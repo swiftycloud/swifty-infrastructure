@@ -2,11 +2,18 @@
   copy:
     src: rdo-release-pike-1.noarch.rpm
     dest: /root/rdo-release-pike-1.noarch.rpm
+  when: "ansible_distribution == 'Fedora'"
 
 - name: install openstack repo from rpm
   package:
     name: /root/rdo-release-pike-1.noarch.rpm
     state: present
+  when: "ansible_distribution == 'Fedora'"
+
+- name: add Ubuntu Cloud Archive for OpenStack Queens
+  fail:
+    msg: "TBD"
+  when: "ansible_distribution == 'Ubuntu'"
 
 - name: install openstack packages
   package:
@@ -61,7 +68,7 @@
 - name: create link for wsgi conf
   shell: "ln -s /usr/share/keystone/wsgi-keystone.conf /etc/httpd/conf.d/"
 
-- name: enable  httpd service
+- name: enable httpd service
   systemd:
     name: httpd
     enabled: yes

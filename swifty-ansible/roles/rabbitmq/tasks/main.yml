@@ -3,37 +3,57 @@
 # https://docs.ansible.com/ansible/latest/modules/rabbitmq_vhost_module.html
 # https://docs.ansible.com/ansible/latest/modules/rabbitmq_plugin_module.html
 
+
 - name: copy erlang repo rpm
   copy:
     src: erlang-solutions-1.0-1.noarch.rpm
     dest: /root/erlang-solutions-1.0-1.noarch.rpm
+  when: "ansible_distribution == 'Fedora'"
 
 - name: install erlang repo from  rpm
   package:
     name: /root/erlang-solutions-1.0-1.noarch.rpm
     state: present
+  when: "ansible_distribution == 'Fedora'"
 
 - name: install erlang
   package:
     name: erlang
     state: present
+  when: "ansible_distribution == 'Fedora'"
 
 - name: copy rabbitmq rpm package
   copy:
     src: rabbitmq-server-3.6.9-1.el7.noarch.rpm
     dest: /root/rabbitmq-server-3.6.9-1.el7.noarch.rpm
+  when: "ansible_distribution == 'Fedora'"
 
+# TODO: for Fedora - it's better to get rid of hardcode & rpm storage here
 - name: install rabbitmq
   package:
     name: /root/rabbitmq-server-3.6.9-1.el7.noarch.rpm
     state: present
+  when: "ansible_distribution == 'Fedora'"
+
+- name: add apt key for rabbitmq repo
+  apt_key:
+    keyserver: hkps.pool.sks-keyservers.net
+    id: 0x6B73A36E6026DFCA
+  when: "ansible_distribution == 'Ubuntu'"
+
+- name: add apt repo for rabbitmq
+  apt_repository:
+    repo: "deb https://dl.bintray.com/rabbitmq/debian {{ ansible_distribution_release }} main"
+    state: present
+    update_cache: yes
+  when: "ansible_distribution == 'Ubuntu'"
 
 - name: install librabbitmq
   package:
     name: librabbitmq
     state: present
 
-- name: enable  rabbitmq-server service
+- name: enable rabbitmq-server service
   systemd:
     name: rabbitmq-server
     enabled: yes
