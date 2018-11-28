@@ -1,0 +1,82 @@
+provider "aws" {}
+
+data "aws_route53_zone" "ci_dns" {
+  name         = "ci.swifty.cloud"
+}
+
+data "aws_ami" "fedora" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["*Fedora-Cloud-Base-27*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["125523088429"]  # Fedora official images
+
+}
+
+resource "aws_security_group" "sec_group" {
+  name        = "{{ meta['commit'] }}_sec_group"
+  description = "Allow all inbound traffic"
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+}
+
+{% for instance in instances %}
+resource "aws_instance" "{{ instance.name }}_{{ meta['commit'] }}" {
+  ami           = "${data.aws_ami.fedora.id}"
+  instance_type = "t2.medium"
+  key_name      = "swifty-ci"
+  security_groups = ["${aws_security_group.sec_group.name}"]
+  tags {
+    Name = "swifty-{{ instance.name }}-{{ meta['commit'] }}"
+    Commit = "{{ meta['commit'] }}"
+  }
+  root_block_device {
+    volume_size = {{ instance.diskspace }}
+  }
+  depends_on = ["aws_security_group.sec_group"]
+  provisioner "local-exec" {
+    command = "aws ec2 wait instance-status-ok --instance-ids ${aws_instance.{{ instance.name }}_{{ meta['commit'] }}.id}"
+  }
+}
+
+
+resource "aws_route53_record" "{{ instance.name }}_{{ meta['commit'] }}_dns" {
+  zone_id = "${data.aws_route53_zone.ci_dns.zone_id}"
+  name    = "{{ instance.name }}-{{ meta['commit'] }}.ci.swifty.cloud"
+  type    = "A"
+  ttl     = "300"
+  records = ["${aws_instance.{{ instance.name }}_{{ meta['commit'] }}.public_ip}"]
+}
+
+output "{{ instance.name }}::public_dns" {
+  value = "${aws_route53_record.{{ instance.name }}_{{ meta['commit'] }}_dns.fqdn}"
+}
+
+
+{% for var in export_vars %}
+output "{{ instance.name }}::{{ var }}" {
+  value = "${aws_instance.{{ instance.name }}_{{ meta['commit'] }}.{{ var }}}"
+}
+{% endfor %}
+
+{% endfor %}

@@ -2,16 +2,19 @@
   copy:
     src: mongodb.repo
     dest: /etc/yum.repos.d/mongodb.repo
+
 - name: copy collections file
   copy:
     src: collections.js
     dest: /root/collections.js
+
 - name: install mongodb
-  dnf:
+  package:
     name:
       - mongodb
       - mongodb-server
     state: latest
+
 - name: enable  mongodb service
   systemd:
     name: mongod
@@ -28,10 +31,12 @@
 
 - name: start mongodb service
   systemd: state=started name=mongod
+
 - name: Install the pymongo module
   pip:
     name: pymongo
     executable: pip3
+
 - name:  add admin user
   mongodb_user:
     database: admin
@@ -39,6 +44,7 @@
     password: "{{ mongodb_admin_password }}"
     roles: readWrite,userAdminAnyDatabase,dbAdminAnyDatabase,dbAdminAnyDatabase
     state: present
+
 - name:  add swygate user
   mongodb_user:
     login_user: admin
@@ -48,6 +54,7 @@
     password: "{{ mongodb_swygate_password }}"
     roles: readWrite,dbAdmin,userAdmin,dbOwner
     state: present
+
 - name:  add swyadmd user
   mongodb_user:
     login_user: admin
@@ -57,6 +64,7 @@
     password: "{{ mongodb_swyadmd_password }}"
     roles: readWrite,dbAdmin,userAdmin,dbOwner
     state: present
+
 - name:  add swifty-s3 user
   mongodb_user:
     login_user: admin
@@ -66,5 +74,6 @@
     password: "{{ mongodb_s3_password }}"
     roles: readWrite,dbAdmin,userAdmin,dbOwner
     state: present
+
 - name: create collections
   shell: "mongo swifty /root/collections.js"

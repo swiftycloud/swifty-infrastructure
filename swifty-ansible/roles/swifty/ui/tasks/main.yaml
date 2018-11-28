@@ -13,7 +13,7 @@
 
 - name: create certs volume
   command: docker volume create --name certs
-  when: certs_volume_exists|failed
+  when: certs_volume_exists is failed
 
 - name: check if certs-data exists
   command: docker volume inspect certs-data
@@ -22,10 +22,10 @@
 
 - name: create certs-data
   command: docker volume create --name certs-data
-  when: certs_data_exists|failed
+  when: certs_data_exists is failed
 
 - name: remove httpd
-  dnf:
+  package:
     name: httpd
     state: absent
 
@@ -49,7 +49,6 @@
     certonly \
     --standalone \
     --agree-tos \
-    --staging \
     --non-interactive \
     --email {{ cert_admin_email }} \
     -d {{ dashboard_domain_name | default(default_dashboard_domain_name) }}
@@ -71,6 +70,12 @@
     user: root
     job: "docker stop ui && docker run -it --rm  --net=host -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt deliverous/certbot renew --standalone ; docker start ui"
     cron_file: le-autorenewal
+
+- name: Log into swifty registry
+  shell: "docker login {{ ui_registry_host }} -u {{ ui_docker_username }} -p {{ ui_docker_password }}"
+
+- name: cleanup nginx containers, if running
+  shell: "docker stop ui || true && docker rm ui || true"
 
 - name: start ui
   shell: docker run -d -p 80:80 -p 443:443 --name ui --restart always -v /root/nginx.conf:/etc/nginx/conf.d/default.conf -v certs:/etc/letsencrypt  -v certs-data:/data/letsencrypt -v /root/swifty.config.json:/html/swifty.config.json:ro registry.gitlab.com/swiftyteam/swifty-dashboard-v2

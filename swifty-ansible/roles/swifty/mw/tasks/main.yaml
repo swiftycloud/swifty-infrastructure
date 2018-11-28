@@ -88,7 +88,7 @@
     dest: /etc/swifty/conf/mime.types
 
 - name: remove httpd
-  dnf:
+  package:
     name: httpd
     state: absent
 

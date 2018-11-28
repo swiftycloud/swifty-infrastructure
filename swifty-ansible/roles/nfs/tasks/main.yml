@@ -1,10 +1,9 @@
 - name: install nfs packages
-  dnf:
-    name:
-      - nfs-utils
+  package:
+    name: nfs-utils
     state: latest
 
-- name: enable  nfs service
+- name: enable nfs service
   systemd:
     name: nfs
     enabled: yes
@@ -46,9 +45,8 @@
 # This is part for workers
 
 - name: install nfs packages
-  dnf:
-    name:
-      - nfs-utils
+  package:
+    name: nfs-utils
     state: latest
   delegate_to: "{{item}}"
   with_items:
