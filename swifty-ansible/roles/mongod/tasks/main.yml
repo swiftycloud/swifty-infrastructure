@@ -1,22 +1,45 @@
-- name: add mongodb repo
+- name: Add mongodb yum repository
   copy:
     src: mongodb.repo
     dest: /etc/yum.repos.d/mongodb.repo
+  when: (ansible_distribution == "Fedora")
+
+- name: Add Mongodb GPG key from a keyserver
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 9DA31620334BD75D9DCB49F368818C72E52529D4
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Add mongodb apt repository
+  apt_repository:
+    repo: deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse
+    state: present
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Update repositories cache
+  apt:
+    update_cache: yes
+  when: (ansible_distribution == "Ubuntu")
+
 - name: copy collections file
   copy:
     src: collections.js
     dest: /root/collections.js
+
 - name: install mongodb
-  dnf:
+  package:
     name:
       - mongodb
       - mongodb-server
     state: latest
-- name: enable  mongodb service
-  systemd:
-    name: mongod
-    enabled: yes
-    masked: no
+  when: (ansible_distribution == "Fedora")
+
+- name: install mongodb
+  package:
+    name:
+      - mongodb-org
+    state: latest
+  when: (ansible_distribution == "Ubuntu")
 
 - name: copy mongod.conf
   template:
@@ -26,12 +49,18 @@
     group: root
     mode: 0644
 
-- name: start mongodb service
-  systemd: state=started name=mongod
 - name: Install the pymongo module
   pip:
     name: pymongo
     executable: pip3
+
+- name: enable and start mongodb service
+  systemd:
+    name: mongod
+    enabled: yes
+    masked: no
+    state: started
+
 - name:  add admin user
   mongodb_user:
     database: admin
@@ -39,6 +68,7 @@
     password: "{{ mongodb_admin_password }}"
     roles: readWrite,userAdminAnyDatabase,dbAdminAnyDatabase,dbAdminAnyDatabase
     state: present
+
 - name:  add swygate user
   mongodb_user:
     login_user: admin
@@ -48,6 +78,7 @@
     password: "{{ mongodb_swygate_password }}"
     roles: readWrite,dbAdmin,userAdmin,dbOwner
     state: present
+
 - name:  add swyadmd user
   mongodb_user:
     login_user: admin
@@ -57,6 +88,7 @@
     password: "{{ mongodb_swyadmd_password }}"
     roles: readWrite,dbAdmin,userAdmin,dbOwner
     state: present
+
 - name:  add swifty-s3 user
   mongodb_user:
     login_user: admin
@@ -66,5 +98,6 @@
     password: "{{ mongodb_s3_password }}"
     roles: readWrite,dbAdmin,userAdmin,dbOwner
     state: present
+
 - name: create collections
   shell: "mongo swifty /root/collections.js"

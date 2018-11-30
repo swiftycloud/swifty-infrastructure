@@ -1,17 +1,32 @@
 - name: install nfs packages
-  dnf:
+  package:
     name:
       - nfs-utils
     state: latest
+  when: (ansible_distribution == "Fedora")
 
-- name: enable  nfs service
+- name: install nfs packages
+  package:
+    name:
+      - nfs-kernel-server
+    state: latest
+  when: (ansible_distribution == "Ubuntu")
+
+- name: enable nfs service
   systemd:
     name: nfs
     enabled: yes
     masked: no
+    state: started
+  when: (ansible_distribution == "Fedora")
 
-- name: start nfs service
-  systemd: state=started name=nfs
+- name: enable  nfs service
+  systemd:
+    name: nfs-kernel-server
+    enabled: yes
+    masked: no
+    state: started
+  when: (ansible_distribution == "Ubuntu")
 
 - name: Configure allow master tcp wrapper
   lineinfile:
@@ -37,12 +52,6 @@
 - name: Export dir
   shell: exportfs -a
 
-- name: Wait for the instances to boot by checking the ssh port
-  wait_for: host="{{item}}" port=22 delay=20 timeout=320 state=started
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['private_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['private_ip'] }}"
-
 # This is part for workers
 
 - name: install nfs packages
@@ -54,42 +63,18 @@
   with_items:
     - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
     - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  when: (ansible_distribution == "Fedora")
 
-- name: enable  nfs service
-  systemd:
-    name: nfs
-    enabled: yes
-    masked: no
+- name: install nfs packages
+  package:
+    name:
+      - nfs-common
+    state: latest
   delegate_to: "{{item}}"
   with_items:
     - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
     - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
-
-- name: start nfs service
-  systemd: state=started name=nfs
-  delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
-
-
-- name: Configure allow workers tcp wrapper
-  lineinfile:
-    path: /etc/hosts.allow
-    line: "rpcbind mountd nfsd statd lockd rquotad : {{ hostvars[groups['gw'][0]]['private_ip'] }}/16"
-  delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
-
-- name: Configure deny workers tcp wrapper
-  lineinfile:
-    path: /etc/hosts.deny
-    line: 'rpcbind mountd nfsd statd lockd rquotad : ALL'
-  delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  when: (ansible_distribution == "Ubuntu")
 
 - name: Creates swifty-volume dir
   file:

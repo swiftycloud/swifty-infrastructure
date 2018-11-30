@@ -6,8 +6,29 @@
     baseurl: http://yum.kubernetes.io/repos/kubernetes-el7-x86_64
     enabled: yes
     gpgcheck: no
-- name: Install kubernetes packages (RHEL/CentOS)
-  dnf:
+  when: (ansible_distribution == "Fedora")
+
+- name: Install apt-transport-https, curl packages
+  package:
+    name:
+      - apt-transport-https
+      - curl
+    state: latest
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Add Kubernetes apt repository
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Update repositories cache
+  apt:
+    update_cache: yes
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Install kubernetes packages
+  package:
     name:
       - kubelet
       - kubeadm
@@ -96,9 +117,41 @@
   with_items:
     - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
     - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  when: (ansible_distribution == "Fedora")
 
-- name: Install kubernetes packages (RHEL/CentOS)
-  dnf:
+- name: Install apt-transport-https, curl packages
+  package:
+    name:
+      - apt-transport-https
+      - curl
+    state: latest
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Add Kubernetes apt repository
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Update repositories cache
+  apt:
+    update_cache: yes
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Install kubernetes packages
+  package:
     name:
       - kubelet
       - kubeadm
@@ -108,6 +161,7 @@
   with_items:
     - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
     - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  when: (ansible_distribution == "Fedora")
 
 - name: Disable system swap
   shell: "swapoff -a"
