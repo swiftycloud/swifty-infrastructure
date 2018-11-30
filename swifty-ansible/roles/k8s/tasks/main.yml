@@ -109,7 +109,7 @@
   yum_repository:
     name: Kubernetes
     description: Kubernetes Repository
-    file: kubernetчes
+    file: kubernetes
     baseurl: http://yum.kubernetes.io/repos/kubernetes-el7-x86_64
     enabled: yes
     gpgcheck: no

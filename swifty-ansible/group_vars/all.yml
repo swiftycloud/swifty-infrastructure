@@ -51,6 +51,11 @@ registry_host: registry.gitlab.com
 docker_username: gitlab+deploy-token-27648
 docker_password: bejaxhFt9LWnSJZT59xy
 
+# use separate token for swifty-ui repo
+ui_registry_host: registry.gitlab.com
+ui_docker_username: gitlab+deploy-token-29308
+ui_docker_password: J3B2MxyD1RoxA8qggi1J
+
 # system
 
 systemd_dir: /lib/systemd/system

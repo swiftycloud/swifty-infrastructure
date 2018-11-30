@@ -7,7 +7,7 @@
     mode: 0755
 
 - name: install packages
-  dnf: name={{item}} state=latest
+  package: name={{item}} state=latest
   with_items:
        - git
        - golang

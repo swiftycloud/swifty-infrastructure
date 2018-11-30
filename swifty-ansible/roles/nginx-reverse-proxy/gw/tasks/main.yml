@@ -46,7 +46,6 @@
     certonly \
     --standalone \
     --agree-tos \
-    --staging \
     --non-interactive \
     --email {{ cert_admin_email }} \
     -d {{ api_domain_name | default(default_api_domain_name) }}
