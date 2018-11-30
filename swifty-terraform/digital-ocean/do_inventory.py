@@ -52,6 +52,19 @@ swifty_hosts = [
         }
     ),
     Host(
+        name='swifty-connector-iac',
+        region = 'ams3',
+        image  = 'ubuntu-18-04-x64',
+        size   = "s-1vcpu-2gb",
+        tags = 'iac',
+        groups=['connector'],
+        meta={
+            'vpn_ip': '192.168.0.4',
+            'public_dns': 'connector.infra-ci.swifty.cloud',
+            'tinc_hostname': 'swyconnector'
+        }
+    ),
+    Host(
         name='swifty-worker0-iac',
         region = 'ams3',
         image  = 'ubuntu-18-04-x64',
@@ -59,7 +72,7 @@ swifty_hosts = [
         tags = 'iac',
         groups=['worker'],
         meta={
-            'vpn_ip': '192.168.0.4',
+            'vpn_ip': '192.168.0.5',
             'public_dns': 'worker0.infra-ci.swifty.cloud',
             'tinc_hostname': 'swyworker0'
         }
@@ -72,7 +85,7 @@ swifty_hosts = [
         tags = 'iac',
         groups=['worker'],
         meta={
-            'vpn_ip': '192.168.0.5',
+            'vpn_ip': '192.168.0.6',
             'public_dns': 'worker1.infra-ci.swifty.cloud',
             'tinc_hostname': 'swyworker1'
         }

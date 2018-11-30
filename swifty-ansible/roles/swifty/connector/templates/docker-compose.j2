@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  app:
+    image: registry.gitlab.com/swiftyteam/swifty.connector/app
+    restart: always
+    volumes:
+      - .env:/var/www/.env
+      - storage:/var/www/storage
+
+  web:
+    image: registry.gitlab.com/swiftyteam/swifty.connector/web
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - certs:/etc/letsencrypt
+      - certs-data:/data/letsencrypt
+    ports:
+      - 80:80
+      - 443:443
+
+  db:
+    image: mysql:5.7
+    restart: always
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      - "MYSQL_DATABASE=${DB_DATABASE}"
+      - "MYSQL_USER=${DB_USERNAME}"
+      - "MYSQL_PASSWORD=${DB_PASSWORD}"
+      - "MYSQL_ROOT_PASSWORD=${DB_PASSWORD}"
+
+  postfix:
+    image: catatnight/postfix
+    restart: always
+    environment:
+      - "maildomain=${MAIL_DOMAIN}"
+      - "smtp_user=${MAIL_USERNAME}:${MAIL_PASSWORD}"
+
+volumes:
+  storage:
+  dbdata:
+  certs:
+    external:
+      name: certs
+  certs-data:
+    external:
+      name: certs-data
