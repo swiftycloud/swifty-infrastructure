@@ -7,6 +7,9 @@
 [ui]
 206.189.8.78 vpn_ip=192.0.0.3 tinc_hostname=swftui public_dns=dashboard-dev.swifty.cloud private_ip=10.133.76.5 public_ip=206.189.8.78
 
+[connector]
+206.189.8.68 vpn_ip=192.0.0.4 tinc_hostname=swftconnector public_dns=login-dev.swifty.cloud private_ip=10.133.76.11 public_ip=206.189.8.68
+
 [worker]
-206.189.0.227 vpn_ip=192.0.0.4 tinc_hostname=swftworker0 private_ip=10.133.70.223 public_ip=206.189.0.227
-206.189.11.253 vpn_ip=192.0.0.5 tinc_hostname=swftworker1 private_ip=10.133.80.90 public_ip=206.189.11.253
+206.189.0.227 vpn_ip=192.0.0.5 tinc_hostname=swftworker0 private_ip=10.133.70.223 public_ip=206.189.0.227
+206.189.11.253 vpn_ip=192.0.0.6 tinc_hostname=swftworker1 private_ip=10.133.80.90 public_ip=206.189.11.253

@@ -38,11 +38,20 @@ swifty_hosts = [
         }
     ),
     Host(
+        name='connector',
+        diskspace=10,
+        groups=['connector'],
+        meta={
+            'vpn_ip': '192.168.0.4',
+            'tinc_hostname': 'swyconnector'
+        }
+    ),
+    Host(
         name='worker0',
         diskspace=10,
         groups=['worker'],
         meta={
-            'vpn_ip': '192.168.0.4',
+            'vpn_ip': '192.168.0.5',
             'tinc_hostname': 'swyworker0'
         }
     ),
@@ -51,7 +60,7 @@ swifty_hosts = [
         diskspace=10,
         groups=['worker'],
         meta={
-            'vpn_ip': '192.168.0.5',
+            'vpn_ip': '192.168.0.6',
             'tinc_hostname': 'swyworker1'
         }
     ),

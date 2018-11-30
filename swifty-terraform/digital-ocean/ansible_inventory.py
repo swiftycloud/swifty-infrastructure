@@ -68,6 +68,7 @@ if __name__ == '__main__':
             'dashboard_domain_name': inv['ui']['hosts'][0],
             'api_domain_name': inv['gw']['hosts'][0],
             's3_domain_name': inv['mw']['hosts'][0],
+            'connector_domain_name': inv['connector']['hosts'][0],
         }
 
         print ' '.join(map(lambda a: "{0}={1}".format(a[0], a[1]), hostnames.items()))

@@ -1,15 +1,13 @@
 # ansible
-
 ansible_ssh_user: fedora
 ansible_ssh_private_key_file:
 ansible_python_interpreter: /usr/bin/python3
-# Kubernetes
 
+# Kubernetes
 token: c9f7b8.8d17974y63l7g85s
 pod_network_cidr: "10.244.0.0/16"
 
 # passwords
-
 mariadb_root_password: CkZAy42zuykED9Nb
 mariadb_keystone_password: trrc6PCOFPlKRR&R
 mongodb_admin_password: trrc6PCOFPlKRR&R
@@ -27,26 +25,33 @@ s3_token: em0pP8KE6X2KuRv
 s3_secret_key: 60c0b0cae645a2768405dd8ff9f9a14e
 mw_secpass: 00e18d1b513b69ac066ad0cb45cb1515
 
-remote_host_ip: '%'
+#connector
+app_env: production
+app_key: base64:pctmhzf0wZNHd5KyKTUStGFxU+WvWHNTywLOHYeNd0E=
+mail_from: "info@swifty.cloud"
+mail_from_name: "Swifty.Cloud"
+main_domain: infra-ci.swifty.cloud
+sendgrid_api_key: "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"
+sendgrid_welcome_tpl: "d-40a3845b97ea4fd798449e797a62f843"
+sendgrid_password_reset_tpl: "d-1d99b292883840f896cefa4f306dae67"
+sendgrid_verification_tpl: "d-7873a8fa26e1464e9e5b5edb21e8150d"
 
 # tinc vpn
-
 netname: nyc3
 vpn_interface: tun0
 vpn_netmask: 255.255.255.0
 vpn_subnet_cidr_netmask: 32
 
 # let's encrypt
-
 cert_admin_email: serenityqn@gmail.com
 
 # for customization of this, use --extra-vars and omit "default_" in key, otherwise default will be applied
 default_dashboard_domain_name: dashboard-dev.swifty.cloud
 default_api_domain_name: api-dev.swifty.cloud
 default_s3_domain_name: s3-dev.swifty.cloud
+default_connector_domain_name: login-dev.swifty.cloud
 
-# docker
-
+# use separate token for swifty repo
 registry_host: registry.gitlab.com
 docker_username: gitlab+deploy-token-27648
 docker_password: bejaxhFt9LWnSJZT59xy
@@ -56,10 +61,15 @@ ui_registry_host: registry.gitlab.com
 ui_docker_username: gitlab+deploy-token-29308
 ui_docker_password: J3B2MxyD1RoxA8qggi1J
 
-# system
+# use separate token for swifty-connector repo
+connector_registry_host: registry.gitlab.com
+connector_docker_username: gitlab+deploy-token-29927
+connector_docker_password: oNUokshPYbA2S5719EsA
 
+# system
 systemd_dir: /lib/systemd/system
 system_env_dir: /etc/sysconfig
 network_dir: /etc/kubernetes/network
 kubeadmin_config: /etc/kubernetes/admin.conf
 kube_addon_dir: /etc/kubernetes/addon
+remote_host_ip: '%'
