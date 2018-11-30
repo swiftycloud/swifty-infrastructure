@@ -8,9 +8,9 @@
   when: "ansible_distribution == 'Ubuntu'"
 
 - name: install tinc
-  package: >
-    name=tinc
-    state=latest
+  package:
+    name: tinc
+    state: latest
 
 - name: create tinc systemd service file
   template: >

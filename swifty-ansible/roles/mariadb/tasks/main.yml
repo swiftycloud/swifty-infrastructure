@@ -7,6 +7,14 @@
       - mysql-devel
       - gcc
     state: latest
+  when: (ansible_distribution == "Fedora")
+
+- name: install mariadb
+  package:
+    name:
+      - mariadb-server
+    state: latest
+  when: (ansible_distribution == "Ubuntu")
 
 - name: enable  mariadb service
   systemd:

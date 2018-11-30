@@ -28,6 +28,13 @@
   package:
     name: httpd
     state: absent
+  when: (ansible_distribution == "Fedora")
+
+- name: remove httpd
+  package:
+    name: apache2
+    state: absent
+  when: (ansible_distribution == "Ubuntu")
 
 #- name: certbot container
 #  docker:

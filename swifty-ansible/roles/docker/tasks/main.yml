@@ -1,7 +1,37 @@
-- name: install libselinux
+- name: Update repositories cache
+  apt:
+    update_cache: yes
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Install libselinux
   package:
     name: libselinux-python3
     state: latest
+  when: (ansible_distribution == "Fedora")
+
+- name: Install libselinux
+  package:
+    name: python-selinux
+    state: present
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Install build-essential
+  package:
+    name: build-essential
+    state: present
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Install docker engine
+  package:
+    name: docker
+    state: latest
+  when: (ansible_distribution == "Fedora")
+
+- name: Install docker engine
+  package:
+    name: docker.io
+    state: present
+  when: (ansible_distribution == "Ubuntu")
 
 - name: Disable selinux
   selinux:
@@ -12,19 +42,16 @@
     name: docker-py
     executable: pip3
 
-- name: install docker engine
-  package:
-    name: docker
-    state: latest
-
-- name: enable  docker service
+- name: Enable  docker service
   systemd:
     name: docker
     enabled: yes
     masked: no
 
-- name: start docker service
-  systemd: state=started name=docker
+- name: Start docker service
+  systemd:
+    state: started
+    name: docker
 
 - name: Log into swifty registry
   shell: "docker login {{ registry_host }} -u {{ docker_username }} -p {{ docker_password }}"
