@@ -8,9 +8,9 @@
   vars:
     ansible_python_interpreter: /usr/bin/python3
   pre_tasks:
-   - include_vars: group_vars/all.yml
+  - include_vars: group_vars/all.yml
   roles:
-  #- {role: 'docker', tags: 'docker'}
+  - {role: 'docker', tags: 'docker'}
 
 - hosts: gw
   gather_facts: true
@@ -22,14 +22,14 @@
   pre_tasks:
   - include_vars: group_vars/all.yml
   roles:
-  #- nfs
-  #- k8s
-  #- mariadb
-  #- mongod
-  #- rabbitmq
-  #- openstack-keystone
-  #- nginx-reverse-proxy/gw
-  #- swifty/gw
+  - nfs
+  - k8s
+  - mariadb
+  - mongod
+  - rabbitmq
+  - openstack-keystone
+  - nginx-reverse-proxy/gw
+  - swifty/gw
 
 - hosts: mw
   gather_facts: true
@@ -41,7 +41,7 @@
   pre_tasks:
   - include_vars: group_vars/all.yml
   roles:
-  #- mariadb
+  - mariadb
   - mongod
   - nginx-reverse-proxy/mw
   - swifty/mw
