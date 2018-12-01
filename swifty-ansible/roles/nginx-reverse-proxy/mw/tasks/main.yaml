@@ -5,12 +5,7 @@
     owner: root
     group: root
     mode: 0644
-
-- name: remove httpd
-  package:
-    name: httpd
-    state: absent
-
+    
 - name: check if certs volume exists
   command: docker volume inspect certs
   register: certs_volume_exists
