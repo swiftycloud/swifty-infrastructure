@@ -24,17 +24,15 @@
   command: docker volume create --name certs-data
   when: certs_data_exists|failed
 
-- name: remove httpd
-  package:
-    name: httpd
-    state: absent
-  when: (ansible_distribution == "Fedora")
-
-- name: remove httpd
-  package:
+- name: replace ports
+  shell: sed -i -e 's/80/8080/g' /etc/apache2/ports.conf && sed -i -e 's/443/8443/g' /etc/apache2/ports.conf
+  when: "ansible_distribution == 'Ubuntu'"
+  
+- name: restart apache2 service
+  systemd:
     name: apache2
-    state: absent
-  when: (ansible_distribution == "Ubuntu")
+    state: restarted
+  when: "ansible_distribution == 'Ubuntu'"
 
 - name: create certbot
   shell: |

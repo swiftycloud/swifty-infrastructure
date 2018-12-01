@@ -10,9 +10,10 @@
     state: present
   when: "ansible_distribution == 'Fedora'"
 
-- name: add Ubuntu Cloud Archive for OpenStack Queens
-  fail:
-    msg: "TBD"
+- name: install software-properties-common
+  package:
+    name: software-properties-common
+    state: present
   when: "ansible_distribution == 'Ubuntu'"
 
 - name: install openstack packages
@@ -23,6 +24,17 @@
       - mod_wsgi
       - python-openstackclient
     state: present
+  when: "ansible_distribution == 'Fedora'"
+
+- name: install openstack packages
+  package:
+    name:
+      - keystone
+      - apache2
+      - libapache2-mod-wsgi
+      - python-openstackclient
+    state: present
+  when: "ansible_distribution == 'Ubuntu'"
 
 - name: Install the mysqlclient module
   pip:
@@ -50,6 +62,9 @@
     name: keystone
     state: present
 
+- name: fix db characher set
+  shell: mysql -e "ALTER SCHEMA keystone DEFAULT CHARACTER SET utf8 ;"
+
 - name: add controller name to hosts file
   shell: echo "127.0.0.1   controller" >> /etc/hosts
 
@@ -60,22 +75,48 @@
     owner: root
     group: keystone
     mode: 0640
+  when: "ansible_distribution == 'Fedora'"
+
+- name: add keystone.conf from template
+  template:
+    src: keystone_queens.j2
+    dest: /etc/keystone/keystone.conf
+    owner: root
+    group: keystone
+    mode: 0640
+  when: "ansible_distribution == 'Ubuntu'"
 
 - name: copy httpd.conf
   copy:
     src: httpd.conf
     dest: /etc/httpd/conf//httpd.conf
+  when: "ansible_distribution == 'Fedora'"
+
+- name: copy apache2.conf
+  copy:
+    src: apache2.conf
+    dest: /etc/apache2/apache2.conf
+  when: "ansible_distribution == 'Ubuntu'"
+
 - name: create link for wsgi conf
   shell: "ln -s /usr/share/keystone/wsgi-keystone.conf /etc/httpd/conf.d/"
+  when: "ansible_distribution == 'Fedora'"
 
 - name: enable httpd service
   systemd:
     name: httpd
     enabled: yes
     masked: no
+    state: restarted
+  when: "ansible_distribution == 'Fedora'"
 
-- name: restart httpd service
-  systemd: state=restarted name=httpd
+- name: enable apache2 service
+  systemd:
+    name: apache2
+    enabled: yes
+    masked: no
+    state: restarted
+  when: "ansible_distribution == 'Ubuntu'"
 
 - name: add .bashrc from template
   template:
@@ -86,7 +127,7 @@
     mode: 0644
 
 - name: reload .bashrc
-  shell: source /root/.bashrc
+  shell: . /root/.bashrc
 
 - name: create .config/openstack dir
   file:
@@ -106,14 +147,26 @@
 
 - name: add keystone_init.sh from template
   template:
-    src: keystone_init.j2
+    src: keystone_init_pike.j2
     dest: /root/keystone_init.sh
     owner: root
     group: keystone
     mode: 0640
+  when: "ansible_distribution == 'Fedora'"
+
+- name: add keystone_init.sh from template
+  template:
+    src: keystone_init_queens.j2
+    dest: /root/keystone_init.sh
+    owner: root
+    group: keystone
+    mode: 0640
+  when: "ansible_distribution == 'Ubuntu'"
 
 - name: make keystone_init.sh executable
-  file: dest=/root/keystone_init.sh mode=a+x
+  file:
+    dest: /root/keystone_init.sh
+    mode: a+x
 
 - name: init keystone
   shell: /root/keystone_init.sh
@@ -223,6 +276,18 @@
     user: swydbscr
     role: swifty.monitor
     project: swyadmin
+
+- name: add wsgi conf
+  copy:
+    src: keystone-wsgi.conf
+    dest: /etc/apache2/sites-available/keystone.conf
+  when: "ansible_distribution == 'Ubuntu'"
+
+- name: restart apache2 service
+  systemd:
+    name: apache2
+    state: restarted
+  when: "ansible_distribution == 'Ubuntu'"
 
 - name:
   shell: openstack user set --project admin admin --os-cloud swifty

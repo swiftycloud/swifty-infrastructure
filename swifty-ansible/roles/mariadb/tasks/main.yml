@@ -13,6 +13,9 @@
   package:
     name:
       - mariadb-server
+      - libmysqlclient-dev
+      - gcc
+      - python3-dev
     state: latest
   when: (ansible_distribution == "Ubuntu")
 

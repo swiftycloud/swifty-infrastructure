@@ -27,18 +27,33 @@
     state: latest
   when: (ansible_distribution == "Fedora")
 
-- name: Install docker-compose
-  shell: sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
-
 - name: Install docker engine
   package:
     name: docker.io
     state: present
   when: (ansible_distribution == "Ubuntu")
 
+- name: Install docker-compose
+  shell: sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
+
 - name: Disable selinux
   selinux:
     state: disabled
+  when: (ansible_distribution == "Fedora")
+
+- name: Disable apparmor
+  systemd:
+    name: apparmor
+    enabled: no
+    masked: yes
+    state: stopped
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Install python3-pip
+  package:
+    name: python3-pip
+    state: present
+  when: (ansible_distribution == "Ubuntu")
 
 - name: Install the mysqlclient module
   pip:
@@ -50,11 +65,7 @@
     name: docker
     enabled: yes
     masked: no
-
-- name: Start docker service
-  systemd:
     state: started
-    name: docker
 
 - name: Log into swifty registry
   shell: "docker login {{ registry_host }} -u {{ docker_username }} -p {{ docker_password }}"

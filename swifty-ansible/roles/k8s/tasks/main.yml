@@ -16,6 +16,12 @@
     state: latest
   when: (ansible_distribution == "Ubuntu")
 
+- name: Add k8s GPG key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+  when: (ansible_distribution == "Ubuntu")
+
 - name: Add Kubernetes apt repository
   apt_repository:
     repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
@@ -131,6 +137,16 @@
     - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
   when: (ansible_distribution == "Ubuntu")
 
+- name: Add k8s GPG key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  when: (ansible_distribution == "Ubuntu")
+
 - name: Add Kubernetes apt repository
   apt_repository:
     repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
@@ -161,7 +177,6 @@
   with_items:
     - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
     - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
-  when: (ansible_distribution == "Fedora")
 
 - name: Disable system swap
   shell: "swapoff -a"

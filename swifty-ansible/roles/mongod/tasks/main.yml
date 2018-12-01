@@ -37,8 +37,17 @@
 - name: install mongodb
   package:
     name:
-      - mongodb-org
+      - mongodb
     state: latest
+  when: (ansible_distribution == "Ubuntu")
+
+- name: create data dir
+  file:
+    path: /data/db
+    state: directory
+    owner: mongodb
+    group: mongodb
+    mode:  0755
   when: (ansible_distribution == "Ubuntu")
 
 - name: copy mongod.conf
@@ -60,6 +69,15 @@
     enabled: yes
     masked: no
     state: started
+  when: (ansible_distribution == "Fedora")
+
+- name: enable and start mongodb service
+  systemd:
+    name: mongodb
+    enabled: yes
+    masked: no
+    state: started
+  when: (ansible_distribution == "Ubuntu")
 
 - name:  add admin user
   mongodb_user:

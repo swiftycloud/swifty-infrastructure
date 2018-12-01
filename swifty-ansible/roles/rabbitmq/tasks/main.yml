@@ -37,8 +37,8 @@
 
 - name: add apt key for rabbitmq repo
   apt_key:
-    keyserver: hkps.pool.sks-keyservers.net
-    id: 0x6B73A36E6026DFCA
+    url: https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc
+    state: present
   when: "ansible_distribution == 'Ubuntu'"
 
 - name: add apt repo for rabbitmq
@@ -48,19 +48,50 @@
     update_cache: yes
   when: "ansible_distribution == 'Ubuntu'"
 
+- name: download apt erlang repo
+  get_url:
+    url: https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
+    dest: /root/erlang-solutions_1.0_all.deb
+    mode: 0644
+  when: "ansible_distribution == 'Ubuntu'"
+
+- name: add apt erlang repo
+  apt:
+    deb: /root/erlang-solutions_1.0_all.deb
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Update repositories cache
+  apt:
+    update_cache: yes
+  when: (ansible_distribution == "Ubuntu")
+
+- name: install erlang and rabbitmq-server
+  package:
+    name:
+      - erlang
+      - rabbitmq-server
+    state: present
+  when: "ansible_distribution == 'Ubuntu'"
+
+
 - name: install librabbitmq
   package:
     name: librabbitmq
     state: present
+  when: "ansible_distribution == 'Fedora'"
+
+- name: install librabbitmq
+  package:
+    name: librabbitmq-dev
+    state: present
+  when: "ansible_distribution == 'Ubuntu'"
 
 - name: enable rabbitmq-server service
   systemd:
     name: rabbitmq-server
     enabled: yes
     masked: no
-
-- name: start rabbitmq-server service
-  systemd: state=started name=rabbitmq-server
+    state: started
 
 - name: enable the rabbitmq_management plugin
   rabbitmq_plugin:
