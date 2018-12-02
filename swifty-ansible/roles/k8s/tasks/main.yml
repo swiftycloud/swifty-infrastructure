@@ -287,3 +287,10 @@
   with_items:
     - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
     - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+
+- name: pull csharp image
+  shell: docker pull registry.gitlab.com/swiftyteam/swifty/csharp
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"

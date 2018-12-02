@@ -19,15 +19,13 @@
     state: latest
   when: (ansible_distribution == "Ubuntu")
 
-- name: enable  mariadb service
+- name: enable and start mariadb service
   systemd:
     name: mariadb
     enabled: yes
     masked: no
-
-- name: start mariadb service
-  systemd: state=started name=mariadb
-
+    state: started
+    
 - name: Install the mysqlclient module
   pip:
     name: mysqlclient
