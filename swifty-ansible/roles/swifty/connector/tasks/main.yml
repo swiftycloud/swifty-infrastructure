@@ -82,3 +82,10 @@
 
 - name: Start connector
   shell: docker-compose -f /root/docker-compose.yml pull && docker-compose -f /root/docker-compose.yml up -d
+
+- name: Wait while containers run
+  pause:
+    seconds: 30
+    
+- name: Configure connector
+  raw: docker-compose -f /root/docker-compose.yml exec -T app mkdir -p storage/framework/{sessions,views,cache} && docker-compose -f /root/docker-compose.yml exec -T app chown -R 33:33 storage && docker-compose -f /root/docker-compose.yml exec -T app php artisan migrate --force

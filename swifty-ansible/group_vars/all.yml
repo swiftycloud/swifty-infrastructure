@@ -21,9 +21,9 @@ keystone_swydbscr_password: XV1he51aI35MjR
 rabbitmq_root_password: ls8RmtuuXcYJA5Mr
 rabbitmq_s3_password: MHCCOhozTrTjTRk
 pgr_token: wnUXzg3BiNIdU1g
-s3_token: em0pP8KE6X2KuRv
-s3_secret_key: 60c0b0cae645a2768405dd8ff9f9a14e
-mw_secpass: 00e18d1b513b69ac066ad0cb45cb1515
+s3_token: eccccf7fb16b3ec91a1f303c6deff4a4 # hex encoded; run swysg -b
+s3_secret_key: 60c0b0cae645a2768405dd8ff9f9a14e # hex encoded; run swysg -b
+mw_secpass: 00e18d1b513b69ac066ad0cb45cb1515 # hex encoded; run swysg -b
 
 #connector
 app_env: production

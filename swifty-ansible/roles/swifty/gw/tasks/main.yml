@@ -117,20 +117,28 @@
     src: service-nodejs.yaml
     dest: /root/service-nodejs.yaml
 
-- name: kubectl create gobuilder
+- name: copy csharp deployment
+  copy:
+    src: service-csharp.yaml
+    dest: /root/service-csharp.yaml
+
+- name: kubectl create golang builder
   shell: kubectl create -f /root/service-golang.yaml
 
-- name: kubectl create swiftbuilder
+- name: kubectl create swift builder
   shell: kubectl create -f /root/service-swift.yaml
 
-- name: kubectl create pythonbuilder
+- name: kubectl create python builder
   shell: kubectl create -f /root/service-python.yaml
 
-- name: kubectl create rubybuilder
+- name: kubectl create ruby builder
   shell: kubectl create -f /root/service-ruby.yaml
 
-- name: kubectl create nodejsbuilder
+- name: kubectl create nodejs builder
   shell: kubectl create -f /root/service-nodejs.yaml
+
+- name: kubectl create csharp builder
+  shell: kubectl create -f /root/service-csharp.yaml
 
 - name: create home dir
   file:

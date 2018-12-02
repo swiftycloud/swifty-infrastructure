@@ -82,6 +82,26 @@
     state: import
     target: /tmp/swifty.sql
 
+- name: Rebind mariadb to private_ip
+  shell: sed -i -e "s/127.0.0.1/{{ hostvars[groups['mw'][0]]['private_ip'] }}/g" /etc/mysql/mariadb.conf.d/50-server.cnf
+  when: (ansible_distribution == "Ubuntu")
+
+- name: restart mariadb service
+  systemd:
+    name: mariadb
+    state: restarted
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Rebind mongodb to private_ip
+  shell: sed -i -e "s/127.0.0.1/127.0.0.1,{{ hostvars[groups['mw'][0]]['private_ip'] }}/g"  /etc/mongodb.conf
+  when: (ansible_distribution == "Ubuntu")
+
+- name: restart mongodb service
+  systemd:
+    name: mongodb
+    state: restarted
+  when: (ansible_distribution == "Ubuntu")
+
 - name: copy mime.types files
   copy:
     src: mime.types
