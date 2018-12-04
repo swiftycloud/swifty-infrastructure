@@ -16,7 +16,7 @@ resource "digitalocean_droplet" "{{instance.name }}" {
   size   = "{{instance.size }}"
   private_networking = true
   tags = ["{{instance.tags }}"]
-  ssh_keys = [23551189, 23551204]
+  ssh_keys = [23551189, 23551204, 23640926, 23641329]
 }
 
 {% for var in export_vars %}

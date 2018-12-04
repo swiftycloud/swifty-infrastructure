@@ -76,7 +76,7 @@
     sysctl --system
 
 - name: pull k8s images
-  shell: kubeadm config images pull --kubernetes-version=v1.11.0
+  shell: kubeadm config images pull --kubernetes-version=v1.13.0
 
 - name: Init Kubernetes cluster
   shell: |
