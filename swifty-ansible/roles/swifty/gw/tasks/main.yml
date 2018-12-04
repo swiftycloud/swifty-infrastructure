@@ -174,4 +174,4 @@
   shell: docker run -d --net=host --name=swyadmd --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets registry.gitlab.com/swiftyteam/swifty/admd
 
 - name: docker run swydbscr
-  shell: docker run -d --net=host --name=swydbscr --restart always -v /etc/swifty:/etc/swifty registry.gitlab.com/swiftyteam/swifty/swydbscr
+  shell: docker run -d --net=host --name=swydbscr --restart always -v /etc/swifty:/etc/swifty registry.gitlab.com/swiftyteam/swifty/dbscr

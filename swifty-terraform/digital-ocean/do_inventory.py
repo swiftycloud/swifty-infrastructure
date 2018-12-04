@@ -21,7 +21,7 @@ swifty_hosts = [
         groups=['gw'],
         meta={
             'vpn_ip': '192.168.0.1',
-            'public_dns': 'gw.infra-ci.swifty.cloud',
+            'public_dns': 'api.infra-ci.swifty.cloud',
             'tinc_hostname': 'swygw'
         }
     ),
@@ -34,7 +34,7 @@ swifty_hosts = [
         groups=['mw'],
         meta={
             'vpn_ip': '192.168.0.2',
-            'public_dns': 'mw.infra-ci.swifty.cloud',
+            'public_dns': 's3.infra-ci.swifty.cloud',
             'tinc_hostname': 'swymw'
         }
     ),

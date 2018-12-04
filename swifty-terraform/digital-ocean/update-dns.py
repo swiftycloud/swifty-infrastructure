@@ -59,8 +59,8 @@ for host in swifty_hosts:
 
 ips = {
     'dashboard.infra-ci.swifty.cloud': inv['ui']['hosts'][0],
-    'gw.infra-ci.swifty.cloud': inv['gw']['hosts'][0],
-    'mw.infra-ci.swifty.cloud': inv['mw']['hosts'][0],
+    'api.infra-ci.swifty.cloud': inv['gw']['hosts'][0],
+    's3.infra-ci.swifty.cloud': inv['mw']['hosts'][0],
     'worker0.infra-ci.swifty.cloud': inv['worker']['hosts'][0],
     'worker1.infra-ci.swifty.cloud': inv['worker']['hosts'][1],
     'connector.infra-ci.swifty.cloud': inv['connector']['hosts'][0],
