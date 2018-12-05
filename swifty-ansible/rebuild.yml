@@ -1,4 +1,28 @@
-# run like this ansible-playbook rebuild.yml -e "githubuser=xxxx" -e "githubpassword=xxxx"
+---
+
+- hosts: gw
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+   ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+  - include_vars: group_vars/all.yml
+  roles:
+  - {role: 'rebuild/gw', tags: 'gw'}
+
+- hosts: mw
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+   ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+  - include_vars: group_vars/all.yml
+  roles:
+  - {role: 'rebuild/mw', tags: 'mw'}
 
 - hosts: worker
   gather_facts: true
@@ -10,4 +34,28 @@
   pre_tasks:
   - include_vars: group_vars/all.yml
   roles:
-  - rebuild
+  - {role: 'rebuild/worker', tags: 'worker'}
+
+- hosts: ui
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+   ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+  - include_vars: group_vars/all.yml
+  roles:
+  - {role: 'rebuild/ui', tags: 'ui'}
+
+- hosts: connector
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+   ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+  - include_vars: group_vars/all.yml
+  roles:
+  - {role: 'rebuild/connector', tags: 'connector'}

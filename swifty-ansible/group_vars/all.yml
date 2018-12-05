@@ -7,6 +7,11 @@ ansible_python_interpreter: /usr/bin/python3
 token: c9f7b8.8d17974y63l7g85s
 pod_network_cidr: "10.244.0.0/16"
 
+
+# Version tag; default latest; we can replace it by commit_id with extra_vars
+
+commit: latest  
+
 # passwords
 mariadb_root_password: CkZAy42zuykED9Nb
 mariadb_keystone_password: trrc6PCOFPlKRR&R

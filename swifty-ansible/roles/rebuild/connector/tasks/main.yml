@@ -1,0 +1,14 @@
+- name: Log into swifty registry
+  shell: "docker login {{ connector_registry_host }} -u {{ connector_docker_username }} -p {{ connector_docker_password }}"
+
+- name: Pull new images and recreate connector's containers
+  shell: docker-compose -f /root/docker-compose.yml pull && docker-compose -f /root/docker-compose.yml up -d
+  args:
+    chdir: /root
+
+- name: Wait while containers run
+  pause:
+    seconds: 30
+
+- name: Configure connector
+  raw: docker-compose -f /root/docker-compose.yml exec -T app php artisan migrate --force

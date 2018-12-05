@@ -1,0 +1,18 @@
+- name: log into swifty registry
+  shell: "docker login {{ registry_host }} -u {{ docker_username }} -p {{ docker_password }}"
+
+- name: pull docker images
+  shell: docker pull registry.gitlab.com/swiftyteam/swifty/{{item}}:{{commit}}
+  with_items:
+       - gate
+       - admd
+       - dbscr
+
+- name: rebuild gate
+  shell: "docker stop swygate  || true && docker rm swygate || true && docker run -d --net=host --name=swygate --restart always -v /home/swifty/clone:/home/swifty/clone -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /var/run/swifty/:/var/run/swifty/ registry.gitlab.com/swiftyteam/swifty/gate:{{commit}}"
+
+- name: rebuild admd
+  shell: docker stop swyadmd || true && docker rm swyadmd || true && docker run -d --net=host --name=swyadmd --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets registry.gitlab.com/swiftyteam/swifty/admd:{{commit}}
+
+- name: rebuild dbscr
+  shell: docker stop swydbscr || true && docker rm swydbscr || true && docker run -d --net=host --name=swydbscr --restart always -v /etc/swifty:/etc/swifty registry.gitlab.com/swiftyteam/swifty/dbscr:{{commit}}

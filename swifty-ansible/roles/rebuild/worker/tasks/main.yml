@@ -1,0 +1,29 @@
+- name: log into swifty registry
+  shell: "docker login {{ registry_host }} -u {{ docker_username }} -p {{ docker_password }}"
+
+- name: pull docker images
+  shell: docker pull registry.gitlab.com/swiftyteam/swifty/{{item}}:{{commit}}
+  with_items:
+       - golang
+       - swift
+       - python
+       - nodejs
+       - ruby
+       - csharp
+
+- name: recreate deployments on gw
+  shell: kubectl set image deployment.v1.apps/swy-{{item}}-service {{item}}-service=registry.gitlab.com/swiftyteam/swifty/{{item}}:{{commit}} --record
+  with_list:
+       - golang
+       - swift
+       - python
+       - nodejs
+       - ruby
+       - csharp
+  delegate_to: "{{ hostvars[groups['gw'][0]]['public_ip'] }}"
+
+- name: restart swygate on gw
+  shell: docker restart swygate
+  delegate_to: "{{item}}"
+  with_items:
+    - "{{ hostvars[groups['gw'][0]]['public_ip'] }}"
