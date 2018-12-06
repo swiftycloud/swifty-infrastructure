@@ -2,7 +2,7 @@
   shell: "docker login {{ registry_host }} -u {{ docker_username }} -p {{ docker_password }}"
 
 - name: pull docker images
-  shell: docker pull registry.gitlab.com/swiftyteam/swifty/{{item}}:{{commit}}
+  shell: docker pull registry.gitlab.com/swiftyteam/swifty/{{item}}:{{tag_swifty}}
   with_items:
        - golang
        - swift
@@ -12,7 +12,7 @@
        - csharp
 
 - name: recreate deployments on gw
-  shell: kubectl set image deployment.v1.apps/swy-{{item}}-service {{item}}-service=registry.gitlab.com/swiftyteam/swifty/{{item}}:{{commit}} --record
+  shell: kubectl set image deployment.v1.apps/swy-{{item}}-service {{item}}-service=registry.gitlab.com/swiftyteam/swifty/{{item}}:{{tag_swifty}} --record
   with_list:
        - golang
        - swift
