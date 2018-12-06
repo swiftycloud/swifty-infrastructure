@@ -2,9 +2,9 @@
   shell: "docker login {{ registry_host }} -u {{ docker_username }} -p {{ docker_password }}"
 
 - name: pull docker images
-  shell: docker pull registry.gitlab.com/swiftyteam/swifty/{{item}}:{{commit}}
+  shell: docker pull registry.gitlab.com/swiftyteam/swifty/{{item}}:{{tag_swifty}}
   with_items:
        - s3
 
 - name: rebuild s3
-  shell: docker stop swys3 || true && docker rm swys3 || true && docker run -d --net=host --name=swys3 --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume -v certs:/etc/letsencrypt  -v certs-data:/data/letsencrypt registry.gitlab.com/swiftyteam/swifty/s3:{{commit}}
+  shell: docker stop swys3 || true && docker rm swys3 || true && docker run -d --net=host --name=swys3 --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume -v certs:/etc/letsencrypt  -v certs-data:/data/letsencrypt registry.gitlab.com/swiftyteam/swifty/s3:{{tag_swifty}}

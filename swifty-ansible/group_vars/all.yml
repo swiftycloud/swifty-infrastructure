@@ -8,9 +8,11 @@ token: c9f7b8.8d17974y63l7g85s
 pod_network_cidr: "10.244.0.0/16"
 
 
-# Version tag; default latest; we can replace it by commit_id with extra_vars
+# tags for docker images; we can replace it with extra_vars
 
-commit: latest  
+tag_swifty: latest
+tag_ui: latest
+tag_connector: latest
 
 # passwords
 mariadb_root_password: CkZAy42zuykED9Nb
