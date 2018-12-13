@@ -13,3 +13,6 @@
 [worker]
 206.189.0.227 vpn_ip=192.0.0.5 tinc_hostname=swftworker0 private_ip=10.133.70.223 public_ip=206.189.0.227
 206.189.11.253 vpn_ip=192.0.0.6 tinc_hostname=swftworker1 private_ip=10.133.80.90 public_ip=206.189.11.253
+
+[monitoring]
+95.216.169.189
