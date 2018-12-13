@@ -1,0 +1,34 @@
+- name: copy prometheus data source config
+  template:
+    src: prometheus-datasource.j2
+    dest: /root/prometheus-datasource.yml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy go processes dashboard json
+  copy:
+    src: go-processes_rev2.json
+    dest: /root/go-processes_rev2.json
+
+- name: copy go-dashboard.yml
+  copy:
+    src: go-dashboard.yml
+    dest: /root/go-dashboard.yml
+
+- name: copy node exporter dashboard json
+  copy:
+    src: node-exporter-full-new_rev12.json
+    dest: /root/node-exporter-full-new_rev12.json
+
+- name: check if grafana-storage exists
+  command: docker volume inspect grafana-storage
+  register: grafana_storage_exists
+  failed_when: false
+
+- name: create grafana-storage
+  command: docker volume create --name grafana-storage
+  when: grafana_storage_exists|failed
+
+- name: run grafana docker container
+  shell: docker run -d --net=host --name=grafana -v grafana-storage:/var/lib/grafana  -v /root/prometheus-datasource.yml:/etc/grafana/provisioning/datasources/prometheus-datasource.yml -v /root/go-dashboard.yml:/etc/grafana/provisioning/dashboards/go-dashboard.yml -v /root/go-processes_rev2.json:/etc/grafana/provisioning/dashboards/go-processes_rev2.json -v /root/node-exporter-full-new_rev12.json:/etc/grafana/provisioning/dashboards/node-exporter-full-new_rev12.json grafana/grafana

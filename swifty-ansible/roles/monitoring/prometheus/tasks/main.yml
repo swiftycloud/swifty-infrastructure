@@ -1,0 +1,10 @@
+- name: create systemd service unit
+  template:
+    src: prometheus.j2
+    dest: /root/prometheus.yml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: run prometheus docker container
+  shell: docker run --name prometheus -d -p {{ private_ip }}:9190:9090 -v /root/prometheus.yml:/etc/prometheus/prometheus.yml quay.io/prometheus/prometheus

@@ -1,0 +1,24 @@
+- hosts: all
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+   - include_vars: group_vars/all.yml
+  roles:
+   - monitoring/node-exporter
+
+- hosts: monitoring
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+   - include_vars: group_vars/all.yml
+  roles:
+   - monitoring/prometheus
+   - monitoring/grafana
