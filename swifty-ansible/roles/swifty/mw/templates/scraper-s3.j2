@@ -1,0 +1,8 @@
+---
+gate-db: "swifty-s3:{{ mongodb_s3_password }}@127.0.0.1:27017"
+admd: "swydbscr:{{keystone_swydbscr_password}}@{{ hostvars[groups['gw'][0]]['public_dns'] }}:443"
+starch:
+        check: "hourly"
+        period: "monthly"
+logs:
+        keep: 7
