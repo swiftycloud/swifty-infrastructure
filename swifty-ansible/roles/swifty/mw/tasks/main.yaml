@@ -63,6 +63,14 @@
     group: root
     mode: 0640
 
+- name: copy scraper-s3 config
+  template:
+    src: scraper-s3.j2
+    dest: /etc/swifty/conf/scraper-s3.yaml
+    owner: root
+    group: root
+    mode: 0640
+
 - name: create swifty db
   mysql_db:
     name: swifty
@@ -109,3 +117,6 @@
 
 - name: docker run s3
   shell: docker run -d --net=host --name=swys3 --restart always -v /home/swifty-volume:/home/swifty-volume -v /etc/swifty:/etc/swifty -v /root/.swysecrets:/root/.swysecrets -v /home/swifty-volume:/home/swifty-volume -v certs:/etc/letsencrypt  -v certs-data:/data/letsencrypt registry.gitlab.com/swiftyteam/swifty/s3
+
+- name: docker run swydbscr-s3
+  shell: docker run -d --net=host --name=swydbscr-s3 --restart always -v /etc/swifty:/etc/swifty registry.gitlab.com/swiftyteam/swifty/dbscr-s3
