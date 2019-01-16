@@ -31,23 +31,23 @@
 - name: Configure allow master tcp wrapper
   lineinfile:
     path: /etc/hosts.allow
-    line: "rpcbind mountd nfsd statd lockd rquotad : {{ hostvars[groups['gw'][0]]['private_ip'] }}/16"
+    line: "rpcbind mountd nfsd statd lockd rquotad : {{ hostvars[groups['storage'][0]]['private_ip'] }}/16"
 
 - name: Configure deny master tcp wrapper
   lineinfile:
     path: /etc/hosts.deny
     line: 'rpcbind mountd nfsd statd lockd rquotad : ALL'
 
-- name: Creates swifty-volume dir
-  file:
-    path: /home/swifty-volume
-    state: directory
+- name: Creates swifty-volume symlink
+  shell: ln -s /mnt/$(ls /mnt | grep nfs) /home/swifty-volume
 
 - name: Configure export dir
-  shell: echo "/home/swifty-volume {{ hostvars[groups['worker'][0]]['private_ip'] }}(rw,sync,no_root_squash)" >> /etc/exports
-
-- name: Configure export dir
-  shell: echo "/home/swifty-volume {{ hostvars[groups['worker'][1]]['private_ip'] }}(rw,sync,no_root_squash)" >> /etc/exports
+  shell: echo "/home/swifty-volume {{item}}(rw,sync,no_root_squash)" >> /etc/exports
+  with_items:
+    - "{{ hostvars[groups['worker'][0]]['private_ip'] }}"
+    - "{{ hostvars[groups['worker'][1]]['private_ip'] }}"
+    - "{{ hostvars[groups['worker'][2]]['private_ip'] }}"
+    - "{{ hostvars[groups['worker'][3]]['private_ip'] }}"
 
 - name: Export dir
   shell: exportfs -a
@@ -62,6 +62,8 @@
   with_items:
     - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
     - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][2]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][3]]['public_ip'] }}"
   when: (ansible_distribution == "Fedora")
 
 - name: install nfs packages
@@ -73,6 +75,8 @@
   with_items:
     - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
     - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][2]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][3]]['public_ip'] }}"
   when: (ansible_distribution == "Ubuntu")
 
 - name: Creates swifty-volume dir
@@ -83,13 +87,17 @@
   with_items:
     - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
     - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][2]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][3]]['public_ip'] }}"
 
 - name: Configure mount point
-  shell: echo "{{ hostvars[groups['gw'][0]]['private_ip'] }}:/home/swifty-volume /home/swifty-volume nfs rw,sync,hard,intr,addr={{ private_ip }} 0 0" >>  /etc/fstab
+  shell: echo "{{ hostvars[groups['storage'][0]]['private_ip'] }}:/home/swifty-volume /home/swifty-volume nfs rw,sync,hard,intr,addr={{ private_ip }} 0 0" >>  /etc/fstab
   delegate_to: "{{item}}"
   with_items:
     - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
     - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][2]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][3]]['public_ip'] }}"
 
 - name: Mount swifty-volume
   shell: mount /home/swifty-volume
@@ -97,3 +105,5 @@
   with_items:
     - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
     - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][2]]['public_ip'] }}"
+    - "{{ hostvars[groups['worker'][3]]['public_ip'] }}"

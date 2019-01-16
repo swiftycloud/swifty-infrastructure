@@ -12,7 +12,7 @@
   roles:
   - {role: 'docker', tags: 'docker'}
 
-- hosts: gw
+- hosts: storage
   gather_facts: true
   become: yes
   become_method: sudo
@@ -23,9 +23,20 @@
   - include_vars: group_vars/all.yml
   roles:
   - nfs
-  - k8s
   - mariadb
   - mongod
+
+- hosts: gw
+  gather_facts: true
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+   ansible_python_interpreter: /usr/bin/python3
+  pre_tasks:
+  - include_vars: group_vars/all.yml
+  roles:
+  - k8s
   - rabbitmq
   - openstack-keystone
   - nginx-reverse-proxy/gw
@@ -41,8 +52,6 @@
   pre_tasks:
   - include_vars: group_vars/all.yml
   roles:
-  - mariadb
-  - mongod
   - nginx-reverse-proxy/mw
   - swifty/mw
 
