@@ -63,7 +63,10 @@ ips = {
     's3.infra-ci.swifty.cloud': inv['mw']['hosts'][0],
     'worker0.infra-ci.swifty.cloud': inv['worker']['hosts'][0],
     'worker1.infra-ci.swifty.cloud': inv['worker']['hosts'][1],
+    'swifty-worker0.infra-ci.swifty.cloud': inv['worker']['hosts'][2],
+    'swifty-worker1.infra-ci.swifty.cloud': inv['worker']['hosts'][3],
     'connector.infra-ci.swifty.cloud': inv['connector']['hosts'][0],
+    'storage.infra-ci.swifty.cloud': inv['storage']['hosts'][0],
 }
 
 

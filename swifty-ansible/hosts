@@ -1,3 +1,5 @@
+#this is not real data, just an example of static inventory for swifty
+
 [gw]
 206.189.11.250 vpn_ip=192.0.0.1 tinc_hostname=swftgw public_dns=api-dev.swifty.cloud private_ip=10.133.80.73 public_ip=206.189.11.250
 
@@ -13,6 +15,11 @@
 [worker]
 206.189.0.227 vpn_ip=192.0.0.5 tinc_hostname=swftworker0 private_ip=10.133.70.223 public_ip=206.189.0.227
 206.189.11.253 vpn_ip=192.0.0.6 tinc_hostname=swftworker1 private_ip=10.133.80.90 public_ip=206.189.11.253
+206.189.11.254 vpn_ip=192.0.0.7 tinc_hostname=systemswftworker0 private_ip=10.133.80.91 public_ip=206.189.11.254
+206.189.11.255 vpn_ip=192.0.0.8 tinc_hostname=systemswftworker1 private_ip=10.133.80.92 public_ip=206.189.11.255
+
+[storage]
+206.189.11.256 vpn_ip=192.0.0.9 tinc_hostname=swftstorage private_ip=10.133.80.95 public_ip=206.189.11.256
 
 [monitoring]
 95.216.169.189

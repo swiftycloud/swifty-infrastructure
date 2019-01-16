@@ -26,5 +26,21 @@ output "{{ instance.name }}::{{ var }}" {
 
 {% endfor %}
 
+{% endfor %}
+
+{% for volume in volumes %}
+
+resource "digitalocean_volume" "{{ volume }}" {
+  region                  = "ams3"
+  name                    = "{{ volume }}"
+  size                    = 5
+  initial_filesystem_type = "ext4"
+  description             = "{{ volume }}"
+}
+
+resource "digitalocean_volume_attachment" "{{ volume }}" {
+  droplet_id = "${digitalocean_droplet.swifty-storage-iac.id}"
+  volume_id  = "${digitalocean_volume.{{ volume }}.id}"
+}
 
 {% endfor %}

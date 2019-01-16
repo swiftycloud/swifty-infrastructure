@@ -90,4 +90,43 @@ swifty_hosts = [
             'tinc_hostname': 'swyworker1'
         }
     ),
+    Host(
+        name='system-swifty-worker0-iac',
+        region = 'ams3',
+        image  = 'ubuntu-18-04-x64',
+        size   = "s-2vcpu-4gb",
+        tags = 'iac',
+        groups=['worker'],
+        meta={
+            'vpn_ip': '192.168.0.7',
+            'public_dns': 'swifty-worker0.infra-ci.swifty.cloud',
+            'tinc_hostname': 'systemswyworker0'
+        }
+    ),
+    Host(
+        name='system-swifty-worker1-iac',
+        region = 'ams3',
+        image  = 'ubuntu-18-04-x64',
+        size   = "s-2vcpu-4gb",
+        tags = 'iac',
+        groups=['worker'],
+        meta={
+            'vpn_ip': '192.168.0.8',
+            'public_dns': 'swifty-worker1.infra-ci.swifty.cloud',
+            'tinc_hostname': 'systemswyworker1'
+        }
+    ),
+    Host(
+        name='swifty-storage-iac',
+        region = 'ams3',
+        image  = 'ubuntu-18-04-x64',
+        size   = "s-2vcpu-4gb",
+        tags = 'iac',
+        groups=['storage'],
+        meta={
+            'vpn_ip': '192.168.0.9',
+            'public_dns': 'storage.infra-ci.swifty.cloud',
+            'tinc_hostname': 'swystorage'
+        }
+    ),
 ]
