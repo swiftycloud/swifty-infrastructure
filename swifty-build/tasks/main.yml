@@ -20,11 +20,15 @@
           image: "s3",
         }
       - {
-          artifact: "swydbscr",
-          dst: "{{ basedir }}/kubectl/docker/dbscr",
-          image: "dbscr",
+          artifact: "swy-dbscr-gate",
+          dst: "{{ basedir }}/kubectl/docker/dbscr-gate",
+          image: "dbscr-gate",
         }
-
+      - {
+          artifact: "swy-dbscr-s3",
+          dst: "{{ basedir }}/kubectl/docker/dbscr-s3",
+          image: "dbscr-s3",
+        }
     langs:
       - name: golang
         dependencies:
@@ -81,6 +85,7 @@
       with_items:
         - "swy-wdog"
         - "swy-runner"
+        - "go-sca"
 
     - name: Copy Core artifacts to Languages Images buildspace
       args:
@@ -88,7 +93,7 @@
       command: "cp -r {{ item[1] }} kubectl/docker/wdog/{{ item[0].name }}"
       with_nested:
         - "{{ langs }}"
-        - [ "swy-wdog", "swy-runner" ]
+        - [ "swy-wdog", "swy-runner", "go-sca"]
 
     - name: Copy Language-specific artifacts to Languages Images buildspace
       args:
@@ -116,7 +121,7 @@
     - name: Build Docker images (Languages)
       args:
         chdir: "{{ basedir }}/kubectl/docker/wdog/{{ item.name }}"
-      command: "docker build --network=host -t {{ registry }}/{{ item.name }}:{{ gitid.stdout }} ."
+      shell: "make layer.tar && docker build --network=host -t {{ registry }}/{{ item.name }}:{{ gitid.stdout }} ."
       with_items: "{{ langs }}"
 
     - name: Push Docker images to GitLab (Core)
@@ -145,4 +150,3 @@
       args:
         chdir: "{{ basedir }}"
       shell: "make mrproper"
-

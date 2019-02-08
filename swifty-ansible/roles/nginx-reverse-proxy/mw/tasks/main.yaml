@@ -5,7 +5,7 @@
     owner: root
     group: root
     mode: 0644
-    
+
 - name: check if certs volume exists
   command: docker volume inspect certs
   register: certs_volume_exists
@@ -57,7 +57,7 @@
     minute: 0
     hour: 4
     user: root
-    job: "docker stop nginx-proxy && docker run -it --rm  --net=host -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt deliverous/certbot renew --standalone ; docker start nginx-proxy"
+    job: "docker stop nginx-proxy swys3 && docker run -it --rm  --net=host -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt deliverous/certbot renew --standalone ; docker start nginx-proxy swys3"
     cron_file: le-autorenewal
 
 - name: cleanup nginx-proxy containers, if running
