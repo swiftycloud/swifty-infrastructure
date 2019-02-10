@@ -27,7 +27,7 @@
 - name: replace ports
   shell: sed -i -e 's/80/8080/g' /etc/apache2/ports.conf && sed -i -e 's/443/8443/g' /etc/apache2/ports.conf
   when: "ansible_distribution == 'Ubuntu'"
-  
+
 - name: restart apache2 service
   systemd:
     name: apache2
@@ -55,7 +55,7 @@
     minute: 0
     hour: 4
     user: root
-    job: "docker stop nginx-proxy && docker run -it --rm  --net=host -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt deliverous/certbot renew --standalone ; docker start nginx-proxy"
+    job: "docker stop nginx-proxy && docker run -d --rm  --net=host -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt deliverous/certbot renew --standalone ; docker start nginx-proxy"
     cron_file: le-autorenewal
 
 - name: run nginx container
