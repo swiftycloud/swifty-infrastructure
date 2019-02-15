@@ -8,6 +8,7 @@
 *.exe
 *.o
 *.so
+**/__pycache__
 
 # Packages #
 ############
@@ -41,3 +42,6 @@ swifty-*/*.pem
 **/*.tf
 **/.terraform
 **/output.json
+
+# Editor files
+.vscode
