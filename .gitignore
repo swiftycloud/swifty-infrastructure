@@ -45,3 +45,4 @@ swifty-*/*.pem
 
 # Editor files
 .vscode
+.history

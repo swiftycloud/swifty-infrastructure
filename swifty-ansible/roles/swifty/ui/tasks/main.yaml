@@ -76,7 +76,7 @@
     minute: 0
     hour: 4
     user: root
-    job: "docker stop ui && docker run -d --rm  --net=host -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt deliverous/certbot renew --standalone ; docker start ui"
+    job: "docker stop ui && docker run -t --rm  --net=host -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt deliverous/certbot renew --standalone ; docker start ui"
     cron_file: le-autorenewal
 
 - name: Log into swifty registry

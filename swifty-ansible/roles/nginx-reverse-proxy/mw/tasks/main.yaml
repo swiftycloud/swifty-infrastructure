@@ -57,7 +57,7 @@
     minute: 0
     hour: 4
     user: root
-    job: "docker stop nginx-proxy swys3 && docker run -d --rm  --net=host -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt deliverous/certbot renew --standalone ; docker start nginx-proxy swys3"
+    job: "docker stop nginx-proxy swys3 && docker run -t --rm  --net=host -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt deliverous/certbot renew --standalone ; docker start nginx-proxy swys3"
     cron_file: le-autorenewal
 
 - name: cleanup nginx-proxy containers, if running
