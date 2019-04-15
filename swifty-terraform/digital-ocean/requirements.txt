@@ -1,2 +1,2 @@
-Jinja2==2.10
+Jinja2==2.10.1
 ansible==2.7.2
