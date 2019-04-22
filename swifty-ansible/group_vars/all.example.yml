@@ -40,7 +40,7 @@ main_domain:
 sendgrid_api_key:
 sendgrid_welcome_tpl:
 sendgrid_password_reset_tpl:
-sendgrid_verification_tpl: 
+sendgrid_verification_tpl:
 
 # tinc vpn
 netname: nyc3
@@ -60,18 +60,18 @@ default_connector_domain_name:
 
 # use separate token for swifty repo
 registry_host: registry.gitlab.com
-docker_username:
-docker_password:
+docker_username: gitlab+deploy-token-61962
+docker_password: UtUqKnNBn6AjBAUFdgE2
 
 # use separate token for swifty-ui repo
 ui_registry_host: registry.gitlab.com
-ui_docker_username:
-ui_docker_password:
+ui_docker_username: gitlab+deploy-token-61963
+ui_docker_password: uenX89Py5vXNvakpzqfk
 
 # use separate token for swifty-connector repo
 connector_registry_host: registry.gitlab.com
-connector_docker_username:
-connector_docker_password:
+connector_docker_username: gitlab+deploy-token-61964
+connector_docker_password: 5J2g7nxtS1fkvBuqvNfB
 
 # system
 systemd_dir: /lib/systemd/system
