@@ -4,7 +4,7 @@ ansible_ssh_private_key_file:
 ansible_python_interpreter: /usr/bin/python3
 
 # Kubernetes
-token:  # use 'kubeadm token generate' for token creation 
+token:  # use 'kubeadm token generate' for token creation
 pod_network_cidr: "10.244.0.0/16"
 
 
@@ -14,19 +14,19 @@ tag_ui: latest
 tag_connector: latest
 
 # passwords
-mariadb_root_password: 
-mariadb_keystone_password: 
-mongodb_admin_password: 
-mongodb_swygate_password: 
-mongodb_swyadmd_password: 
-mongodb_s3_password: 
-keystone_swyadmin_password: 
-keystone_swyui_password: 
+mariadb_root_password:
+mariadb_keystone_password:
+mongodb_admin_password:
+mongodb_swygate_password:
+mongodb_swyadmd_password:
+mongodb_s3_password:
+keystone_swyadmin_password:
+keystone_swyui_password:
 keystone_admin_password:  # without special chars
-keystone_swydbscr_password: 
-rabbitmq_root_password: 
-rabbitmq_s3_password: 
-pgr_token: 
+keystone_swydbscr_password:
+rabbitmq_root_password:
+rabbitmq_s3_password:
+pgr_token:
 s3_token:  # hex encoded; run 'swysg -b' or 'openssl rand -hex 16'
 s3_secret_key:  # hex encoded; run 'swysg -b' or 'openssl rand -hex 16'
 mw_secpass:  # hex encoded; run 'swysg -b' or 'openssl rand -hex 16'
@@ -37,7 +37,7 @@ app_key: base64:pctmhzf0wZNHd5KyKTUStGFxU+WvWHNTywLOHYeNd0E=
 mail_from: "info@swifty.cloud"
 mail_from_name: "Swifty.Cloud"
 main_domain: infra-ci.swifty.cloud
-sendgrid_api_key: 
+sendgrid_api_key:
 sendgrid_welcome_tpl: "d-40a3845b97ea4fd798449e797a62f843"
 sendgrid_password_reset_tpl: "d-1d99b292883840f896cefa4f306dae67"
 sendgrid_verification_tpl: "d-7873a8fa26e1464e9e5b5edb21e8150d"
@@ -49,29 +49,29 @@ vpn_netmask: 255.255.255.0
 vpn_subnet_cidr_netmask: 32
 
 # let's encrypt
-cert_admin_email: 
+cert_admin_email:
 
 # for customization of this, use --extra-vars and omit "default_" in key, otherwise default will be applied
 
-default_dashboard_domain_name: 
-default_api_domain_name: 
-default_s3_domain_name: 
-default_connector_domain_name: 
+default_dashboard_domain_name:
+default_api_domain_name:
+default_s3_domain_name:
+default_connector_domain_name:
 
 # use separate token for swifty repo
 registry_host: registry.gitlab.com
-docker_username: 
-docker_password: 
+docker_username:
+docker_password:
 
 # use separate token for swifty-ui repo
 ui_registry_host: registry.gitlab.com
-ui_docker_username: 
-ui_docker_password: 
+ui_docker_username:
+ui_docker_password:
 
 # use separate token for swifty-connector repo
 connector_registry_host: registry.gitlab.com
-connector_docker_username: 
-connector_docker_password: 
+connector_docker_username:
+connector_docker_password:
 
 # system
 systemd_dir: /lib/systemd/system
