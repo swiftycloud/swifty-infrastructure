@@ -2,6 +2,9 @@
 .vscode
 .history
 
+swifty-ansible/group_vars/all.yml
+swifty-ansible/hosts
+
 # Compiled source #
 ###################
 *.com
