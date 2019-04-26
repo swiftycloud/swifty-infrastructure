@@ -6,6 +6,11 @@
 - name: clean apt cache
   shell: apt clean
   when: "ansible_distribution == 'Ubuntu'"
+  
+- name: Update repositories cache
+  apt:
+    update_cache: yes
+  when: (ansible_distribution == "Ubuntu")
 
 - name: install tinc
   package:
