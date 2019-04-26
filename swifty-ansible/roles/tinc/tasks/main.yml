@@ -4,7 +4,7 @@
   when: "ansible_distribution == 'Fedora'"
 
 - name: clean apt cache
-  shell: apt-cache clean
+  shell: apt clean
   when: "ansible_distribution == 'Ubuntu'"
 
 - name: install tinc
