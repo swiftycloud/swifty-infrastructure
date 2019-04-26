@@ -31,7 +31,11 @@
 - name: Configure allow master tcp wrapper
   lineinfile:
     path: /etc/hosts.allow
-    line: "rpcbind mountd nfsd statd lockd rquotad : {{ hostvars[groups['gw'][0]]['private_ip'] }}/16"
+    line: "rpcbind mountd nfsd statd lockd rquotad : {{ hostvars[groups['gw'][0]]['private_ip'] }}"
+    
+- name: Add workers to hosts.allow
+  shell: sed -i '${s/$/ {{ hostvars[item]['private_ip'] }}/}' /etc/hosts.allow
+  with_items: "{{ groups['worker'] }}"
 
 - name: Configure deny master tcp wrapper
   lineinfile:
@@ -44,10 +48,8 @@
     state: directory
 
 - name: Configure export dir
-  shell: echo "/home/swifty-volume {{ hostvars[groups['worker'][0]]['private_ip'] }}(rw,sync,no_root_squash)" >> /etc/exports
-
-- name: Configure export dir
-  shell: echo "/home/swifty-volume {{ hostvars[groups['worker'][1]]['private_ip'] }}(rw,sync,no_root_squash)" >> /etc/exports
+  shell: echo "/home/swifty-volume {{ hostvars[item]['private_ip'] }}(rw,sync,no_root_squash,no_subtree_check)" >> /etc/exports
+  with_items: "{{ groups['worker'] }}"
 
 - name: Export dir
   shell: exportfs -a
