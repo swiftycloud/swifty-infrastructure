@@ -45,7 +45,7 @@
     src=tinc.conf.j2
     dest=/etc/tinc/{{ netname }}/tinc.conf
   notify:
-    - reload tinc
+    - restart tinc
 
 - name: create tinc-up file
   template: >
