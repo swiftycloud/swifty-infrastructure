@@ -59,9 +59,7 @@
     name: nfs-utils
     state: latest
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
   when: (ansible_distribution == "Fedora")
 
 - name: install nfs packages
@@ -70,9 +68,7 @@
       - nfs-common
     state: latest
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
   when: (ansible_distribution == "Ubuntu")
 
 - name: Creates swifty-volume dir
@@ -80,20 +76,14 @@
     path: /home/swifty-volume
     state: directory
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: Configure mount point
   shell: echo "{{ hostvars[groups['gw'][0]]['private_ip'] }}:/home/swifty-volume /home/swifty-volume nfs rw,sync,hard,intr,addr={{ private_ip }} 0 0" >>  /etc/fstab
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: Mount swifty-volume
   shell: mount /home/swifty-volume
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"

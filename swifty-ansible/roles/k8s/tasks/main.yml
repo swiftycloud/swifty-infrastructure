@@ -120,9 +120,7 @@
     enabled: yes
     gpgcheck: no
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
   when: (ansible_distribution == "Fedora")
 
 - name: Install apt-transport-https, curl packages
@@ -132,9 +130,7 @@
       - curl
     state: latest
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
   when: (ansible_distribution == "Ubuntu")
 
 - name: Add k8s GPG key
@@ -142,9 +138,7 @@
     url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
     state: present
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
   when: (ansible_distribution == "Ubuntu")
 
 - name: Add Kubernetes apt repository
@@ -152,18 +146,14 @@
     repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
     state: present
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
   when: (ansible_distribution == "Ubuntu")
 
 - name: Update repositories cache
   apt:
     update_cache: yes
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
   when: (ansible_distribution == "Ubuntu")
 
 - name: Install kubernetes packages
@@ -174,16 +164,12 @@
       - kubectl
     state: latest
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: Disable system swap
   shell: "swapoff -a"
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: Remove current swaps from fstab
   lineinfile:
@@ -193,9 +179,7 @@
     backrefs: yes
     state: present
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: Disable swappiness
   sysctl:
@@ -203,9 +187,7 @@
     value: 0
     state: present
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: Enable and restart kubelet engine
   systemd:
@@ -214,9 +196,7 @@
     state: started
     enabled: yes
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: ensure net.bridge.bridge-nf-call-iptables is set to 1
   shell: |
@@ -226,9 +206,7 @@
     EOF
     sysctl --system
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: Join to Kubernetes clusters
   tags: worker
@@ -238,9 +216,7 @@
                  {{ hostvars[groups['gw'][0]]['private_ip'] }}:6443 \
                  --discovery-token-unsafe-skip-ca-verification
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: Enable and restart kubelet engine
   systemd:
@@ -249,48 +225,34 @@
     state: started
     enabled: yes
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: pull golang image
   shell: docker pull registry.gitlab.com/swiftyteam/swifty/golang
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: pull swift image
   shell: docker pull registry.gitlab.com/swiftyteam/swifty/swift
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: pull python image
   shell: docker pull registry.gitlab.com/swiftyteam/swifty/python
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: pull nodejs image
   shell: docker pull registry.gitlab.com/swiftyteam/swifty/nodejs
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: pull ruby image
   shell: docker pull registry.gitlab.com/swiftyteam/swifty/ruby
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
 
 - name: pull csharp image
   shell: docker pull registry.gitlab.com/swiftyteam/swifty/csharp
   delegate_to: "{{item}}"
-  with_items:
-    - "{{ hostvars[groups['worker'][0]]['public_ip'] }}"
-    - "{{ hostvars[groups['worker'][1]]['public_ip'] }}"
+  with_items: "{{ groups['worker'] }}"
