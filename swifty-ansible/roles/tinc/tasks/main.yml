@@ -104,14 +104,14 @@
     dest=fetch/{{ tinc_hostname }}
     flat=yes
   notify:
-    - reload tinc
+    - restart tinc
 
 - name: sync the fetched tinc hosts files on each host
   synchronize: >
     src=fetch/
     dest=/etc/tinc/{{ netname }}/hosts/
   notify:
-    - reload tinc
+    - restart tinc
 
 - name: run handlers
   meta: flush_handlers
