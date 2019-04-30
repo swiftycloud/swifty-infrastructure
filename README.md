@@ -1,7 +1,7 @@
 ## Swifty setup with Ansible
 
 ### Create VMs
-You need at least two virtual machines (or physical) with 4vCPU, 8GB of RAM and 50GB of storage. Please use Ubuntu 18.04 as OS.
+You need at least two virtual machines (or physical) with 4vCPU, 8GB of RAM and 50GB of storage. Please use Ubuntu 18.04.
 
 
 ### Clone swifty-infrastructure project
