@@ -1,5 +1,9 @@
 ## Swifty setup with Ansible
 
+### Create VMs
+You need at least two virtual machines (or physical) with 4vCPU, 8GB of RAM and 50GB of storage. Please use Ubuntu 18.04 as OS.
+
+
 ### Clone swifty-infrastructure project
 ```
 git clone https://github.com/swiftycloud/swifty-infrastructure
@@ -9,19 +13,18 @@ git clone https://github.com/swiftycloud/swifty-infrastructure
 Copy swifty-ansible/hosts.example file to hosts and change it according to your settings. Production setup assumes you have 7 virtual or physical servers with different roles. Test setup can use just 2 servers. Here is the example for 2 servers test setup:
 ```
 [gw]
-104.248.92.42 vpn_ip=192.0.0.1 tinc_hostname=swftgw public_dns=swf001.swifty.cloud private_ip=192.0.0.1 public_ip=104.248.92.42
+209.97.138.78 vpn_ip=192.0.0.1 tinc_hostname=swftgw public_dns=swf01.domain.com private_ip=192.0.0.1 public_ip=209.97.138.78
 
 [mw]
-104.248.92.42 vpn_ip=192.0.0.1 tinc_hostname=swftgw public_dns=swf001.swifty.cloud private_ip=192.0.0.1 public_ip=104.248.92.42
+178.128.162.75 vpn_ip=192.0.0.2 tinc_hostname=swftmw public_dns=swf02.domain.com private_ip=192.0.0.2 public_ip=178.128.162.75
 
 [ui]
-104.248.92.42 vpn_ip=192.0.0.1 tinc_hostname=swftgw public_dns=swf001.swifty.cloud private_ip=192.0.0.1 public_ip=104.248.92.42
+209.97.138.78 vpn_ip=192.0.0.1 tinc_hostname=swftgw public_dns=swf01.domain.com private_ip=192.0.0.1 public_ip=209.97.138.78
 
 [connector]
 
 [worker]
-104.248.92.42 vpn_ip=192.0.0.1 tinc_hostname=swftgw private_ip=192.0.0.1 public_ip=104.248.92.42
-104.248.93.176 vpn_ip=192.0.0.2 tinc_hostname=swftgw1 private_ip=192.0.0.2 public_ip=104.248.93.176
+178.128.162.75 vpn_ip=192.0.0.2 tinc_hostname=swftmw private_ip=192.0.0.2 public_ip=178.128.162.75
 
 [monitoring]
 ```
@@ -29,9 +32,17 @@ Copy swifty-ansible/hosts.example file to hosts and change it according to your 
 ### Change encvironment variables file
 Copy swifty-ansible/group_vars/all.example.yml file to all.yml and change it according to your settings. 
 1. Add passwords and tokens.
-2. Add domain name.
+2. Add domain names.
 3. Skip #connector section.
 4. Don't change settings for gitlab repos - we store docker images on gitlab.
+
+Please be awar, your domain section should look like:
+```
+default_dashboard_domain_name: swf01.swifty.cloud
+default_api_domain_name: swf01.swifty.cloud
+default_s3_domain_name: swf02.swifty.cloud
+...
+```
 
 ### Run ansible script
 ```
