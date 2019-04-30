@@ -82,7 +82,7 @@
   shell: |
     kubeadm init --pod-network-cidr {{ pod_network_cidr }} \
                  --apiserver-advertise-address {{ hostvars[groups['gw'][0]]['private_ip'] }} \
-                 --kubernetes-version=v1.13.0 \
+                 --kubernetes-version=v1.14.1 \
                  --token {{ token }}
   tags: master
 
