@@ -29,7 +29,7 @@ Copy swifty-ansible/hosts.example file to hosts and change it according to your 
 [monitoring]
 ```
 
-### Change encvironment variables file
+### Change environment variables file
 Copy swifty-ansible/group_vars/all.example.yml file to all.yml and change it according to your settings. 
 1. Add passwords and tokens.
 2. Add domain names.
