@@ -80,3 +80,4 @@ network_dir: /etc/kubernetes/network
 kubeadmin_config: /etc/kubernetes/admin.conf
 kube_addon_dir: /etc/kubernetes/addon
 remote_host_ip: '%'
+allow_local_sign: true
