@@ -13,6 +13,7 @@ swifty-ansible/hosts
 *.exe
 *.o
 *.so
+*.pem
 
 # Packages #
 ############
