@@ -48,7 +48,9 @@
     --agree-tos \
     --non-interactive \
     --email {{ cert_admin_email }} \
-    -d {{ s3_domain_name | default(default_s3_domain_name) }}
+    -d {{ default_s3_domain_name }}
+
+# docker run -t --rm -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt --net=host deliverous/certbot certonly --standalone --agree-tos --non-interactive --email bbelky@gmail.com -d s3-swf.vzqa.site
 
 - name: cron job for letsencrypt autorenewal
   cron:

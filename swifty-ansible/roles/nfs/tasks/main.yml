@@ -20,7 +20,7 @@
     state: started
   when: (ansible_distribution == "Fedora")
 
-- name: enable  nfs service
+- name: enable nfs service
   systemd:
     name: nfs-kernel-server
     enabled: yes
@@ -32,7 +32,7 @@
   lineinfile:
     path: /etc/hosts.allow
     line: "rpcbind mountd nfsd statd lockd rquotad : {{ hostvars[groups['gw'][0]]['private_ip'] }}"
-    
+
 - name: Add workers to hosts.allow
   shell: sed -i '${s/$/ {{ hostvars[item]['private_ip'] }}/}' /etc/hosts.allow
   with_items: "{{ groups['worker'] }}"

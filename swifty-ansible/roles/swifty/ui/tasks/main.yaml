@@ -57,9 +57,11 @@
     --standalone \
     --agree-tos \
     --non-interactive \
-    --staging \
     --email {{ cert_admin_email }} \
-    -d {{ dashboard_domain_name | default(default_dashboard_domain_name) }}
+    -d {{ default_dashboard_domain_name }}
+
+# docker run -t --rm -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt --net=host deliverous/certbot certonly --standalone --agree-tos --non-interactive --staging --email bbelky@gmail.com -d ui-swf.vzqa.site
+# default_dashboard_domain_name
 
 - name: copy nginx.conf
   template:

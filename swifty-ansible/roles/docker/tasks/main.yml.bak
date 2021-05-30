@@ -29,8 +29,8 @@
 
 - name: Install docker engine
   package:
-    name: docker.io=18.09.7-0ubuntu1~18.04.4
-    state: fixed
+    name: docker.io
+    state: present
   when: (ansible_distribution == "Ubuntu")
 
 - name: Install docker-compose

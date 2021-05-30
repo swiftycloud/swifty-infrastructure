@@ -36,11 +36,10 @@
 - name: Install kubernetes packages
   package:
     name:
-      - kubernetes-cni=0.7.5-00
-      - kubelet=1.14.1-00
-      - kubeadm=1.14.1-00
-      - kubectl=1.14.1-00
-    state: fixed
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: latest
 
 - name: Disable system swap
   shell: "swapoff -a"
@@ -77,13 +76,14 @@
     sysctl --system
 
 - name: pull k8s images
-  shell: kubeadm config images pull --kubernetes-version=v1.14.1
+ #shell: kubeadm config images pull --kubernetes-version=v1.13.0
+  shell: kubeadm config images pull --kubernetes-version=v1.18.0
 
 - name: Init Kubernetes cluster
   shell: |
     kubeadm init --pod-network-cidr {{ pod_network_cidr }} \
                  --apiserver-advertise-address {{ hostvars[groups['gw'][0]]['private_ip'] }} \
-                 --kubernetes-version=v1.14.1 \
+#                 --kubernetes-version=v1.14.1 \
                  --token {{ token }}
   tags: master
 
@@ -160,11 +160,10 @@
 - name: Install kubernetes packages
   package:
     name:
-      - kubernetes-cni=0.7.5-00
-      - kubelet=1.14.1-00
-      - kubeadm=1.14.1-00
-      - kubectl=1.14.1-00
-    state: fixed
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: latest
   delegate_to: "{{item}}"
   with_items: "{{ groups['worker'] }}"
 

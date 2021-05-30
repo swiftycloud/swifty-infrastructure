@@ -13,7 +13,7 @@
 
 - name: create certs volume
   command: docker volume create --name certs
-  when: certs_volume_exists
+  when: certs_volume_exists|failed
 
 - name: check if certs-data exists
   command: docker volume inspect certs-data
@@ -22,7 +22,7 @@
 
 - name: create certs-data
   command: docker volume create --name certs-data
-  when: certs_data_exists
+  when: certs_data_exists|failed
 
 - name: replace ports
   shell: sed -i -e 's/80/8080/g' /etc/apache2/ports.conf && sed -i -e 's/443/8443/g' /etc/apache2/ports.conf
@@ -46,7 +46,7 @@
     --agree-tos \
     --non-interactive \
     --email {{ cert_admin_email }} \
-    -d {{ default_api_domain_name }}
+    -d {{ api_domain_name | default(default_api_domain_name) }}
 
 - name: cron job for letsencrypt autorenewal
   cron:

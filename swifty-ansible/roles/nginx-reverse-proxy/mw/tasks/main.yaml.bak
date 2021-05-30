@@ -1,7 +1,7 @@
-- name: copy swyadmd-proxy.conf
+- name: copy s3.conf
   template:
-    src: swyadmd-proxy.j2
-    dest: /root/swyadmd-proxy.conf
+    src: s3.j2
+    dest: /root/s3.conf
     owner: root
     group: root
     mode: 0644
@@ -13,7 +13,7 @@
 
 - name: create certs volume
   command: docker volume create --name certs
-  when: certs_volume_exists
+  when: certs_volume_exists is failed
 
 - name: check if certs-data exists
   command: docker volume inspect certs-data
@@ -22,17 +22,19 @@
 
 - name: create certs-data
   command: docker volume create --name certs-data
-  when: certs_data_exists
+  when: certs_data_exists is failed
 
-- name: replace ports
-  shell: sed -i -e 's/80/8080/g' /etc/apache2/ports.conf && sed -i -e 's/443/8443/g' /etc/apache2/ports.conf
-  when: "ansible_distribution == 'Ubuntu'"
+- name: remove httpd
+  package:
+    name: httpd
+    state: absent
+  when: (ansible_distribution == "Fedora")
 
-- name: restart apache2 service
-  systemd:
+- name: remove httpd
+  package:
     name: apache2
-    state: restarted
-  when: "ansible_distribution == 'Ubuntu'"
+    state: absent
+  when: (ansible_distribution == "Ubuntu")
 
 - name: create certbot
   shell: |
@@ -46,7 +48,7 @@
     --agree-tos \
     --non-interactive \
     --email {{ cert_admin_email }} \
-    -d {{ default_api_domain_name }}
+    -d {{ s3_domain_name | default(default_s3_domain_name) }}
 
 - name: cron job for letsencrypt autorenewal
   cron:
@@ -55,8 +57,11 @@
     minute: 0
     hour: 4
     user: root
-    job: "docker stop nginx-proxy && docker run -d --rm  --net=host -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt deliverous/certbot renew --standalone ; docker start nginx-proxy"
+    job: "docker stop nginx-proxy swys3 && docker run -d --rm  --net=host -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt deliverous/certbot renew --standalone ; docker start nginx-proxy swys3"
     cron_file: le-autorenewal
 
+- name: cleanup nginx-proxy containers, if running
+  shell: "sudo docker stop nginx-proxy || true && sudo docker rm nginx-proxy || true"
+
 - name: run nginx container
-  shell: docker run -d --net=host -v /root/swyadmd-proxy.conf:/etc/nginx/conf.d/swyadmd-proxy.conf -v certs:/etc/letsencrypt  -v certs-data:/data/letsencrypt  --name nginx-proxy nginx
+  shell: docker run -d -p 443:443 -v /root/s3.conf:/etc/nginx/conf.d/s3.conf -v certs:/etc/letsencrypt  -v certs-data:/data/letsencrypt --name nginx-proxy nginx

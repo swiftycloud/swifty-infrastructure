@@ -4,7 +4,7 @@ set -ex
 
 terraform init
 terraform destroy -auto-approve
-python tfgen.py abcdef  # FIXME
+python3 tfgen.py abcdef  # FIXME
 terraform apply -auto-approve
 terraform output -json > output.json
 chmod +x ansible_inventory.py
